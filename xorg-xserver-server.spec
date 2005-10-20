@@ -60,6 +60,18 @@ X.org server
 %description -l pl
 Serwer X.org
 
+%package devel
+Summary:	Header files for X.org server
+Summary(pl):	Pliki nag³ówkowe dla servera X.org
+Group:		X11/Development/Libraries
+Requires:	%{name} = %{version}-%{release}
+
+%description devel
+Header files for X.org server.
+
+%description devel -l pl
+Pliki nag³ówkowe dla servera X.org.
+
 %prep
 %setup -q -a1 -n xorg-server-%{version}
 %patch0 -p1
@@ -80,8 +92,29 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
+rm $RPM_BUILD_ROOT%{_libdir}/xorg/modules/*/*{.la,.a}
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
+%attr(755,root,root) %{_bindir}/*
+%{_includedir}/X11/*
+
+# app-default should go to xorg-lib-libX11?
+%{_libdir}/X11/*
+# broken symlinks:
+%exclude %{_libdir}/X11/xserver/C/print
+%{_libdir}/xorg
+
+%{_datadir}/X11/xkb/compiled
+
+%{_mandir}/man1/*.1*
+%{_mandir}/man4x/*.4x*
+%{_mandir}/man5x/*.5x*
+
+%files devel
+%defattr(644,root,root,755)
+%{_includedir}/xorg
+%{_pkgconfigdir}/xorg-server.pc
