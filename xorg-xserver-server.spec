@@ -12,10 +12,12 @@ Source0:	http://xorg.freedesktop.org/releases/X11R7.0-RC1/xserver/xorg-server-%{
 # Source0-md5:	8467f86e0832a5c532b30387c82d1e49
 Source1:	http://dl.sourceforge.net/mesa3d/MesaLib-6.3.2.tar.bz2
 # Source1-md5:	0df27701df0924d17ddf41185efa8ce1
+Patch0:		%{name}-ncurses.patch
 URL:		http://xorg.freedesktop.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	libdrm
+BuildRequires:	ncurses-devel
 BuildRequires:	pkgconfig >= 0.19
 BuildRequires:	xorg-lib-libfontenc-devel
 BuildRequires:	xorg-lib-libXau-devel
@@ -60,6 +62,7 @@ Serwer X.org
 
 %prep
 %setup -q -a1 -n xorg-server-%{version}
+%patch0 -p1
 
 %build
 %{__aclocal}
@@ -67,7 +70,7 @@ Serwer X.org
 %{__autoheader}
 %{__automake}
 %configure \
-	--with-mesa-source="Mesa-6.3.2"
+	--with-mesa-source="`pwd`/Mesa-6.3.2"
 
 %{__make}
 
