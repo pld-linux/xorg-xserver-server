@@ -21,7 +21,7 @@ BuildRequires:	libdrm-devel
 BuildRequires:	libtool
 BuildRequires:	ncurses-devel
 BuildRequires:	perl-base
-BuildRequires:	pkgconfig >= 0.19
+BuildRequires:	pkgconfig >= 1:0.19
 BuildRequires:	xorg-lib-libXau-devel
 BuildRequires:	xorg-lib-libXaw-devel
 BuildRequires:	xorg-lib-libXdmcp-devel
