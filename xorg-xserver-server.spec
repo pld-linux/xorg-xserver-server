@@ -114,7 +114,7 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT \
 	drivermandir=%{_mandir}/man4 \
-	filenamdir=%{_mandir}/man5
+	filemandir=%{_mandir}/man5
 
 rm -f $RPM_BUILD_ROOT%{_libdir}/xorg/modules/*/*{.la,.a}
 
