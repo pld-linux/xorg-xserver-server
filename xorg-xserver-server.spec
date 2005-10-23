@@ -14,6 +14,8 @@ Source1:	http://dl.sourceforge.net/mesa3d/MesaLib-6.3.2.tar.bz2
 # Source1-md5:	0df27701df0924d17ddf41185efa8ce1
 Patch0:		%{name}-ncurses.patch
 URL:		http://xorg.freedesktop.org/
+# for glx headers
+BuildRequires:	Mesa-devel
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake
 BuildRequires:	cpp
@@ -80,7 +82,6 @@ Serwer X.org.
 Summary:	Header files for X.org server
 Summary(pl):	Pliki nag³ówkowe dla servera X.org
 Group:		X11/Development/Libraries
-Requires:	%{name} = %{version}-%{release}
 
 %description devel
 Header files for X.org server.
