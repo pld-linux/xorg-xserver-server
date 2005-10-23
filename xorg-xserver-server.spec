@@ -116,7 +116,7 @@ rm -rf $RPM_BUILD_ROOT
 	drivermandir=%{_mandir}/man4 \
 	filemandir=%{_mandir}/man5
 
-rm -f $RPM_BUILD_ROOT%{_libdir}/xorg/modules/*/*{.la,.a}
+rm -f $RPM_BUILD_ROOT%{_libdir}/xorg/modules/{*,*/*}.{la,a}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -133,7 +133,15 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/X11/xserver
 # broken symlinks:
 %exclude %{_libdir}/X11/xserver/C/print
-%{_libdir}/xorg
+%dir %{_libdir}/xorg
+%dir %{_libdir}/xorg/modules
+%attr(755,root,root) %{_libdir}/xorg/modules/lib*.so
+%dir %{_libdir}/xorg/modules/extensions
+%attr(755,root,root) %{_libdir}/xorg/modules/extensions/libdri.so
+%dir %{_libdir}/xorg/modules/linux
+%attr(755,root,root) %{_libdir}/xorg/modules/linux/libdrm.so
+%dir %{_libdir}/xorg/modules/multimedia
+%attr(755,root,root) %{_libdir}/xorg/modules/multimedia/*.so
 %{_datadir}/X11/xkb/compiled
 %{_mandir}/man1/*.1*
 %{_mandir}/man4/*.4x*
