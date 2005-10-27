@@ -68,6 +68,8 @@ BuildRequires:	xorg-proto-xf86vidmodeproto-devel
 BuildRequires:	xorg-proto-xineramaproto-devel
 BuildRequires:	xorg-proto-xproto-devel
 BuildRequires:	xorg-util-util-macros >= 0.99.1
+# for rgb.txt
+Requires:	xorg-app-rgb
 # just for %{_includedir}/bitmaps dir
 Requires:	xorg-data-xbitmaps
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
