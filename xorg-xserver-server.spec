@@ -70,8 +70,10 @@ BuildRequires:	xorg-proto-xproto-devel
 BuildRequires:	xorg-util-util-macros >= 0.99.1
 # for rgb.txt
 Requires:	xorg-app-rgb
+Requires:	xorg-app-xkbcomp
 # just for %{_includedir}/bitmaps dir
 Requires:	xorg-data-xbitmaps
+Requires:	xorg-data-xkbdata
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
