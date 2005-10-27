@@ -82,6 +82,11 @@ Serwer X.org.
 Summary:	Header files for X.org server
 Summary(pl):	Pliki nag³ówkowe dla servera X.org
 Group:		X11/Development/Libraries
+Requires:	libdrm-devel
+Requires:	xorg-proto-fontsproto-devel
+Requires:	xorg-proto-renderproto-devel
+Requires:	xorg-proto-videoproto-devel
+Requires:	xorg-proto-xextproto-devel
 
 %description devel
 Header files for X.org server.
