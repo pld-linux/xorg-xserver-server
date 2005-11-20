@@ -4,18 +4,17 @@
 Summary:	X.org server
 Summary(pl):	Serwer X.org
 Name:		xorg-xserver-server
-Version:	0.99.2
+Version:	0.99.3
 Release:	0.1
 License:	MIT
 Group:		X11/Applications
-Source0:	http://xorg.freedesktop.org/releases/X11R7.0-RC1/xserver/xorg-server-%{version}.tar.bz2
-# Source0-md5:	8467f86e0832a5c532b30387c82d1e49
-Source1:	http://dl.sourceforge.net/mesa3d/MesaLib-6.3.2.tar.bz2
-# Source1-md5:	0df27701df0924d17ddf41185efa8ce1
+Source0:	http://xorg.freedesktop.org/releases/X11R7.0-RC2/xserver/xorg-server-%{version}.tar.bz2
+# Source0-md5:	82a9ccf391ee2473c456407a8eceda2d
+Source1:	http://dl.sourceforge.net/mesa3d/MesaLib-6.4.tar.bz2
 Patch0:		%{name}-ncurses.patch
 URL:		http://xorg.freedesktop.org/
 # for glx headers
-BuildRequires:	Mesa-devel
+BuildRequires:	Mesa-libGL-devel
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake
 BuildRequires:	cpp
@@ -114,7 +113,7 @@ Pliki nag³ówkowe dla serwera X.org.
 	--enable-xevie \
 	--enable-xtrap \
 	--with-default-font-path="%{_fontsdir}/misc,%{_fontsdir}/TTF,%{_fontsdir}/OTF,%{_fontsdir}/Type1,%{_fontsdir}/CID,%{_fontsdir}/100dpi,%{_fontsdir}/75dpi" \
-	--with-mesa-source="`pwd`/Mesa-6.3.2"
+	--with-mesa-source="`pwd`/Mesa-6.4"
 
 %{__make}
 
@@ -123,6 +122,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT \
+	appmandir=%{_mandir}/man1 \
 	drivermandir=%{_mandir}/man4 \
 	filemandir=%{_mandir}/man5
 
@@ -153,6 +153,8 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_libdir}/xorg/modules/multimedia
 %attr(755,root,root) %{_libdir}/xorg/modules/multimedia/*.so
 %{_datadir}/X11/xkb/compiled
+%dir %{_libdir}/xserver
+%{_libdir}/xserver/SecurityPolicy
 %{_mandir}/man1/*.1*
 %{_mandir}/man4/*.4x*
 %{_mandir}/man5/*.5x*
@@ -160,4 +162,5 @@ rm -rf $RPM_BUILD_ROOT
 %files devel
 %defattr(644,root,root,755)
 %{_includedir}/xorg
+%{_aclocaldir}/xorg-server.m4
 %{_pkgconfigdir}/xorg-server.pc
