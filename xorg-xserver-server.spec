@@ -1,16 +1,14 @@
-# TODO:
-# - Xdmx DDX (now disabled in configure)
-#
 Summary:	X.org server
 Summary(pl):	Serwer X.org
 Name:		xorg-xserver-server
-Version:	0.99.3
+Version:	0.99.4
 Release:	0.1
 License:	MIT
 Group:		X11/Servers
-Source0:	http://xorg.freedesktop.org/releases/X11R7.0-RC2/xserver/xorg-server-%{version}.tar.bz2
-# Source0-md5:	82a9ccf391ee2473c456407a8eceda2d
-Source1:	http://dl.sourceforge.net/mesa3d/MesaLib-6.4.tar.bz2
+Source0:	http://xorg.freedesktop.org/releases/X11R7.0-RC3/xserver/xorg-server-%{version}.tar.bz2
+# Source0-md5:	a4354b15e6ef7462c070f74bcc7532da
+Source1:	http://dl.sourceforge.net/mesa3d/MesaLib-6.4.1.tar.bz2
+# Source1-md5:	ea148c828ec6f645526451db1b8556f1
 Patch0:		%{name}-ncurses.patch
 Patch1:		%{name}-symlinks.patch
 URL:		http://xorg.freedesktop.org/
@@ -24,13 +22,16 @@ BuildRequires:	libtool
 BuildRequires:	ncurses-devel
 BuildRequires:	perl-base
 BuildRequires:	pkgconfig >= 1:0.19
+BuildRequires:	xorg-lib-libX11-devel
 BuildRequires:	xorg-lib-libXau-devel
 BuildRequires:	xorg-lib-libXaw-devel
 BuildRequires:	xorg-lib-libXdmcp-devel
+BuildRequires:	xorg-lib-libXext-devel
 BuildRequires:	xorg-lib-libXfont-devel
 BuildRequires:	xorg-lib-libXi-devel
 BuildRequires:	xorg-lib-libXmu-devel
 BuildRequires:	xorg-lib-libXpm-devel
+BuildRequires:	xorg-lib-libXrender-devel
 BuildRequires:	xorg-lib-libXres-devel
 BuildRequires:	xorg-lib-libXt-devel
 BuildRequires:	xorg-lib-libXtst-devel
@@ -46,6 +47,7 @@ BuildRequires:	xorg-lib-xtrans-devel
 BuildRequires:	xorg-proto-bigreqsproto-devel
 BuildRequires:	xorg-proto-compositeproto-devel
 BuildRequires:	xorg-proto-damageproto-devel
+BuildRequires:	xorg-proto-dmxproto-devel
 BuildRequires:	xorg-proto-evieext-devel
 BuildRequires:	xorg-proto-fixesproto-devel
 BuildRequires:	xorg-proto-fontsproto-devel
@@ -67,7 +69,7 @@ BuildRequires:	xorg-proto-xf86miscproto-devel
 BuildRequires:	xorg-proto-xf86vidmodeproto-devel
 BuildRequires:	xorg-proto-xineramaproto-devel
 BuildRequires:	xorg-proto-xproto-devel
-BuildRequires:	xorg-util-util-macros >= 0.99.1
+BuildRequires:	xorg-util-util-macros >= 0.99.2
 # for rgb.txt
 Requires:	xorg-app-rgb
 Requires:	xorg-app-xkbcomp
@@ -207,9 +209,8 @@ Pliki nag³ówkowe dla serwera X.org.
 	--enable-dga \
 	--enable-lbx \
 	--enable-xevie \
-	--enable-xtrap \
 	--with-default-font-path="%{_fontsdir}/misc,%{_fontsdir}/TTF,%{_fontsdir}/OTF,%{_fontsdir}/Type1,%{_fontsdir}/CID,%{_fontsdir}/100dpi,%{_fontsdir}/75dpi" \
-	--with-mesa-source="`pwd`/Mesa-6.4"
+	--with-mesa-source="`pwd`/Mesa-6.4.1"
 
 %{__make}
 
@@ -217,10 +218,7 @@ Pliki nag³ówkowe dla serwera X.org.
 rm -rf $RPM_BUILD_ROOT
 
 %{__make} install \
-	DESTDIR=$RPM_BUILD_ROOT \
-	appmandir=%{_mandir}/man1 \
-	drivermandir=%{_mandir}/man4 \
-	filemandir=%{_mandir}/man5
+	DESTDIR=$RPM_BUILD_ROOT
 
 rm -f $RPM_BUILD_ROOT%{_libdir}/xorg/modules/{*,*/*}.{la,a}
 
@@ -251,23 +249,32 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_libdir}/xorg/modules
 %attr(755,root,root) %{_libdir}/xorg/modules/lib*.so
 %dir %{_libdir}/xorg/modules/extensions
+%attr(755,root,root) %{_libdir}/xorg/modules/extensions/libGLcore.so
+%attr(755,root,root) %{_libdir}/xorg/modules/extensions/libdbe.so
 %attr(755,root,root) %{_libdir}/xorg/modules/extensions/libdri.so
+%attr(755,root,root) %{_libdir}/xorg/modules/extensions/libextmod.so
+%attr(755,root,root) %{_libdir}/xorg/modules/extensions/libglx.so
+%attr(755,root,root) %{_libdir}/xorg/modules/extensions/librecord.so
+%attr(755,root,root) %{_libdir}/xorg/modules/extensions/libxtrap.so
+%dir %{_libdir}/xorg/modules/fonts
+%attr(755,root,root) %{_libdir}/xorg/modules/fonts/lib*.so
 %dir %{_libdir}/xorg/modules/linux
 %attr(755,root,root) %{_libdir}/xorg/modules/linux/libdrm.so
+%attr(755,root,root) %{_libdir}/xorg/modules/linux/libfbdevhw.so
 %dir %{_libdir}/xorg/modules/multimedia
 %attr(755,root,root) %{_libdir}/xorg/modules/multimedia/*.so
 %{_datadir}/X11/xkb/compiled
 %dir %{_libdir}/xserver
 %{_libdir}/xserver/SecurityPolicy
-%{_mandir}/man1/Xorg.1*
+%{_mandir}/man1/Xorg.1x*
 %{_mandir}/man1/Xserver.1x*
-%{_mandir}/man1/getconfig.1*
-%{_mandir}/man1/gtf.1*
-%{_mandir}/man1/pcitweak.1*
-%{_mandir}/man1/scanpci.1*
-%{_mandir}/man1/xorgcfg.1*
+%{_mandir}/man1/getconfig.1x*
+%{_mandir}/man1/gtf.1x*
+%{_mandir}/man1/pcitweak.1x*
+%{_mandir}/man1/scanpci.1x*
+%{_mandir}/man1/xorgcfg.1x*
 %{_mandir}/man1/xorgconfig.1*
-%{_mandir}/man4/fbdevhw.4x*
+%{_mandir}/man4/fbdevhw.4*
 %{_mandir}/man5/getconfig.5x*
 %{_mandir}/man5/xorg.conf.5x*
 
@@ -285,26 +292,26 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/vdltodmx
 %attr(755,root,root) %{_bindir}/xdmx
 %attr(755,root,root) %{_bindir}/xdmxconfig
-%{_mandir}/man1/Xdmx.1*
-%{_mandir}/man1/dmxtodmx.1*
-%{_mandir}/man1/vdltodmx.1*
-%{_mandir}/man1/xdmxconfig.1*
+%{_mandir}/man1/Xdmx.1x*
+%{_mandir}/man1/dmxtodmx.1x*
+%{_mandir}/man1/vdltodmx.1x*
+%{_mandir}/man1/xdmxconfig.1x*
 
 %files -n xorg-xserver-Xnest
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/Xnest
-%{_mandir}/man1/Xnest.1*
+%{_mandir}/man1/Xnest.1x*
 
 %files -n xorg-xserver-Xprt
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/Xprt
 %{_libdir}/X11/xserver
-%{_mandir}/man1/Xprt.1*
+%{_mandir}/man1/Xprt.1x*
 
 %files -n xorg-xserver-Xvfb
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/Xvfb
-%{_mandir}/man1/Xvfb.1*
+%{_mandir}/man1/Xvfb.1x*
 
 %files devel
 %defattr(644,root,root,755)
