@@ -71,7 +71,7 @@ BuildRequires:	xorg-proto-xineramaproto-devel
 BuildRequires:	xorg-proto-xproto-devel
 BuildRequires:	xorg-util-util-macros >= 0.99.2
 # for rgb.txt
-Requires:	xorg-app-rgb
+Requires:	xorg-app-rgb >= 0.99.3
 Requires:	xorg-app-xkbcomp
 # just for %{_includedir}/bitmaps dir
 Requires:	xorg-data-xbitmaps
