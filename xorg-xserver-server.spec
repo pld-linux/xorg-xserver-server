@@ -1,12 +1,12 @@
 Summary:	X.org server
 Summary(pl):	Serwer X.org
 Name:		xorg-xserver-server
-Version:	0.99.4
+Version:	1.0.0
 Release:	0.1
 License:	MIT
 Group:		X11/Servers
-Source0:	http://xorg.freedesktop.org/releases/X11R7.0-RC3/xserver/xorg-server-%{version}.tar.bz2
-# Source0-md5:	a4354b15e6ef7462c070f74bcc7532da
+Source0:	http://xorg.freedesktop.org/releases/X11R7.0-RC4/xserver/xorg-server-%{version}.tar.bz2
+# Source0-md5:	baca22f964ff51d4dc000794ba6f7ecb
 Source1:	http://dl.sourceforge.net/mesa3d/MesaLib-6.4.1.tar.bz2
 # Source1-md5:	ea148c828ec6f645526451db1b8556f1
 Patch0:		%{name}-ncurses.patch
@@ -33,7 +33,7 @@ BuildRequires:	xorg-lib-libXmu-devel
 BuildRequires:	xorg-lib-libXpm-devel
 BuildRequires:	xorg-lib-libXrender-devel
 BuildRequires:	xorg-lib-libXres-devel
-BuildRequires:	xorg-lib-libXt-devel
+BuildRequires:	xorg-lib-libXt-devel >= 1.0.0
 BuildRequires:	xorg-lib-libXtst-devel
 BuildRequires:	xorg-lib-libXxf86dga-devel
 BuildRequires:	xorg-lib-libXxf86misc-devel
@@ -76,6 +76,8 @@ Requires:	xorg-app-xkbcomp
 # just for %{_includedir}/bitmaps dir
 Requires:	xorg-data-xbitmaps
 Requires:	xorg-data-xkbdata
+# for new app-defaults location
+Requires:	xorg-lib-libXt >= 1.0.0
 Obsoletes:	X11-Xserver
 Obsoletes:	X11-modules
 Obsoletes:	XFree86-Xserver
@@ -243,7 +245,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/X11/bitmaps/*
 %{_includedir}/X11/pixmaps
 %{_libdir}/X11/Cards
-%{_libdir}/X11/app-defaults/XOrgCfg
+%{_libdir}/X11/Options
 %{_libdir}/X11/getconfig
 %dir %{_libdir}/xorg
 %dir %{_libdir}/xorg/modules
@@ -263,9 +265,10 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/xorg/modules/linux/libfbdevhw.so
 %dir %{_libdir}/xorg/modules/multimedia
 %attr(755,root,root) %{_libdir}/xorg/modules/multimedia/*.so
-%{_datadir}/X11/xkb/compiled
 %dir %{_libdir}/xserver
 %{_libdir}/xserver/SecurityPolicy
+%{_datadir}/X11/app-defaults/XOrgCfg
+%{_datadir}/X11/xkb/compiled
 %{_mandir}/man1/Xorg.1x*
 %{_mandir}/man1/Xserver.1x*
 %{_mandir}/man1/getconfig.1x*
