@@ -1,12 +1,12 @@
 Summary:	X.org server
 Summary(pl):	Serwer X.org
 Name:		xorg-xserver-server
-Version:	1.0.0
+Version:	1.0.1
 Release:	0.1
 License:	MIT
 Group:		X11/Servers
-Source0:	http://xorg.freedesktop.org/releases/X11R7.0-RC4/xserver/xorg-server-%{version}.tar.bz2
-# Source0-md5:	baca22f964ff51d4dc000794ba6f7ecb
+Source0:	http://xorg.freedesktop.org/releases/X11R7.0/src/xserver/xorg-server-%{version}.tar.bz2
+# Source0-md5:	aa0ccb851ec5f7f9b132581d9a5827e4
 Source1:	http://dl.sourceforge.net/mesa3d/MesaLib-6.4.1.tar.bz2
 # Source1-md5:	ea148c828ec6f645526451db1b8556f1
 Patch0:		%{name}-ncurses.patch
@@ -229,7 +229,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc ChangeLog
+%doc COPYING ChangeLog
 %attr(755,root,root) %{_bindir}/X
 %attr(755,root,root) %{_bindir}/Xorg
 %attr(755,root,root) %{_bindir}/getconfig
