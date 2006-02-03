@@ -9,6 +9,7 @@ Source0:	http://xorg.freedesktop.org/releases/X11R7.0/src/xserver/xorg-server-%{
 # Source0-md5:	aa0ccb851ec5f7f9b132581d9a5827e4
 Source1:	http://dl.sourceforge.net/mesa3d/MesaLib-6.4.1.tar.bz2
 # Source1-md5:	ea148c828ec6f645526451db1b8556f1
+Source2:	xserver.pamd
 Patch0:		%{name}-ncurses.patch
 Patch1:		%{name}-symlinks.patch
 URL:		http://xorg.freedesktop.org/
@@ -220,6 +221,11 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
+install -D %{SOURCE2} $RPM_BUILD_ROOT/etc/pam.d/xserver
+install -d $RPM_BUILD_ROOT/etc/security/console.apps
+:> $RPM_BUILD_ROOT/etc/security/console.apps/xserver
+:> $RPM_BUILD_ROOT/etc/security/blacklist.xserver
+
 rm -f $RPM_BUILD_ROOT%{_libdir}/xorg/modules/{*,*/*}.{la,a}
 
 %clean
@@ -267,6 +273,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/xserver/SecurityPolicy
 %{_datadir}/X11/app-defaults/XOrgCfg
 %{_datadir}/X11/xkb/compiled
+%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/pam.d/xserver
+%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/security/blacklist.xserver
+%config(missingok) /etc/security/console.apps/xserver
 %{_mandir}/man1/Xorg.1x*
 %{_mandir}/man1/Xserver.1x*
 %{_mandir}/man1/getconfig.1x*
