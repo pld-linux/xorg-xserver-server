@@ -235,7 +235,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc COPYING ChangeLog
 %attr(755,root,root) %{_bindir}/X
-%attr(755,root,root) %{_bindir}/Xorg
+%attr(4755,root,root) %{_bindir}/Xorg
 %attr(755,root,root) %{_bindir}/getconfig
 %attr(755,root,root) %{_bindir}/getconfig.pl
 %attr(755,root,root) %{_bindir}/gtf
