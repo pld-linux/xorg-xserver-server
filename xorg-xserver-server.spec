@@ -2,7 +2,7 @@ Summary:	X.org server
 Summary(pl):	Serwer X.org
 Name:		xorg-xserver-server
 Version:	1.0.1
-Release:	0.2
+Release:	0.3
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/X11R7.0/src/xserver/xorg-server-%{version}.tar.bz2
@@ -12,6 +12,7 @@ Source1:	http://dl.sourceforge.net/mesa3d/MesaLib-6.4.1.tar.bz2
 Source2:	xserver.pamd
 Patch0:		%{name}-ncurses.patch
 Patch1:		%{name}-symlinks.patch
+Patch2:		%{name}-xwrapper.patch
 URL:		http://xorg.freedesktop.org/
 # for glx headers
 BuildRequires:	Mesa-libGL-devel
@@ -21,6 +22,7 @@ BuildRequires:	cpp
 BuildRequires:	libdrm-devel
 BuildRequires:	libtool
 BuildRequires:	ncurses-devel
+BuildRequires:	pam-devel
 BuildRequires:	perl-base
 BuildRequires:	pkgconfig >= 1:0.19
 BuildRequires:	xorg-lib-libX11-devel
@@ -203,6 +205,7 @@ Pliki nag³ówkowe dla serwera X.org.
 %setup -q -a1 -n xorg-server-%{version}
 %patch0 -p1
 %patch1 -p1
+%patch2 -p0
 
 %build
 %{__libtoolize}
@@ -239,7 +242,8 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc COPYING ChangeLog
 %attr(755,root,root) %{_bindir}/X
-%attr(4755,root,root) %{_bindir}/Xorg
+%attr(755,root,root) %{_bindir}/Xorg
+%attr(4755,root,root) %{_bindir}/Xwrapper
 %attr(755,root,root) %{_bindir}/getconfig
 %attr(755,root,root) %{_bindir}/getconfig.pl
 %attr(755,root,root) %{_bindir}/gtf
