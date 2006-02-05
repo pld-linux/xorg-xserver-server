@@ -2,7 +2,7 @@ Summary:	X.org server
 Summary(pl):	Serwer X.org
 Name:		xorg-xserver-server
 Version:	1.0.1
-Release:	0.3
+Release:	0.4
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/X11R7.0/src/xserver/xorg-server-%{version}.tar.bz2
