@@ -2,7 +2,7 @@ Summary:	X.org server
 Summary(pl):	Serwer X.org
 Name:		xorg-xserver-server
 Version:	1.0.1
-Release:	0.4
+Release:	0.5
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/X11R7.0/src/xserver/xorg-server-%{version}.tar.bz2
@@ -13,6 +13,7 @@ Source2:	xserver.pamd
 Patch0:		%{name}-ncurses.patch
 Patch1:		%{name}-symlinks.patch
 Patch2:		%{name}-xwrapper.patch
+Patch3:		%{name}-compositefastpath.patch
 URL:		http://xorg.freedesktop.org/
 # for glx headers
 BuildRequires:	Mesa-libGL-devel
@@ -206,6 +207,7 @@ Pliki nag³ówkowe dla serwera X.org.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p0
+%patch3 -p0
 
 %build
 %{__libtoolize}
