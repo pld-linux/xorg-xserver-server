@@ -7,8 +7,8 @@ License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/X11R7.0/src/xserver/xorg-server-%{version}.tar.bz2
 # Source0-md5:	aa0ccb851ec5f7f9b132581d9a5827e4
-Source1:	http://dl.sourceforge.net/mesa3d/MesaLib-6.4.1.tar.bz2
-# Source1-md5:	ea148c828ec6f645526451db1b8556f1
+Source1:	http://dl.sourceforge.net/mesa3d/MesaLib-6.4.2.tar.bz2
+# Source1-md5:	7674d2c603b5834259e4e5a820cefd5b
 Source2:	xserver.pamd
 Patch0:		%{name}-ncurses.patch
 Patch1:		%{name}-symlinks.patch
@@ -220,7 +220,7 @@ Pliki nag³ówkowe dla serwera X.org.
 	--enable-lbx \
 	--enable-xevie \
 	--with-default-font-path="%{_fontsdir}/misc,%{_fontsdir}/TTF,%{_fontsdir}/OTF,%{_fontsdir}/Type1,%{_fontsdir}/CID,%{_fontsdir}/100dpi,%{_fontsdir}/75dpi" \
-	--with-mesa-source="`pwd`/Mesa-6.4.1"
+	--with-mesa-source="`pwd`/Mesa-6.4.2"
 
 %{__make}
 
