@@ -2,7 +2,7 @@ Summary:	X.org server
 Summary(pl):	Serwer X.org
 Name:		xorg-xserver-server
 Version:	1.0.1
-Release:	0.5
+Release:	0.6
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/X11R7.0/src/xserver/xorg-server-%{version}.tar.bz2
@@ -81,7 +81,7 @@ Requires:	xorg-data-xkbdata
 # xserver requires default fixed and cursosr fonts.
 Requires:	xorg-font-font-alias
 Requires:	xorg-font-font-cursor-misc
-Requires:	xorg-font-font-misc-misc
+Requires:	xorg-font-font-misc-misc-base
 # for new app-defaults location
 Requires:	xorg-lib-libXt >= 1.0.0
 Obsoletes:	X11-Xserver
@@ -217,6 +217,7 @@ Pliki nag³ówkowe dla serwera X.org.
 %{__automake}
 %configure \
 	--enable-dga \
+	--enable-builddocs \
 	--enable-lbx \
 	--enable-xevie \
 	--with-default-font-path="%{_fontsdir}/misc,%{_fontsdir}/TTF,%{_fontsdir}/OTF,%{_fontsdir}/Type1,%{_fontsdir}/CID,%{_fontsdir}/100dpi,%{_fontsdir}/75dpi" \
