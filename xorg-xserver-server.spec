@@ -14,6 +14,7 @@ Patch0:		%{name}-ncurses.patch
 Patch1:		%{name}-symlinks.patch
 Patch2:		%{name}-xwrapper.patch
 Patch3:		%{name}-compositefastpath.patch
+Patch4:		Mesa-glx-x11-render-texture.diff
 URL:		http://xorg.freedesktop.org/
 # for glx headers
 BuildRequires:	Mesa-libGL-devel
@@ -208,6 +209,9 @@ Pliki nag³ówkowe dla serwera X.org.
 %patch1 -p1
 %patch2 -p0
 %patch3 -p0
+cd Mesa-6.4.2
+%patch4 -p0
+cd ..
 
 %build
 %{__libtoolize}
