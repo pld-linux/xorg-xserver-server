@@ -27,6 +27,7 @@ BuildRequires:	ncurses-devel
 BuildRequires:	pam-devel
 BuildRequires:	perl-base
 BuildRequires:	pkgconfig >= 1:0.19
+BuildRequires:	xorg-app-mkfontscale
 BuildRequires:	xorg-lib-libX11-devel
 BuildRequires:	xorg-lib-libXau-devel
 BuildRequires:	xorg-lib-libXaw-devel
