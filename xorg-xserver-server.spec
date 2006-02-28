@@ -83,7 +83,7 @@ Requires:	xorg-data-xkbdata
 # xserver requires default fixed and cursosr fonts.
 Requires:	xorg-font-font-alias
 Requires:	xorg-font-font-cursor-misc
-Requires:	xorg-font-font-misc-misc-base
+Requires:	xorg-font-font-misc-misc-base >= 1.0.0-0.3
 # for new app-defaults location
 Requires:	xorg-lib-libXt >= 1.0.0
 Obsoletes:	X11-Xserver
