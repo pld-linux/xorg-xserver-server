@@ -1,3 +1,4 @@
+# TODO: update to 1.0.2 (CVE-2006-0745)
 Summary:	X.org server
 Summary(pl):	Serwer X.org
 Name:		xorg-xserver-server
