@@ -3,7 +3,7 @@
 @@ -1,6 +1,6 @@
  xpcdir = @xpconfigdir@/C/print/models/CANONC3200-PS/fonts
  
--parentdir = $(DESTDIR)/@xpconfigdir@/C/print/models/PSdefault/fonts
+-parentdir = @xpconfigdir@/C/print/models/PSdefault/fonts
 +parentdir = ../../PSdefault/fonts
  
  XPFONTS = \
@@ -13,7 +13,7 @@
 @@ -1,6 +1,6 @@
  xpcdir = @xpconfigdir@/C/print/models/HPLJ4050-PS/fonts
  
--parentdir = $(DESTDIR)/@xpconfigdir@/C/print/models/PSdefault/fonts
+-parentdir = @xpconfigdir@/C/print/models/PSdefault/fonts
 +parentdir = ../../PSdefault/fonts
  
  XPFONTS = \
@@ -23,7 +23,7 @@
 @@ -1,6 +1,6 @@
  xpcdir = @xpconfigdir@/C/print/models/SPSPARC2/fonts
  
--parentdir = $(DESTDIR)/@xpconfigdir@/C/print/models/PSdefault/fonts
+-parentdir = @xpconfigdir@/C/print/models/PSdefault/fonts
 +parentdir = ../../PSdefault/fonts
  
  XPFONTS = \
