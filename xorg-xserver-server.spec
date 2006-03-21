@@ -1,13 +1,12 @@
-# TODO: update to 1.0.2 (CVE-2006-0745)
 Summary:	X.org server
 Summary(pl):	Serwer X.org
 Name:		xorg-xserver-server
-Version:	1.0.1
-Release:	0.8
+Version:	1.0.2
+Release:	0.1
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
-# Source0-md5:	aa0ccb851ec5f7f9b132581d9a5827e4
+# Source0-md5:	5cd3316f07ed32a05cbd69e73a71bc74
 Source1:	http://dl.sourceforge.net/mesa3d/MesaLib-6.4.2.tar.bz2
 # Source1-md5:	7674d2c603b5834259e4e5a820cefd5b
 Source2:	xserver.pamd
@@ -17,7 +16,6 @@ Patch2:		%{name}-xwrapper.patch
 Patch3:		%{name}-compositefastpath.patch
 Patch4:		Mesa-glx-x11-render-texture.diff
 Patch5:		%{name}-tun.patch
-Patch6:		%{name}-randrstr.patch
 URL:		http://xorg.freedesktop.org/
 # for glx headers
 BuildRequires:	Mesa-libGL-devel
@@ -217,7 +215,6 @@ cd Mesa-6.4.2
 %patch4 -p0
 cd ..
 %patch5 -p1
-%patch6 -p1
 
 %build
 %{__libtoolize}
