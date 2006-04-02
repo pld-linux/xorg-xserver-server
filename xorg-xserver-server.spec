@@ -1,20 +1,20 @@
+%define	mesa_version	6.5
 Summary:	X.org server
 Summary(pl):	Serwer X.org
 Name:		xorg-xserver-server
-Version:	1.0.2
-Release:	0.2
+Version:	1.0.99.2
+Release:	0.1
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
-# Source0-md5:	5cd3316f07ed32a05cbd69e73a71bc74
-Source1:	http://dl.sourceforge.net/mesa3d/MesaLib-6.4.2.tar.bz2
-# Source1-md5:	7674d2c603b5834259e4e5a820cefd5b
+# Source0-md5:	e19e7e7e923c6a549c0d114c3f5c498c
+Source1:	http://dl.sourceforge.net/mesa3d/MesaLib-%{mesa_version}.tar.bz2
+# Source1-md5:	61beda590bfc5b4a12e979d5f2d70d7a
 Source2:	xserver.pamd
 Patch0:		%{name}-ncurses.patch
 Patch1:		%{name}-symlinks.patch
 Patch2:		%{name}-xwrapper.patch
 Patch3:		%{name}-compositefastpath.patch
-Patch4:		Mesa-glx-x11-render-texture.diff
 URL:		http://xorg.freedesktop.org/
 # for glx headers
 BuildRequires:	Mesa-libGL-devel
@@ -61,7 +61,7 @@ BuildRequires:	xorg-proto-randrproto-devel
 BuildRequires:	xorg-proto-recordproto-devel
 BuildRequires:	xorg-proto-renderproto-devel
 BuildRequires:	xorg-proto-resourceproto-devel
-BuildRequires:	xorg-proto-scrnsaverproto-devel
+BuildRequires:	xorg-proto-scrnsaverproto-devel >= 1.1.0
 BuildRequires:	xorg-proto-trapproto-devel
 BuildRequires:	xorg-proto-videoproto-devel
 BuildRequires:	xorg-proto-xcmiscproto-devel
@@ -210,9 +210,6 @@ Pliki nag³ówkowe dla serwera X.org.
 %patch1 -p1
 %patch2 -p0
 %patch3 -p0
-cd Mesa-6.4.2
-%patch4 -p0
-cd ..
 
 %build
 %{__libtoolize}
@@ -226,7 +223,7 @@ cd ..
 	--enable-lbx \
 	--enable-xevie \
 	--with-default-font-path="%{_fontsdir}/misc,%{_fontsdir}/TTF,%{_fontsdir}/OTF,%{_fontsdir}/Type1,%{_fontsdir}/CID,%{_fontsdir}/100dpi,%{_fontsdir}/75dpi" \
-	--with-mesa-source="`pwd`/Mesa-6.4.2"
+	--with-mesa-source="`pwd`/Mesa-%{mesa_version}"
 
 %{__make}
 
@@ -252,6 +249,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/X
 %attr(755,root,root) %{_bindir}/Xorg
 %attr(4755,root,root) %{_bindir}/Xwrapper
+%attr(755,root,root) %{_bindir}/cvt
 %attr(755,root,root) %{_bindir}/getconfig
 %attr(755,root,root) %{_bindir}/getconfig.pl
 %attr(755,root,root) %{_bindir}/gtf
@@ -294,6 +292,7 @@ rm -rf $RPM_BUILD_ROOT
 %config(missingok) /etc/security/console.apps/xserver
 %{_mandir}/man1/Xorg.1x*
 %{_mandir}/man1/Xserver.1x*
+%{_mandir}/man1/cvt.1*
 %{_mandir}/man1/getconfig.1x*
 %{_mandir}/man1/gtf.1x*
 %{_mandir}/man1/pcitweak.1x*
