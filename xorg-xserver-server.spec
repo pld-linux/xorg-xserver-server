@@ -54,8 +54,9 @@ BuildRequires:	xorg-proto-damageproto-devel
 BuildRequires:	xorg-proto-dmxproto-devel
 BuildRequires:	xorg-proto-evieext-devel
 BuildRequires:	xorg-proto-fixesproto-devel
+BuildRequires:	xorg-proto-fontcacheproto-devel
 BuildRequires:	xorg-proto-fontsproto-devel
-BuildRequires:	xorg-proto-glproto-devel >= 1.4.1
+BuildRequires:	xorg-proto-glproto-devel >= 1.4.6
 BuildRequires:	xorg-proto-printproto-devel
 BuildRequires:	xorg-proto-randrproto-devel
 BuildRequires:	xorg-proto-recordproto-devel
