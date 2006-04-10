@@ -49,11 +49,11 @@ BuildRequires:	xorg-lib-libxkbfile-devel
 BuildRequires:	xorg-lib-libxkbui-devel
 BuildRequires:	xorg-lib-xtrans-devel
 BuildRequires:	xorg-proto-bigreqsproto-devel
-BuildRequires:	xorg-proto-compositeproto-devel
+BuildRequires:	xorg-proto-compositeproto-devel >= 0.3
 BuildRequires:	xorg-proto-damageproto-devel
 BuildRequires:	xorg-proto-dmxproto-devel
 BuildRequires:	xorg-proto-evieext-devel
-BuildRequires:	xorg-proto-fixesproto-devel
+BuildRequires:	xorg-proto-fixesproto-devel >= 4.0
 BuildRequires:	xorg-proto-fontcacheproto-devel
 BuildRequires:	xorg-proto-fontsproto-devel
 BuildRequires:	xorg-proto-glproto-devel >= 1.4.6
