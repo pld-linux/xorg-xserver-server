@@ -1,13 +1,13 @@
-%define	mesa_version	6.5
 Summary:	X.org server
 Summary(pl):	Serwer X.org
 Name:		xorg-xserver-server
 Version:	1.0.99.901
-Release:	0.1
+Release:	0.2
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
 # Source0-md5:	9100da4b892b8f8bf741db7ac371476e
+%define		mesa_version	6.5
 Source1:	http://dl.sourceforge.net/mesa3d/MesaLib-%{mesa_version}.tar.bz2
 # Source1-md5:	61beda590bfc5b4a12e979d5f2d70d7a
 Source2:	xserver.pamd
@@ -17,7 +17,7 @@ Patch2:		%{name}-xwrapper.patch
 Patch3:		%{name}-compositefastpath.patch
 URL:		http://xorg.freedesktop.org/
 # for glx headers
-BuildRequires:	Mesa-libGL-devel
+BuildRequires:	OpenGL-GLX-devel
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake
 BuildRequires:	cpp
@@ -205,6 +205,20 @@ Header files for X.org server.
 %description devel -l pl
 Pliki nag³ówkowe dla serwera X.org.
 
+%package -n xorg-xserver-libglx
+Summary:	GLX extension library fo X.org server
+Summary(pl):	Biblioteka rozszerzenia GLX dla serwera X.org
+Group:		X11/Servers
+Requires:	xorg-xserver-server
+Provides:	xorg-xserver-modules-libglx
+Obsoletes:	xorg-driver-video-nvidia
+
+%description -n xorg-xserver-libglx
+GLX extension library fo X.org server.
+
+%description -n xorg-xserver-libglx -l pl
+Biblioteka rozszerzenia GLX dla serwera X.org.
+
 %prep
 %setup -q -a1 -n xorg-server-%{version}
 %patch0 -p1
@@ -275,7 +289,6 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/xorg/modules/extensions/libdbe.so
 %attr(755,root,root) %{_libdir}/xorg/modules/extensions/libdri.so
 %attr(755,root,root) %{_libdir}/xorg/modules/extensions/libextmod.so
-%attr(755,root,root) %{_libdir}/xorg/modules/extensions/libglx.so
 %attr(755,root,root) %{_libdir}/xorg/modules/extensions/librecord.so
 %attr(755,root,root) %{_libdir}/xorg/modules/extensions/libxtrap.so
 %dir %{_libdir}/xorg/modules/fonts
@@ -345,3 +358,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/xorg
 %{_aclocaldir}/xorg-server.m4
 %{_pkgconfigdir}/xorg-server.pc
+
+%files -n xorg-xserver-libglx
+%attr(755,root,root) %{_libdir}/xorg/modules/extensions/libglx.so
