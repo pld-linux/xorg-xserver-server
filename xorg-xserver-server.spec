@@ -2,7 +2,7 @@ Summary:	X.org server
 Summary(pl):	Serwer X.org
 Name:		xorg-xserver-server
 Version:	1.0.99.902
-Release:	0.1
+Release:	0.2
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
@@ -15,6 +15,7 @@ Patch0:		%{name}-ncurses.patch
 Patch1:		%{name}-symlinks.patch
 Patch2:		%{name}-xwrapper.patch
 Patch3:		%{name}-compositefastpath.patch
+Patch4:		%{name}-mitri.patch
 URL:		http://xorg.freedesktop.org/
 # for glx headers
 BuildRequires:	OpenGL-GLX-devel
@@ -225,6 +226,7 @@ Biblioteka rozszerzenia GLX dla serwera X.org.
 %patch1 -p1
 %patch2 -p0
 %patch3 -p0
+%patch4 -p0
 
 %build
 %{__libtoolize}
