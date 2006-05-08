@@ -253,6 +253,7 @@ rm -rf $RPM_BUILD_ROOT
 
 install -D %{SOURCE2} $RPM_BUILD_ROOT/etc/pam.d/xserver
 install -d $RPM_BUILD_ROOT/etc/security/console.apps
+install -d $RPM_BUILD_ROOT%{_libdir}/xorg/modules/{drivers,input}
 :> $RPM_BUILD_ROOT/etc/security/console.apps/xserver
 :> $RPM_BUILD_ROOT/etc/security/blacklist.xserver
 
@@ -285,7 +286,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/X11/getconfig
 %dir %{_libdir}/xorg
 %dir %{_libdir}/xorg/modules
-%attr(755,root,root) %{_libdir}/xorg/modules/lib*.so
+%dir %{_libdir}/xorg/modules/drivers
 %dir %{_libdir}/xorg/modules/extensions
 %attr(755,root,root) %{_libdir}/xorg/modules/extensions/libGLcore.so
 %attr(755,root,root) %{_libdir}/xorg/modules/extensions/libdbe.so
@@ -295,11 +296,13 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/xorg/modules/extensions/libxtrap.so
 %dir %{_libdir}/xorg/modules/fonts
 %attr(755,root,root) %{_libdir}/xorg/modules/fonts/lib*.so
+%dir %{_libdir}/xorg/modules/input
 %dir %{_libdir}/xorg/modules/linux
 %attr(755,root,root) %{_libdir}/xorg/modules/linux/libdrm.so
 %attr(755,root,root) %{_libdir}/xorg/modules/linux/libfbdevhw.so
 %dir %{_libdir}/xorg/modules/multimedia
 %attr(755,root,root) %{_libdir}/xorg/modules/multimedia/*.so
+%attr(755,root,root) %{_libdir}/xorg/modules/lib*.so
 %dir %{_libdir}/xserver
 %{_libdir}/xserver/SecurityPolicy
 %{_datadir}/X11/app-defaults/XOrgCfg
