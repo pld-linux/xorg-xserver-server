@@ -1,12 +1,12 @@
 Summary:	X.org server
 Summary(pl):	Serwer X.org
 Name:		xorg-xserver-server
-Version:	1.0.99.902
-Release:	0.2
+Version:	1.0.99.903
+Release:	0.1
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
-# Source0-md5:	643633bbc7038643b29a373aa3a2413e
+# Source0-md5:	18a1b0077839bfd5052a666c0de63f6d
 %define		mesa_version	6.5
 Source1:	http://dl.sourceforge.net/mesa3d/MesaLib-%{mesa_version}.tar.bz2
 # Source1-md5:	61beda590bfc5b4a12e979d5f2d70d7a
@@ -15,7 +15,6 @@ Patch0:		%{name}-ncurses.patch
 Patch1:		%{name}-symlinks.patch
 Patch2:		%{name}-xwrapper.patch
 Patch3:		%{name}-compositefastpath.patch
-Patch4:		%{name}-mitri.patch
 URL:		http://xorg.freedesktop.org/
 # for glx headers
 BuildRequires:	OpenGL-GLX-devel
@@ -226,7 +225,6 @@ Biblioteka rozszerzenia GLX dla serwera X.org.
 %patch1 -p1
 %patch2 -p0
 %patch3 -p0
-%patch4 -p0
 
 %build
 %{__libtoolize}
