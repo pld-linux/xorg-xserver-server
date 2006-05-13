@@ -363,4 +363,5 @@ rm -rf $RPM_BUILD_ROOT
 %{_pkgconfigdir}/xorg-server.pc
 
 %files -n xorg-xserver-libglx
+%defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/xorg/modules/extensions/libglx.so
