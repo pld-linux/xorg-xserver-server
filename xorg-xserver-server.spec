@@ -2,7 +2,7 @@ Summary:	X.org server
 Summary(pl):	Serwer X.org
 Name:		xorg-xserver-server
 Version:	1.1.0
-Release:	0.2
+Release:	0.3
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
@@ -252,6 +252,9 @@ rm -rf $RPM_BUILD_ROOT
 install -D %{SOURCE2} $RPM_BUILD_ROOT/etc/pam.d/xserver
 install -d $RPM_BUILD_ROOT/etc/security/console.apps
 install -d $RPM_BUILD_ROOT%{_libdir}/xorg/modules/{dri,drivers,input}
+install hw/xfree86/parser/xf86Parser.h $RPM_BUILD_ROOT%{_includedir}/xorg/xf86Parser.h
+install hw/xfree86/parser/xf86Optrec.h $RPM_BUILD_ROOT%{_includedir}/xorg/xf86Optrec.h
+install hw/xfree86/parser/libxf86config.a $RPM_BUILD_ROOT%{_libdir}/libxf86config.a
 :> $RPM_BUILD_ROOT/etc/security/console.apps/xserver
 :> $RPM_BUILD_ROOT/etc/security/blacklist.xserver
 
@@ -360,6 +363,7 @@ rm -rf $RPM_BUILD_ROOT
 %files devel
 %defattr(644,root,root,755)
 %{_includedir}/xorg
+%{_libdir}/libxf86config.a
 %{_aclocaldir}/xorg-server.m4
 %{_pkgconfigdir}/xorg-server.pc
 
