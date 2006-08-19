@@ -260,12 +260,15 @@ install hw/xfree86/parser/libxf86config.a $RPM_BUILD_ROOT%{_libdir}/libxf86confi
 
 rm -f $RPM_BUILD_ROOT%{_libdir}/xorg/modules/{*,*/*}.{la,a}
 
+echo "LIBGL_DRIVERS_PATH=%{_libdir}/xorg/modules/dri" > install -d $RPM_BUILD_ROOT/%{_sysconfdir}/env.d/LIBGL_DRIVERS_PATH
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
 %doc COPYING ChangeLog
+%config(noreplace,missingok) %verify(not md5 mtime size) %{_sysconfdir}/env.d/LIBGL_DRIVERS_PATH
 %attr(755,root,root) %{_bindir}/X
 %attr(755,root,root) %{_bindir}/Xorg
 %attr(4755,root,root) %{_bindir}/Xwrapper
