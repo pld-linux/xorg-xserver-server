@@ -97,6 +97,7 @@ Obsoletes:	X11-Xserver
 Obsoletes:	X11-modules
 Obsoletes:	XFree86-Xserver
 Obsoletes:	XFree86-modules
+Obsoletes:	Xserver
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -124,6 +125,7 @@ Summary(pl):	Xnest - zagnie¿d¿ony serwer X
 Group:		X11/Servers
 Obsoletes:	X11-Xnest
 Obsoletes:	XFree86-Xnest
+Obsoletes:	Xserver-Xnest
 
 %description -n xorg-xserver-Xnest
 Xnest is an X Window System server which runs in an X window. Xnest is
