@@ -1,20 +1,20 @@
 Summary:	X.org server
 Summary(pl):	Serwer X.org
 Name:		xorg-xserver-server
-Version:	1.1.1
+Version:	1.1.99.901
 Release:	0.1
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
-# Source0-md5:	a8ed678677af8ebb2fba5624602f6b2e
-%define		mesa_version	6.5
+# Source0-md5:	83f4fa9afa0826280fc37b3780e31d33
+%define		mesa_version	6.5.1
 Source1:	http://dl.sourceforge.net/mesa3d/MesaLib-%{mesa_version}.tar.bz2
-# Source1-md5:	61beda590bfc5b4a12e979d5f2d70d7a
+# Source1-md5:	c46f2c6646a270911b791dd8e1c2d977
 Source2:	xserver.pamd
 Patch0:		%{name}-ncurses.patch
 Patch1:		%{name}-symlinks.patch
 Patch2:		%{name}-xwrapper.patch
-Patch3:		%{name}-compositefastpath.patch
+Patch3:		%{name}-missing-files.patch
 URL:		http://xorg.freedesktop.org/
 # for glx headers
 BuildRequires:	OpenGL-GLX-devel
@@ -35,6 +35,8 @@ BuildRequires:	xorg-lib-libXdmcp-devel
 BuildRequires:	xorg-lib-libXext-devel
 BuildRequires:	xorg-lib-libXfont-devel
 BuildRequires:	xorg-lib-libXi-devel
+BuildRequires:	xorg-lib-libXmu-devel
+BuildRequires:	xorg-lib-libXpm-devel
 BuildRequires:	xorg-lib-libXrender-devel
 BuildRequires:	xorg-lib-libXres-devel
 BuildRequires:	xorg-lib-libXt-devel >= 1.0.0
@@ -46,7 +48,7 @@ BuildRequires:	xorg-lib-libdmx-devel
 BuildRequires:	xorg-lib-libfontenc-devel
 BuildRequires:	xorg-lib-liblbxutil-devel
 BuildRequires:	xorg-lib-libxkbfile-devel
-BuildRequires:	xorg-lib-libxkbui-devel
+BuildRequires:	xorg-lib-libxkbui-devel >= 1.0.2
 BuildRequires:	xorg-lib-xtrans-devel
 BuildRequires:	xorg-proto-bigreqsproto-devel
 BuildRequires:	xorg-proto-compositeproto-devel >= 0.3
@@ -56,7 +58,9 @@ BuildRequires:	xorg-proto-evieext-devel
 BuildRequires:	xorg-proto-fixesproto-devel >= 4.0
 BuildRequires:	xorg-proto-fontcacheproto-devel
 BuildRequires:	xorg-proto-fontsproto-devel
-BuildRequires:	xorg-proto-glproto-devel >= 1.4.6
+BuildRequires:	xorg-proto-glproto-devel >= 1.4.7
+BuildRequires:	xorg-proto-inputproto-devel
+BuildRequires:	xorg-proto-kbproto-devel >= 1.0.3
 BuildRequires:	xorg-proto-printproto-devel
 BuildRequires:	xorg-proto-randrproto-devel
 BuildRequires:	xorg-proto-recordproto-devel
@@ -75,6 +79,8 @@ BuildRequires:	xorg-proto-xf86vidmodeproto-devel
 BuildRequires:	xorg-proto-xineramaproto-devel
 BuildRequires:	xorg-proto-xproto-devel
 BuildRequires:	xorg-util-util-macros >= 0.99.2
+# xcalibrateproto, tslib (for KDRIVE only)
+# glitz-devel >= 0.4.3 (for XGL and EGL only)
 # for rgb.txt
 Requires:	xorg-app-rgb >= 0.99.3
 Requires:	xorg-app-xkbcomp
@@ -224,7 +230,7 @@ Biblioteka rozszerzenia GLX dla serwera X.org.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p0
-%patch3 -p0
+%patch3 -p1
 
 %build
 %{__libtoolize}
@@ -265,13 +271,11 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc COPYING ChangeLog
+%doc COPYING
 %attr(755,root,root) %{_bindir}/X
 %attr(755,root,root) %{_bindir}/Xorg
 %attr(4755,root,root) %{_bindir}/Xwrapper
 %attr(755,root,root) %{_bindir}/cvt
-%attr(755,root,root) %{_bindir}/getconfig
-%attr(755,root,root) %{_bindir}/getconfig.pl
 %attr(755,root,root) %{_bindir}/gtf
 %attr(755,root,root) %{_bindir}/in[bwl]
 %attr(755,root,root) %{_bindir}/ioport
@@ -284,7 +288,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/X11/pixmaps
 %{_libdir}/X11/Cards
 %{_libdir}/X11/Options
-%{_libdir}/X11/getconfig
 %dir %{_libdir}/xorg
 %dir %{_libdir}/xorg/modules
 %dir %{_libdir}/xorg/modules/dri
@@ -315,14 +318,13 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man1/Xorg.1x*
 %{_mandir}/man1/Xserver.1x*
 %{_mandir}/man1/cvt.1*
-%{_mandir}/man1/getconfig.1x*
 %{_mandir}/man1/gtf.1x*
 %{_mandir}/man1/pcitweak.1x*
 %{_mandir}/man1/scanpci.1x*
 %{_mandir}/man1/xorgcfg.1x*
 %{_mandir}/man1/xorgconfig.1*
+%{_mandir}/man4/exa.4*
 %{_mandir}/man4/fbdevhw.4*
-%{_mandir}/man5/getconfig.5x*
 %{_mandir}/man5/xorg.conf.5x*
 
 %files -n xorg-xserver-Xdmx
