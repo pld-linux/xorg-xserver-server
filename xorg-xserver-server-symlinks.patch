@@ -1,25 +1,5 @@
---- xorg-server-0.99.3/XpConfig/C/print/models/CANONC3200-PS/fonts/Makefile.am.orig	2005-09-28 20:38:42.000000000 +0000
-+++ xorg-server-0.99.3/XpConfig/C/print/models/CANONC3200-PS/fonts/Makefile.am	2005-11-20 08:57:22.000000000 +0000
-@@ -1,6 +1,6 @@
- xpcdir = @xpconfigdir@/C/print/models/CANONC3200-PS/fonts
- 
--parentdir = @xpconfigdir@/C/print/models/PSdefault/fonts
-+parentdir = ../../PSdefault/fonts
- 
- XPFONTS = \
-         AvantGarde-Book.pmf \
---- xorg-server-0.99.3/XpConfig/C/print/models/HPLJ4050-PS/fonts/Makefile.am.orig	2005-09-28 20:38:42.000000000 +0000
-+++ xorg-server-0.99.3/XpConfig/C/print/models/HPLJ4050-PS/fonts/Makefile.am	2005-11-20 08:58:07.000000000 +0000
-@@ -1,6 +1,6 @@
- xpcdir = @xpconfigdir@/C/print/models/HPLJ4050-PS/fonts
- 
--parentdir = @xpconfigdir@/C/print/models/PSdefault/fonts
-+parentdir = ../../PSdefault/fonts
- 
- XPFONTS = \
-         AvantGarde-Book.pmf \
---- xorg-server-0.99.3/XpConfig/C/print/models/SPSPARC2/fonts/Makefile.am.orig	2005-09-28 20:38:42.000000000 +0000
-+++ xorg-server-0.99.3/XpConfig/C/print/models/SPSPARC2/fonts/Makefile.am	2005-11-20 08:58:59.000000000 +0000
+--- xorg-server-1.1.99.901/hw/xprint/config/C/print/models/SPSPARC2/fonts/Makefile.am.orig	2006-10-12 00:42:19.000000000 +0200
++++ xorg-server-1.1.99.901/hw/xprint/config/C/print/models/SPSPARC2/fonts/Makefile.am	2006-10-15 04:57:37.361612000 +0200
 @@ -1,6 +1,6 @@
  xpcdir = @xpconfigdir@/C/print/models/SPSPARC2/fonts
  
@@ -28,3 +8,23 @@
  
  XPFONTS = \
          Courier-Bold.pmf \
+--- xorg-server-1.1.99.901/hw/xprint/config/C/print/models/CANONC3200-PS/fonts/Makefile.am.orig	2006-10-12 00:42:19.000000000 +0200
++++ xorg-server-1.1.99.901/hw/xprint/config/C/print/models/CANONC3200-PS/fonts/Makefile.am	2006-10-15 04:56:41.598127000 +0200
+@@ -1,6 +1,6 @@
+ xpcdir = @xpconfigdir@/C/print/models/CANONC3200-PS/fonts
+ 
+-parentdir = @xpconfigdir@/C/print/models/PSdefault/fonts
++parentdir = ../../PSdefault/fonts
+ 
+ XPFONTS = \
+         AvantGarde-Book.pmf \
+--- xorg-server-1.1.99.901/hw/xprint/config/C/print/models/HPLJ4050-PS/fonts/Makefile.am.orig	2006-10-12 00:42:19.000000000 +0200
++++ xorg-server-1.1.99.901/hw/xprint/config/C/print/models/HPLJ4050-PS/fonts/Makefile.am	2006-10-15 04:57:16.176288000 +0200
+@@ -1,6 +1,6 @@
+ xpcdir = @xpconfigdir@/C/print/models/HPLJ4050-PS/fonts
+ 
+-parentdir = @xpconfigdir@/C/print/models/PSdefault/fonts
++parentdir = ../../PSdefault/fonts
+ 
+ XPFONTS = \
+         AvantGarde-Book.pmf \
