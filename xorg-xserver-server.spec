@@ -1,27 +1,33 @@
+# NOTE:
+# - DMX is broken at this moment (so --disable-dmx added for now)
+# - same for xprint
+%bcond_with	dmx
+%bcond_with	xprint
 Summary:	X.org server
 Summary(pl):	Serwer X.org
 Name:		xorg-xserver-server
-Version:	1.1.99.901
+Version:	1.2.99.0
 Release:	0.1
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
-# Source0-md5:	83f4fa9afa0826280fc37b3780e31d33
-%define		mesa_version	6.5.1
-Source1:	http://dl.sourceforge.net/mesa3d/MesaLib-%{mesa_version}.tar.bz2
+# Source0-md5:	b21e7262541f6d3c8c5dfdfd29238bbe
+# %define		mesa_version	6.5.1
+# Source1:	http://dl.sourceforge.net/mesa3d/MesaLib-%{mesa_version}.tar.bz2
+Source1:	Mesa-20061103.tar.gz
 # Source1-md5:	c46f2c6646a270911b791dd8e1c2d977
 Source2:	xserver.pamd
 Patch0:		%{name}-ncurses.patch
 Patch1:		%{name}-symlinks.patch
 Patch2:		%{name}-xwrapper.patch
-Patch3:		%{name}-missing-files.patch
+Patch3:		%{name}-dbus.patch
 URL:		http://xorg.freedesktop.org/
 # for glx headers
 BuildRequires:	OpenGL-GLX-devel
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake
 BuildRequires:	cpp
-BuildRequires:	libdrm-devel
+BuildRequires:	libdrm-devel >= 2.2.0
 BuildRequires:	libtool
 BuildRequires:	ncurses-devel
 BuildRequires:	pam-devel
@@ -44,7 +50,7 @@ BuildRequires:	xorg-lib-libXtst-devel
 BuildRequires:	xorg-lib-libXxf86dga-devel
 BuildRequires:	xorg-lib-libXxf86misc-devel
 BuildRequires:	xorg-lib-libXxf86vm-devel
-BuildRequires:	xorg-lib-libdmx-devel
+%{?with_dmx:BuildRequires:	xorg-lib-libdmx-devel}
 BuildRequires:	xorg-lib-libfontenc-devel
 BuildRequires:	xorg-lib-liblbxutil-devel
 BuildRequires:	xorg-lib-libxkbfile-devel
@@ -53,13 +59,13 @@ BuildRequires:	xorg-lib-xtrans-devel
 BuildRequires:	xorg-proto-bigreqsproto-devel
 BuildRequires:	xorg-proto-compositeproto-devel >= 0.3
 BuildRequires:	xorg-proto-damageproto-devel
-BuildRequires:	xorg-proto-dmxproto-devel
+%{?with_dmx:BuildRequires:	xorg-proto-dmxproto-devel}
 BuildRequires:	xorg-proto-evieext-devel
 BuildRequires:	xorg-proto-fixesproto-devel >= 4.0
 BuildRequires:	xorg-proto-fontcacheproto-devel
 BuildRequires:	xorg-proto-fontsproto-devel
 BuildRequires:	xorg-proto-glproto-devel >= 1.4.7
-BuildRequires:	xorg-proto-inputproto-devel
+BuildRequires:	xorg-proto-inputproto-devel >= 1.4
 BuildRequires:	xorg-proto-kbproto-devel >= 1.0.3
 BuildRequires:	xorg-proto-printproto-devel
 BuildRequires:	xorg-proto-randrproto-devel
@@ -199,7 +205,7 @@ serwera X, ale odmawiaj± uruchomienia bez niego.
 Summary:	Header files for X.org server
 Summary(pl):	Pliki nag³ówkowe dla servera X.org
 Group:		X11/Development/Libraries
-Requires:	libdrm-devel
+Requires:	libdrm-devel >= 2.2.0
 Requires:	xorg-proto-fontsproto-devel
 Requires:	xorg-proto-renderproto-devel
 Requires:	xorg-proto-videoproto-devel
@@ -232,7 +238,7 @@ Biblioteka rozszerzenia GLX dla serwera X.org.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p0
-%patch3 -p1
+%patch3 -p0
 
 %build
 %{__libtoolize}
@@ -245,9 +251,14 @@ Biblioteka rozszerzenia GLX dla serwera X.org.
 	--enable-builddocs \
 	--enable-lbx \
 	--enable-xevie \
+	--%{?with_dmx:en}%{!?with_dmx:dis}able-dmx \
+	--%{?with_dmx:en}%{!?with_dmx:dis}able-xprint \
 	--with-dri-driver-path=%{_libdir}/xorg/modules/dri \
 	--with-default-font-path="%{_fontsdir}/misc,%{_fontsdir}/TTF,%{_fontsdir}/OTF,%{_fontsdir}/Type1,%{_fontsdir}/CID,%{_fontsdir}/100dpi,%{_fontsdir}/75dpi" \
-	--with-mesa-source="`pwd`/Mesa-%{mesa_version}"
+	--with-mesa-source="`pwd`/Mesa"
+
+# workarounds
+sed -i -e 's#CONFIG_H#XXX_MESA_CONFIG_H#g' GL/mesa/main/config.h
 
 %{__make}
 
@@ -284,10 +295,10 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/out[bwl]
 %attr(755,root,root) %{_bindir}/pcitweak
 %attr(755,root,root) %{_bindir}/scanpci
-%attr(755,root,root) %{_bindir}/xorgcfg
+#%attr(755,root,root) %{_bindir}/xorgcfg
 %attr(755,root,root) %{_bindir}/xorgconfig
-%{_includedir}/X11/bitmaps/*
-%{_includedir}/X11/pixmaps
+#%{_includedir}/X11/bitmaps/*
+#%{_includedir}/X11/pixmaps
 %{_libdir}/X11/Cards
 %{_libdir}/X11/Options
 %dir %{_libdir}/xorg
@@ -312,8 +323,9 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/xorg/modules/lib*.so
 %dir %{_libdir}/xserver
 %{_libdir}/xserver/SecurityPolicy
-%{_datadir}/X11/app-defaults/XOrgCfg
+#%{_datadir}/X11/app-defaults/XOrgCfg
 %{_datadir}/X11/xkb/compiled
+/etc/dbus-1/system.d/*.conf
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/pam.d/xserver
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/security/blacklist.xserver
 %config(missingok) /etc/security/console.apps/xserver
@@ -323,12 +335,13 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man1/gtf.1x*
 %{_mandir}/man1/pcitweak.1x*
 %{_mandir}/man1/scanpci.1x*
-%{_mandir}/man1/xorgcfg.1x*
+#%{_mandir}/man1/xorgcfg.1x*
 %{_mandir}/man1/xorgconfig.1*
 %{_mandir}/man4/exa.4*
 %{_mandir}/man4/fbdevhw.4*
 %{_mandir}/man5/xorg.conf.5x*
 
+%if %{with dmx}
 %files -n xorg-xserver-Xdmx
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/Xdmx
@@ -347,17 +360,20 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man1/dmxtodmx.1x*
 %{_mandir}/man1/vdltodmx.1x*
 %{_mandir}/man1/xdmxconfig.1x*
+%endif
 
 %files -n xorg-xserver-Xnest
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/Xnest
 %{_mandir}/man1/Xnest.1x*
 
+%if %{with xprint}
 %files -n xorg-xserver-Xprt
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/Xprt
 %{_libdir}/X11/xserver
 %{_mandir}/man1/Xprt.1x*
+%endif
 
 %files -n xorg-xserver-Xvfb
 %defattr(644,root,root,755)
@@ -368,6 +384,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %{_includedir}/xorg
 %{_libdir}/libxf86config.a
+%{_libdir}/libconfig.a
 %{_aclocaldir}/xorg-server.m4
 %{_pkgconfigdir}/xorg-server.pc
 
