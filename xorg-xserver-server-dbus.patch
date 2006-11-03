@@ -1,0 +1,10 @@
+--- configure.ac.org	2006-11-03 13:35:15.294001312 +0000
++++ configure.ac	2006-11-03 13:37:02.207579844 +0000
+@@ -539,6 +539,7 @@
+        REQUIRED_LIBS="$REQUIRED_LIBS dbus-1"
+ fi
+ CONFIG_LIB='$(top_builddir)/config/libconfig.a'
++CONFIG_LIB="$CONFIG_LIB $DBUS_LIBS"
+ AM_CONDITIONAL(DBUS, [test "x$DBUS" = xyes])
+ 
+ AM_CONDITIONAL(XV, [test "x$XV" = xyes])
