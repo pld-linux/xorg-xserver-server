@@ -15,7 +15,7 @@ Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{v
 # %define		mesa_version	6.5.1
 # Source1:	http://dl.sourceforge.net/mesa3d/MesaLib-%{mesa_version}.tar.bz2
 Source1:	Mesa-20061103.tar.gz
-# Source1-md5:	fa53549d83dc5a03b0c955e03a8764e4
+# Source1-md5:	1ef25af748d4c2a808ee4521a75c2579
 Source2:	xserver.pamd
 Patch0:		%{name}-ncurses.patch
 Patch1:		%{name}-symlinks.patch
