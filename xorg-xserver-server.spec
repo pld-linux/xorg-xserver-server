@@ -7,7 +7,7 @@ Summary:	X.org server
 Summary(pl):	Serwer X.org
 Name:		xorg-xserver-server
 Version:	1.2.99.0
-Release:	0.1
+Release:	0.2
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
@@ -278,6 +278,10 @@ install hw/xfree86/parser/xf86Optrec.h $RPM_BUILD_ROOT%{_includedir}/xorg/xf86Op
 install hw/xfree86/parser/libxf86config.a $RPM_BUILD_ROOT%{_libdir}/libxf86config.a
 :> $RPM_BUILD_ROOT/etc/security/console.apps/xserver
 :> $RPM_BUILD_ROOT/etc/security/blacklist.xserver
+
+# missing includes ?
+install hw/xfree86/common/xf86Keymap.h $RPM_BUILD_ROOT%{_includedir}/xorg/xf86Keymap.h
+
 
 rm -f $RPM_BUILD_ROOT%{_libdir}/xorg/modules/{*,*/*}.{la,a}
 
