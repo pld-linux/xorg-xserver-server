@@ -21,6 +21,7 @@ Patch0:		%{name}-ncurses.patch
 Patch1:		%{name}-symlinks.patch
 Patch2:		%{name}-xwrapper.patch
 Patch3:		%{name}-dbus.patch
+Patch4:		%{name}-xkb.patch
 URL:		http://xorg.freedesktop.org/
 # for glx headers
 BuildRequires:	OpenGL-GLX-devel
@@ -239,6 +240,7 @@ Biblioteka rozszerzenia GLX dla serwera X.org.
 %patch1 -p1
 %patch2 -p0
 %patch3 -p0
+%patch4 -p1
 
 %build
 %{__libtoolize}
