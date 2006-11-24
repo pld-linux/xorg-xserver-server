@@ -237,6 +237,8 @@ Biblioteka rozszerzenia GLX dla serwera X.org.
 %{__autoheader}
 %{__automake}
 %configure \
+	--with-os-name="PLD/Linux" \
+	--with-os-vendor="PLD/Team" \
 	--enable-dga \
 	--enable-builddocs \
 	--enable-lbx \
