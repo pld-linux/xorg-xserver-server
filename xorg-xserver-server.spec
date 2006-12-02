@@ -303,7 +303,6 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/xorg/modules/fonts/lib*.so
 %dir %{_libdir}/xorg/modules/input
 %dir %{_libdir}/xorg/modules/linux
-%attr(755,root,root) %{_libdir}/xorg/modules/linux/libdrm.so
 %attr(755,root,root) %{_libdir}/xorg/modules/linux/libfbdevhw.so
 %dir %{_libdir}/xorg/modules/multimedia
 %attr(755,root,root) %{_libdir}/xorg/modules/multimedia/*.so
