@@ -1,12 +1,12 @@
 Summary:	X.org server
 Summary(pl):	Serwer X.org
 Name:		xorg-xserver-server
-Version:	1.1.99.902
+Version:	1.1.99.903
 Release:	0.1
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
-# Source0-md5:	0319aac0baee367529d0605c380281f0
+# Source0-md5:	aa7d6b3577d4d851faf1c591df490bd5
 %define		mesa_version	6.5.1
 Source1:	http://dl.sourceforge.net/mesa3d/MesaLib-%{mesa_version}.tar.bz2
 # Source1-md5:	c46f2c6646a270911b791dd8e1c2d977
@@ -20,7 +20,7 @@ BuildRequires:	OpenGL-GLX-devel
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake
 BuildRequires:	cpp
-BuildRequires:	libdrm-devel
+BuildRequires:	libdrm-devel >= 2.3.0
 BuildRequires:	libtool
 BuildRequires:	ncurses-devel
 BuildRequires:	pam-devel
@@ -196,7 +196,7 @@ serwera X, ale odmawiaj± uruchomienia bez niego.
 Summary:	Header files for X.org server
 Summary(pl):	Pliki nag³ówkowe dla servera X.org
 Group:		X11/Development/Libraries
-Requires:	libdrm-devel
+Requires:	libdrm-devel >= 2.3.0
 Requires:	xorg-proto-fontsproto-devel
 Requires:	xorg-proto-renderproto-devel
 Requires:	xorg-proto-videoproto-devel
@@ -244,7 +244,7 @@ Biblioteka rozszerzenia GLX dla serwera X.org.
 	--enable-lbx \
 	--enable-xevie \
 	--with-dri-driver-path=%{_libdir}/xorg/modules/dri \
-	--with-default-font-path="%{_fontsdir}/misc,%{_fontsdir}/TTF,%{_fontsdir}/OTF,%{_fontsdir}/Type1,%{_fontsdir}/CID,%{_fontsdir}/100dpi,%{_fontsdir}/75dpi" \
+	--with-default-font-path="%{_fontsdir}/misc,%{_fontsdir}/TTF,%{_fontsdir}/OTF,%{_fontsdir}/Type1,%{_fontsdir}/100dpi,%{_fontsdir}/75dpi" \
 	--with-mesa-source="`pwd`/Mesa-%{mesa_version}"
 
 %{__make}
