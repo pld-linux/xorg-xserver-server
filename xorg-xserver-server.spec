@@ -12,7 +12,7 @@ License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
 # Source0-md5:	b21e7262541f6d3c8c5dfdfd29238bbe
-# %define		mesa_version	6.5.1
+%define		mesa_version	6.5.1.20061103
 # Source1:	http://dl.sourceforge.net/mesa3d/MesaLib-%{mesa_version}.tar.bz2
 Source1:	Mesa-20061103.tar.gz
 # Source1-md5:	1ef25af748d4c2a808ee4521a75c2579
@@ -224,7 +224,8 @@ Pliki nag³ówkowe dla serwera X.org.
 Summary:	GLX extension library fo X.org server
 Summary(pl):	Biblioteka rozszerzenia GLX dla serwera X.org
 Group:		X11/Servers
-Requires:	xorg-xserver-server
+Requires:	%{name} = %{version}-%{release}
+Provides:	xorg-xserver-libglx(glapi) = %{mesa_version}
 Provides:	xorg-xserver-modules-libglx
 Obsoletes:	xorg-driver-video-nvidia
 
