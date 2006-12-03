@@ -246,7 +246,8 @@ Biblioteka rozszerzenia GLX dla serwera X.org.
 	--enable-xevie \
 	--with-dri-driver-path=%{_libdir}/xorg/modules/dri \
 	--with-default-font-path="%{_fontsdir}/misc,%{_fontsdir}/TTF,%{_fontsdir}/OTF,%{_fontsdir}/Type1,%{_fontsdir}/100dpi,%{_fontsdir}/75dpi" \
-	--with-mesa-source="`pwd`/Mesa-%{mesa_version}"
+	--with-mesa-source="`pwd`/Mesa-%{mesa_version}" \
+	--with-xkb-output=/var/lib/xkb
 
 %{__make}
 
@@ -311,7 +312,8 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_libdir}/xserver
 %{_libdir}/xserver/SecurityPolicy
 %{_datadir}/X11/app-defaults/XOrgCfg
-%{_datadir}/X11/xkb/compiled
+%dir /var/lib/xkb
+/var/lib/xkb/README.compiled
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/pam.d/xserver
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/security/blacklist.xserver
 %config(missingok) /etc/security/console.apps/xserver
