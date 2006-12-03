@@ -1,8 +1,11 @@
 # NOTE:
 # - DMX is broken at this moment (so --disable-dmx added for now)
 # - same for xprint
-%bcond_with	dmx
-%bcond_with	xprint
+#
+# Conditional build:
+%bcond_with	dmx		# Xdmx server
+%bcond_with	xprint		# Xprint server
+#
 Summary:	X.org server
 Summary(pl):	Serwer X.org
 Name:		xorg-xserver-server
@@ -259,7 +262,8 @@ Biblioteka rozszerzenia GLX dla serwera X.org.
 	--%{?with_dmx:en}%{!?with_dmx:dis}able-xprint \
 	--with-dri-driver-path=%{_libdir}/xorg/modules/dri \
 	--with-default-font-path="%{_fontsdir}/misc,%{_fontsdir}/TTF,%{_fontsdir}/OTF,%{_fontsdir}/Type1,%{_fontsdir}/CID,%{_fontsdir}/100dpi,%{_fontsdir}/75dpi" \
-	--with-mesa-source="`pwd`/Mesa-%{mesa_version}"
+	--with-mesa-source="`pwd`/Mesa-%{mesa_version}" \
+	--with-xkb-output=/var/lib/xkb
 
 # workarounds
 sed -i -e 's#CONFIG_H#XXX_MESA_CONFIG_H#g' GL/mesa/main/config.h
@@ -281,9 +285,8 @@ install hw/xfree86/parser/libxf86config.a $RPM_BUILD_ROOT%{_libdir}/libxf86confi
 :> $RPM_BUILD_ROOT/etc/security/console.apps/xserver
 :> $RPM_BUILD_ROOT/etc/security/blacklist.xserver
 
-# missing includes ?
+# missing include (needed by -driver-keyboard)
 install hw/xfree86/common/xf86Keymap.h $RPM_BUILD_ROOT%{_includedir}/xorg/xf86Keymap.h
-
 
 rm -f $RPM_BUILD_ROOT%{_libdir}/xorg/modules/{*,*/*}.{la,a}
 
@@ -332,7 +335,8 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_libdir}/xserver
 %{_libdir}/xserver/SecurityPolicy
 #%{_datadir}/X11/app-defaults/XOrgCfg
-%{_datadir}/X11/xkb/compiled
+%dir /var/lib/xkb
+/var/lib/xkb/README.compiled
 /etc/dbus-1/system.d/*.conf
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/pam.d/xserver
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/security/blacklist.xserver
