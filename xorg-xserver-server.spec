@@ -7,9 +7,9 @@ License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
 # Source0-md5:	aa7d6b3577d4d851faf1c591df490bd5
-%define		mesa_version	6.5.1
+%define		mesa_version	6.5.2
 Source1:	http://dl.sourceforge.net/mesa3d/MesaLib-%{mesa_version}.tar.bz2
-# Source1-md5:	c46f2c6646a270911b791dd8e1c2d977
+# Source1-md5:	e4d894181f1859651658b3704633e10d
 Source2:	xserver.pamd
 Patch0:		%{name}-ncurses.patch
 Patch1:		%{name}-symlinks.patch
