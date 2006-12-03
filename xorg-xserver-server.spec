@@ -12,10 +12,9 @@ License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
 # Source0-md5:	b21e7262541f6d3c8c5dfdfd29238bbe
-%define		mesa_version	6.5.1.20061103
-# Source1:	http://dl.sourceforge.net/mesa3d/MesaLib-%{mesa_version}.tar.bz2
-Source1:	Mesa-20061103.tar.gz
-# Source1-md5:	1ef25af748d4c2a808ee4521a75c2579
+%define		mesa_version	6.5.2
+Source1:	http://dl.sourceforge.net/mesa3d/MesaLib-%{mesa_version}.tar.bz2
+# Source1-md5:	e4d894181f1859651658b3704633e10d
 Source2:	xserver.pamd
 Patch0:		%{name}-ncurses.patch
 Patch1:		%{name}-symlinks.patch
@@ -260,7 +259,7 @@ Biblioteka rozszerzenia GLX dla serwera X.org.
 	--%{?with_dmx:en}%{!?with_dmx:dis}able-xprint \
 	--with-dri-driver-path=%{_libdir}/xorg/modules/dri \
 	--with-default-font-path="%{_fontsdir}/misc,%{_fontsdir}/TTF,%{_fontsdir}/OTF,%{_fontsdir}/Type1,%{_fontsdir}/CID,%{_fontsdir}/100dpi,%{_fontsdir}/75dpi" \
-	--with-mesa-source="`pwd`/Mesa"
+	--with-mesa-source="`pwd`/Mesa-%{mesa_version}"
 
 # workarounds
 sed -i -e 's#CONFIG_H#XXX_MESA_CONFIG_H#g' GL/mesa/main/config.h
