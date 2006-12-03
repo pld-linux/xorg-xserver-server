@@ -214,7 +214,8 @@ Pliki nag³ówkowe dla serwera X.org.
 Summary:	GLX extension library fo X.org server
 Summary(pl):	Biblioteka rozszerzenia GLX dla serwera X.org
 Group:		X11/Servers
-Requires:	xorg-xserver-server
+Requires:	%{name} = %{version}-%{release}
+Provides:	xorg-xserver-libglx(glapi) = %{mesa_version}
 Provides:	xorg-xserver-modules-libglx
 Obsoletes:	xorg-driver-video-nvidia
 
