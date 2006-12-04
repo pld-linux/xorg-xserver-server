@@ -1,0 +1,20 @@
+Index: exa/exa.c
+===================================================================
+RCS file: /cvs/xorg/xserver/xorg/exa/exa.c,v
+retrieving revision 1.46
+diff -p -u -r1.46 exa.c
+--- exa/exa.c	18 Apr 2006 19:14:07 -0000	1.46
++++ exa/exa.c	5 Jun 2006 15:33:26 -0000
+@@ -419,9 +460,10 @@ exaValidateGC (GCPtr pGC, Mask changes, 
+ 	if (!pGC->tileIsPixel && FbEvenTile (pGC->tile.pixmap->drawable.width *
+ 					     pDrawable->bitsPerPixel))
+ 	{
+-	    exaPrepareAccess(&pGC->tile.pixmap->drawable, EXA_PREPARE_SRC);
++	    exaPrepareAccess(&pGC->tile.pixmap->drawable, EXA_PREPARE_DEST);
++	    exaMoveOutPixmap(pGC->tile.pixmap);
+ 	    fbPadPixmap (pGC->tile.pixmap);
+-	    exaFinishAccess(&pGC->tile.pixmap->drawable, EXA_PREPARE_SRC);
++	    exaFinishAccess(&pGC->tile.pixmap->drawable, EXA_PREPARE_DEST);
+ 	}
+ 	/* Mask out the GCTile change notification, now that we've done FB's
+ 	 * job for it.
