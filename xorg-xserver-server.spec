@@ -2,7 +2,7 @@ Summary:	X.org server
 Summary(pl):	Serwer X.org
 Name:		xorg-xserver-server
 Version:	1.1.99.903
-Release:	1
+Release:	2
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
@@ -238,6 +238,7 @@ Biblioteka rozszerzenia GLX dla serwera X.org.
 %patch3 -p0
 %patch4 -p1
 %patch5 -p1
+# buggy gcc
 %ifarch %{x8664} athlon i486
 %patch6 -p1
 %endif
