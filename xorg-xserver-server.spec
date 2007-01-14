@@ -2,7 +2,7 @@ Summary:	X.org server
 Summary(pl):	Serwer X.org
 Name:		xorg-xserver-server
 Version:	1.1.99.903
-Release:	0.5
+Release:	0.3
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
@@ -16,7 +16,6 @@ Patch1:		%{name}-symlinks.patch
 Patch2:		%{name}-xwrapper.patch
 Patch3:		%{name}-bug-5825.patch
 Patch4:		%{name}-mesa-6.5.2.patch
-Patch5:		%{name}-white_cube.patch
 URL:		http://xorg.freedesktop.org/
 # for glx headers
 BuildRequires:	OpenGL-GLX-devel
@@ -88,17 +87,17 @@ Requires:	xorg-app-rgb >= 0.99.3
 Requires:	xorg-app-xkbcomp
 # just for %{_includedir}/bitmaps dir
 Requires:	xorg-data-xbitmaps
-Requires:	xkeyboard-config
+Requires:	xorg-data-xkbdata
 # xserver requires default fixed and cursosr fonts.
 Requires:	xorg-font-font-alias
 Requires:	xorg-font-font-cursor-misc
 Requires:	xorg-font-font-misc-misc-base >= 1.0.0-0.3
 # for new app-defaults location
 Requires:	xorg-lib-libXt >= 1.0.0
-Obsoletes:	X11-Xserver < 1:7.0.0
-Obsoletes:	X11-modules < 1:7.0.0
-Obsoletes:	XFree86-Xserver < 1:7.0.0
-Obsoletes:	XFree86-modules < 1:7.0.0
+Obsoletes:	X11-Xserver
+Obsoletes:	X11-modules
+Obsoletes:	XFree86-Xserver
+Obsoletes:	XFree86-modules
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -124,8 +123,8 @@ Xdmx - rozproszony, wielomonitorowy serwer X.
 Summary:	Xnest - nested X server
 Summary(pl):	Xnest - zagnie¿d¿ony serwer X
 Group:		X11/Servers
-Obsoletes:	X11-Xnest < 1:7.0.0
-Obsoletes:	XFree86-Xnest < 1:7.0.0
+Obsoletes:	X11-Xnest
+Obsoletes:	XFree86-Xnest
 
 %description -n xorg-xserver-Xnest
 Xnest is an X Window System server which runs in an X window. Xnest is
@@ -154,8 +153,8 @@ Xnest - ÃÅ ÓÅÒ×ÅÒ X Window System, ÑËÉÊ ÐÒÁÃÀ¤ Õ ×¦ËÎ¦ X. æÁËÔÉÞÎÏ ÃÅ
 Summary:	Xprt - Xprint server for X
 Summary(pl):	Xprt - serwer Xprint dla X
 Group:		X11/Servers
-Obsoletes:	X11-Xprt < 1:7.0.0
-Obsoletes:	XFree86-Xprt < 1:7.0.0
+Obsoletes:	X11-Xprt
+Obsoletes:	XFree86-Xprt
 
 %description -n xorg-xserver-Xprt
 Xprt is the Xprint print server for X Window System for non display
@@ -169,8 +168,8 @@ wy¶wietlaj±cych, takich jak drukarki czy faksy.
 Summary:	Xvfb - virtual framebuffer X server
 Summary(pl):	Xvfb - serwer X z wirtualnym framebufferem
 Group:		X11/Servers
-Obsoletes:	X11-Xvfb < 1:7.0.0
-Obsoletes:	XFree86-Xvfb < 1:7.0.0
+Obsoletes:	X11-Xvfb
+Obsoletes:	XFree86-Xvfb
 
 %description -n xorg-xserver-Xvfb
 Xvfb (X Virtual Frame Buffer) is an X Window System server that is
@@ -204,8 +203,8 @@ Requires:	xorg-proto-fontsproto-devel
 Requires:	xorg-proto-renderproto-devel
 Requires:	xorg-proto-videoproto-devel
 Requires:	xorg-proto-xextproto-devel
-Obsoletes:	X11-Xserver-devel < 1:7.0.0
-Obsoletes:	X11-XFree86-devel < 1:7.0.0
+Obsoletes:	X11-Xserver-devel
+Obsoletes:	X11-XFree86-devel
 
 %description devel
 Header files for X.org server.
@@ -235,7 +234,6 @@ Biblioteka rozszerzenia GLX dla serwera X.org.
 %patch2 -p0
 %patch3 -p0
 %patch4 -p1
-%patch5 -p1
 
 %build
 %{__libtoolize}
