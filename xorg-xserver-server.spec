@@ -238,7 +238,7 @@ Biblioteka rozszerzenia GLX dla serwera X.org.
 %patch3 -p0
 %patch4 -p1
 %patch5 -p1
-%ifarch %{x8664}
+%ifarch %{x8664} athlon i486
 %patch6 -p1
 %endif
 
