@@ -1,12 +1,12 @@
 Summary:	X.org server
 Summary(pl):	Serwer X.org
 Name:		xorg-xserver-server
-Version:	1.1.99.903
-Release:	2
+Version:	1.2.0
+Release:	1
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
-# Source0-md5:	aa7d6b3577d4d851faf1c591df490bd5
+# Source0-md5:	ea291c89e68832d570d9d5e007218bd6
 %define		mesa_version	6.5.2
 Source1:	http://dl.sourceforge.net/mesa3d/MesaLib-%{mesa_version}.tar.bz2
 # Source1-md5:	e4d894181f1859651658b3704633e10d
@@ -15,10 +15,8 @@ Patch0:		%{name}-ncurses.patch
 Patch1:		%{name}-symlinks.patch
 Patch2:		%{name}-xwrapper.patch
 Patch3:		%{name}-bug-5825.patch
-Patch4:		%{name}-mesa-6.5.2.patch
-Patch5:		%{name}-white_cube.patch
 # nasty hack for http://gcc.gnu.org/bugzilla/show_bug.cgi?id=30052
-Patch6:		%{name}-gcc-x86_64-workaround.patch
+Patch4:		%{name}-gcc-x86_64-workaround.patch
 URL:		http://xorg.freedesktop.org/
 # for glx headers
 BuildRequires:	OpenGL-GLX-devel
@@ -62,7 +60,7 @@ BuildRequires:	xorg-proto-evieext-devel
 BuildRequires:	xorg-proto-fixesproto-devel >= 4.0
 BuildRequires:	xorg-proto-fontcacheproto-devel
 BuildRequires:	xorg-proto-fontsproto-devel
-BuildRequires:	xorg-proto-glproto-devel >= 1.4.7
+BuildRequires:	xorg-proto-glproto-devel >= 1.4.8
 BuildRequires:	xorg-proto-inputproto-devel
 BuildRequires:	xorg-proto-kbproto-devel >= 1.0.3
 BuildRequires:	xorg-proto-printproto-devel
@@ -236,11 +234,9 @@ Biblioteka rozszerzenia GLX dla serwera X.org.
 %patch1 -p1
 %patch2 -p0
 %patch3 -p0
-%patch4 -p1
-%patch5 -p1
 # buggy gcc
 %ifarch %{x8664} athlon i486
-%patch6 -p1
+%patch4 -p1
 %endif
 
 %build
