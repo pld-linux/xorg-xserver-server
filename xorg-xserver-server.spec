@@ -7,7 +7,7 @@
 %bcond_with	xprint		# Xprint server
 #
 Summary:	X.org server
-Summary(pl.UTF-8):   Serwer X.org
+Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
 Version:	1.2.99.0
 Release:	0.2
@@ -119,7 +119,7 @@ graficznej. Do działania wymaga odpowiedniego sterownika.
 
 %package -n xorg-xserver-Xdmx
 Summary:	Xdmx - distributed multi-head X server
-Summary(pl.UTF-8):   Xdmx - rozproszony, wielomonitorowy serwer X
+Summary(pl.UTF-8):	Xdmx - rozproszony, wielomonitorowy serwer X
 Group:		X11/Servers
 
 %description -n xorg-xserver-Xdmx
@@ -130,7 +130,7 @@ Xdmx - rozproszony, wielomonitorowy serwer X.
 
 %package -n xorg-xserver-Xnest
 Summary:	Xnest - nested X server
-Summary(pl.UTF-8):   Xnest - zagnieżdżony serwer X
+Summary(pl.UTF-8):	Xnest - zagnieżdżony serwer X
 Group:		X11/Servers
 Obsoletes:	X11-Xnest < 1:7.0.0
 Obsoletes:	XFree86-Xnest < 1:7.0.0
@@ -161,7 +161,7 @@ Xnest - це сервер X Window System, який працює у вікні X
 
 %package -n xorg-xserver-Xprt
 Summary:	Xprt - Xprint server for X
-Summary(pl.UTF-8):   Xprt - serwer Xprint dla X
+Summary(pl.UTF-8):	Xprt - serwer Xprint dla X
 Group:		X11/Servers
 Obsoletes:	X11-Xprt < 1:7.0.0
 Obsoletes:	XFree86-Xprt < 1:7.0.0
@@ -176,7 +176,7 @@ wyświetlających, takich jak drukarki czy faksy.
 
 %package -n xorg-xserver-Xvfb
 Summary:	Xvfb - virtual framebuffer X server
-Summary(pl.UTF-8):   Xvfb - serwer X z wirtualnym framebufferem
+Summary(pl.UTF-8):	Xvfb - serwer X z wirtualnym framebufferem
 Group:		X11/Servers
 Obsoletes:	X11-Xvfb < 1:7.0.0
 Obsoletes:	XFree86-Xvfb < 1:7.0.0
@@ -206,7 +206,7 @@ serwera X, ale odmawiają uruchomienia bez niego.
 
 %package devel
 Summary:	Header files for X.org server
-Summary(pl.UTF-8):   Pliki nagłówkowe dla servera X.org
+Summary(pl.UTF-8):	Pliki nagłówkowe dla servera X.org
 Group:		X11/Development/Libraries
 Requires:	libdrm-devel >= 2.2.0
 Requires:	xorg-proto-fontsproto-devel
@@ -224,7 +224,7 @@ Pliki nagłówkowe dla serwera X.org.
 
 %package -n xorg-xserver-libglx
 Summary:	GLX extension library fo X.org server
-Summary(pl.UTF-8):   Biblioteka rozszerzenia GLX dla serwera X.org
+Summary(pl.UTF-8):	Biblioteka rozszerzenia GLX dla serwera X.org
 Group:		X11/Servers
 Requires:	%{name} = %{version}-%{release}
 Provides:	xorg-xserver-libglx(glapi) = %{mesa_version}
