@@ -7,7 +7,7 @@
 %bcond_with	xprint		# Xprint server
 #
 Summary:	X.org server
-Summary(pl):	Serwer X.org
+Summary(pl.UTF-8):   Serwer X.org
 Name:		xorg-xserver-server
 Version:	1.2.99.0
 Release:	0.2
@@ -113,24 +113,24 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 Xorg server is a generally used X server which uses display hardware.
 It requires proper driver for your display hardware.
 
-%description -l pl
-Serwer Xorg to podstawowy serwer X wy∂wietlaj±cy obraz na karcie
-graficznej. Do dzia≥ania wymaga odpowiedniego sterownika.
+%description -l pl.UTF-8
+Serwer Xorg to podstawowy serwer X wy≈õwietlajƒÖcy obraz na karcie
+graficznej. Do dzia≈Çania wymaga odpowiedniego sterownika.
 
 %package -n xorg-xserver-Xdmx
 Summary:	Xdmx - distributed multi-head X server
-Summary(pl):	Xdmx - rozproszony, wielomonitorowy serwer X
+Summary(pl.UTF-8):   Xdmx - rozproszony, wielomonitorowy serwer X
 Group:		X11/Servers
 
 %description -n xorg-xserver-Xdmx
 Xdmx - distributed multi-head X server.
 
-%description -n xorg-xserver-Xdmx -l pl
+%description -n xorg-xserver-Xdmx -l pl.UTF-8
 Xdmx - rozproszony, wielomonitorowy serwer X.
 
 %package -n xorg-xserver-Xnest
 Summary:	Xnest - nested X server
-Summary(pl):	Xnest - zagnieødøony serwer X
+Summary(pl.UTF-8):   Xnest - zagnie≈ºd≈ºony serwer X
 Group:		X11/Servers
 Obsoletes:	X11-Xnest < 1:7.0.0
 Obsoletes:	XFree86-Xnest < 1:7.0.0
@@ -142,26 +142,26 @@ a 'nested' window server, actually a client of the real X server,
 which manages windows and graphics requests for Xnest, while Xnest
 manages the windows and graphics requests for its own clients.
 
-%description -n xorg-xserver-Xnest -l pl
+%description -n xorg-xserver-Xnest -l pl.UTF-8
 Xnest jest serwerem X uruchamianym w okienku innego serwera X. Xnest
-zachowuje siÍ jak klient X w stosunku do prawdziwego serwera X, a jak
-serwer X dla w≥asnych klientÛw.
+zachowuje siƒô jak klient X w stosunku do prawdziwego serwera X, a jak
+serwer X dla w≈Çasnych klient√≥w.
 
-%description -n xorg-xserver-Xnest -l ru
-Xnest - ‹‘œ ”≈“◊≈“ X Window System, Àœ‘œ“Ÿ  “¡¬œ‘¡≈‘ ◊ œÀŒ≈ X. Ó¡
-”¡ÕœÕ ƒ≈Ã≈ ‹‘œ ÀÃ…≈Œ‘ “≈¡ÃÿŒœ«œ X-”≈“◊≈“¡, Àœ‘œ“Ÿ  ’–“¡◊Ã—≈‘ œÀŒ¡Õ… …
-«“¡∆…ﬁ≈”À…Õ… ⁄¡–“œ”¡Õ… ƒÃ— Xnest ◊ ‘œ ◊“≈Õ—, À¡À Xnest ’–“¡◊Ã—≈‘
-œÀŒ¡Õ… … «“¡∆…ﬁ≈”À…Õ… ⁄¡–“œ”¡Õ… ƒÃ— ”◊œ…» ”œ¬”‘◊≈ŒŒŸ» ÀÃ…≈Œ‘œ◊.
+%description -n xorg-xserver-Xnest -l ru.UTF-8
+Xnest - —ç—Ç–æ —Å–µ—Ä–≤–µ—Ä X Window System, –∫–æ—Ç–æ—Ä—ã–π —Ä–∞–±–æ—Ç–∞–µ—Ç –≤ –æ–∫–Ω–µ X. –ù–∞
+—Å–∞–º–æ–º –¥–µ–ª–µ —ç—Ç–æ –∫–ª–∏–µ–Ω—Ç —Ä–µ–∞–ª—å–Ω–æ–≥–æ X-—Å–µ—Ä–≤–µ—Ä–∞, –∫–æ—Ç–æ—Ä—ã–π —É–ø—Ä–∞–≤–ª—è–µ—Ç –æ–∫–Ω–∞–º–∏ –∏
+–≥—Ä–∞—Ñ–∏—á–µ—Å–∫–∏–º–∏ –∑–∞–ø—Ä–æ—Å–∞–º–∏ –¥–ª—è Xnest –≤ —Ç–æ –≤—Ä–µ–º—è, –∫–∞–∫ Xnest —É–ø—Ä–∞–≤–ª—è–µ—Ç
+–æ–∫–Ω–∞–º–∏ –∏ –≥—Ä–∞—Ñ–∏—á–µ—Å–∫–∏–º–∏ –∑–∞–ø—Ä–æ—Å–∞–º–∏ –¥–ª—è —Å–≤–æ–∏—Ö —Å–æ–±—Å—Ç–≤–µ–Ω–Ω—ã—Ö –∫–ª–∏–µ–Ω—Ç–æ–≤.
 
-%description -n xorg-xserver-Xnest -l uk
-Xnest - √≈ ”≈“◊≈“ X Window System, —À…  –“¡√¿§ ’ ◊¶ÀŒ¶ X. Ê¡À‘…ﬁŒœ √≈
-ÀÃ¶§Œ‘ “≈¡ÃÿŒœ«œ X-”≈“◊≈“¡, —À…  À≈“’§ ◊¶ÀŒ¡Õ… ‘¡ «“¡∆¶ﬁŒ…Õ… ⁄¡–…‘¡Õ…
-ƒÃ— Xnest ◊ ‘œ  ﬁ¡”, —À Xnest À≈“’§ ◊¶ÀŒ¡Õ… ‘¡ «“¡∆¶ﬁŒ…Õ… ⁄¡–…‘¡Õ… ƒÃ—
-”◊œß» ◊Ã¡”Œ…» ÀÃ¶§Œ‘¶◊.
+%description -n xorg-xserver-Xnest -l uk.UTF-8
+Xnest - —Ü–µ —Å–µ—Ä–≤–µ—Ä X Window System, —è–∫–∏–π –ø—Ä–∞—Ü—é—î —É –≤—ñ–∫–Ω—ñ X. –§–∞–∫—Ç–∏—á–Ω–æ —Ü–µ
+–∫–ª—ñ—î–Ω—Ç —Ä–µ–∞–ª—å–Ω–æ–≥–æ X-—Å–µ—Ä–≤–µ—Ä–∞, —è–∫–∏–π –∫–µ—Ä—É—î –≤—ñ–∫–Ω–∞–º–∏ —Ç–∞ –≥—Ä–∞—Ñ—ñ—á–Ω–∏–º–∏ –∑–∞–ø–∏—Ç–∞–º–∏
+–¥–ª—è Xnest –≤ —Ç–æ–π —á–∞—Å, —è–∫ Xnest –∫–µ—Ä—É—î –≤—ñ–∫–Ω–∞–º–∏ —Ç–∞ –≥—Ä–∞—Ñ—ñ—á–Ω–∏–º–∏ –∑–∞–ø–∏—Ç–∞–º–∏ –¥–ª—è
+—Å–≤–æ—ó—Ö –≤–ª–∞—Å–Ω–∏—Ö –∫–ª—ñ—î–Ω—Ç—ñ–≤.
 
 %package -n xorg-xserver-Xprt
 Summary:	Xprt - Xprint server for X
-Summary(pl):	Xprt - serwer Xprint dla X
+Summary(pl.UTF-8):   Xprt - serwer Xprint dla X
 Group:		X11/Servers
 Obsoletes:	X11-Xprt < 1:7.0.0
 Obsoletes:	XFree86-Xprt < 1:7.0.0
@@ -170,13 +170,13 @@ Obsoletes:	XFree86-Xprt < 1:7.0.0
 Xprt is the Xprint print server for X Window System for non display
 devices such as printers and fax machines.
 
-%description -n xorg-xserver-Xprt -l pl
-Xprt to serwer wydrukÛw Xprint dla X Window System dla urz±dzeÒ nie
-wy∂wietlaj±cych, takich jak drukarki czy faksy.
+%description -n xorg-xserver-Xprt -l pl.UTF-8
+Xprt to serwer wydruk√≥w Xprint dla X Window System dla urzƒÖdze≈Ñ nie
+wy≈õwietlajƒÖcych, takich jak drukarki czy faksy.
 
 %package -n xorg-xserver-Xvfb
 Summary:	Xvfb - virtual framebuffer X server
-Summary(pl):	Xvfb - serwer X z wirtualnym framebufferem
+Summary(pl.UTF-8):   Xvfb - serwer X z wirtualnym framebufferem
 Group:		X11/Servers
 Obsoletes:	X11-Xvfb < 1:7.0.0
 Obsoletes:	XFree86-Xvfb < 1:7.0.0
@@ -195,18 +195,18 @@ load testing, to help with porting an X server to a new platform, and
 to provide an unobtrusive way of running applications which really
 don't need an X server but insist on having one.
 
-%description -n xorg-xserver-Xvfb -l pl
-Xvfb (X Virtual Frame Buffer) jest serwerem X, ktÛry moøna uruchamiaÊ
-na maszynach bez urz±dzeÒ wy∂wietlaj±cych ani fizycznych urz±dzeÒ
-wej∂ciowych. Xvfb emuluje prosty framebuffer w pamiÍci. Zwykle jest
-uøywany do testowania serwerÛw X, moøe teø byÊ uøywany do testowania
-klientÛw X w rzadko uøywanych konfiguracjach ekranu. Moøna teø uøyÊ
-Xvfb do uruchomienia aplikacji, ktÛre w rzeczywisto∂ci nie wymagaj±
-serwera X, ale odmawiaj± uruchomienia bez niego.
+%description -n xorg-xserver-Xvfb -l pl.UTF-8
+Xvfb (X Virtual Frame Buffer) jest serwerem X, kt√≥ry mo≈ºna uruchamiaƒá
+na maszynach bez urzƒÖdze≈Ñ wy≈õwietlajƒÖcych ani fizycznych urzƒÖdze≈Ñ
+wej≈õciowych. Xvfb emuluje prosty framebuffer w pamiƒôci. Zwykle jest
+u≈ºywany do testowania serwer√≥w X, mo≈ºe te≈º byƒá u≈ºywany do testowania
+klient√≥w X w rzadko u≈ºywanych konfiguracjach ekranu. Mo≈ºna te≈º u≈ºyƒá
+Xvfb do uruchomienia aplikacji, kt√≥re w rzeczywisto≈õci nie wymagajƒÖ
+serwera X, ale odmawiajƒÖ uruchomienia bez niego.
 
 %package devel
 Summary:	Header files for X.org server
-Summary(pl):	Pliki nag≥Ûwkowe dla servera X.org
+Summary(pl.UTF-8):   Pliki nag≈Ç√≥wkowe dla servera X.org
 Group:		X11/Development/Libraries
 Requires:	libdrm-devel >= 2.2.0
 Requires:	xorg-proto-fontsproto-devel
@@ -219,12 +219,12 @@ Obsoletes:	X11-XFree86-devel < 1:7.0.0
 %description devel
 Header files for X.org server.
 
-%description devel -l pl
-Pliki nag≥Ûwkowe dla serwera X.org.
+%description devel -l pl.UTF-8
+Pliki nag≈Ç√≥wkowe dla serwera X.org.
 
 %package -n xorg-xserver-libglx
 Summary:	GLX extension library fo X.org server
-Summary(pl):	Biblioteka rozszerzenia GLX dla serwera X.org
+Summary(pl.UTF-8):   Biblioteka rozszerzenia GLX dla serwera X.org
 Group:		X11/Servers
 Requires:	%{name} = %{version}-%{release}
 Provides:	xorg-xserver-libglx(glapi) = %{mesa_version}
@@ -234,7 +234,7 @@ Obsoletes:	xorg-driver-video-nvidia
 %description -n xorg-xserver-libglx
 GLX extension library fo X.org server.
 
-%description -n xorg-xserver-libglx -l pl
+%description -n xorg-xserver-libglx -l pl.UTF-8
 Biblioteka rozszerzenia GLX dla serwera X.org.
 
 %prep
