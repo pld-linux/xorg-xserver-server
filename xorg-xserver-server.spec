@@ -52,7 +52,7 @@ BuildRequires:	xorg-lib-libxkbui-devel >= 1.0.2
 BuildRequires:	xorg-lib-xtrans-devel
 BuildRequires:	xorg-proto-bigreqsproto-devel
 BuildRequires:	xorg-proto-compositeproto-devel >= 0.3
-BuildRequires:	xorg-proto-damageproto-devel
+BuildRequires:	xorg-proto-damageproto-devel >= 1.1
 BuildRequires:	xorg-proto-dmxproto-devel
 BuildRequires:	xorg-proto-evieext-devel
 BuildRequires:	xorg-proto-fixesproto-devel >= 4.0
@@ -62,7 +62,7 @@ BuildRequires:	xorg-proto-glproto-devel >= 1.4.8
 BuildRequires:	xorg-proto-inputproto-devel >= 1.4
 BuildRequires:	xorg-proto-kbproto-devel >= 1.0.3
 BuildRequires:	xorg-proto-printproto-devel
-BuildRequires:	xorg-proto-randrproto-devel
+BuildRequires:	xorg-proto-randrproto-devel >= 1.2
 BuildRequires:	xorg-proto-recordproto-devel
 BuildRequires:	xorg-proto-renderproto-devel
 BuildRequires:	xorg-proto-resourceproto-devel
