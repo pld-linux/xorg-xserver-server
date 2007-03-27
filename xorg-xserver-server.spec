@@ -232,9 +232,9 @@ Biblioteka rozszerzenia GLX dla serwera X.org.
 %setup -q -a1 -n xorg-server-%{version}
 %patch0 -p1
 %patch1 -p0
-#%ifarch %{x8664} athlon i486
-#%patch2 -p1
-#%endif
+%ifarch %{x8664}
+%patch2 -p1
+%endif
 
 %build
 %{__libtoolize}
