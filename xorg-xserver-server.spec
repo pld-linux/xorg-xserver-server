@@ -1,12 +1,12 @@
 Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
-Version:	1.2.99.905
+Version:	1.3.0.0
 Release:	0.1
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
-# Source0-md5:	0c755fb74191ba1bca47657be8791bd2
+# Source0-md5:	a51a7d482e3c689394755bb17bda8526
 %define		mesa_version	6.5.2
 Source1:	http://dl.sourceforge.net/mesa3d/MesaLib-%{mesa_version}.tar.bz2
 # Source1-md5:	e4d894181f1859651658b3704633e10d
