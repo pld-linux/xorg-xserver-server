@@ -104,6 +104,9 @@ Obsoletes:	XFree86-setup < 1:7.0.0
 Obsoletes:	Xserver
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
+# avoid self-dependencies on included modules
+%define		_noautoreq	libscanpci.so libxf1bpp.so
+
 %description
 Xorg server is a generally used X server which uses display hardware.
 It requires proper driver for your display hardware.
@@ -209,7 +212,7 @@ Requires:	xorg-proto-renderproto-devel
 Requires:	xorg-proto-videoproto-devel
 Requires:	xorg-proto-xextproto-devel
 Obsoletes:	X11-Xserver-devel < 1:7.0.0
-Obsoletes:	X11-XFree86-devel < 1:7.0.0
+Obsoletes:	XFree86-Xserver-devel < 1:7.0.0
 
 %description devel
 Header files for X.org server.
@@ -224,6 +227,8 @@ Group:		X11/Servers
 Requires:	%{name} = %{version}-%{release}
 Provides:	xorg-xserver-libglx(glapi) = %{mesa_version}
 Provides:	xorg-xserver-modules-libglx
+Obsoletes:	X11-OpenGL-core < 1:7.0.0
+Obsoletes:	XFree86-OpenGL-core < 1:7.0.0
 Obsoletes:	xorg-driver-video-nvidia
 
 %description -n xorg-xserver-libglx
