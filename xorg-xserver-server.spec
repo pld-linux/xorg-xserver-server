@@ -89,7 +89,7 @@ Requires:	xorg-app-xkbcomp
 # just for %{_includedir}/bitmaps dir
 Requires:	xorg-data-xbitmaps
 Requires:	xkeyboard-config
-# xserver requires default fixed and cursosr fonts.
+# xserver requires fixed and cursor fonts
 Requires:	xorg-font-font-alias
 Requires:	xorg-font-font-cursor-misc
 Requires:	xorg-font-font-misc-misc-base >= 1.0.0-0.3
@@ -177,6 +177,10 @@ wyświetlających, takich jak drukarki czy faksy.
 Summary:	Xvfb - virtual framebuffer X server
 Summary(pl.UTF-8):	Xvfb - serwer X z wirtualnym framebufferem
 Group:		X11/Servers
+# requires fixed and cursor fonts
+Requires:	xorg-font-font-alias
+Requires:	xorg-font-font-cursor-misc
+Requires:	xorg-font-font-misc-misc-base >= 1.0.0-0.3
 Obsoletes:	X11-Xvfb < 1:7.0.0
 Obsoletes:	XFree86-Xvfb < 1:7.0.0
 
