@@ -96,6 +96,7 @@ Requires:	xorg-font-font-misc-misc-base >= 1.0.0-0.3
 # for new app-defaults location
 Requires:	xorg-lib-libXt >= 1.0.0
 Obsoletes:	X11-Xserver < 1:7.0.0
+Obsoletes:	X11-driver-i2c < 1:7.0.0
 Obsoletes:	X11-modules < 1:7.0.0
 Obsoletes:	X11-setup < 1:7.0.0
 Obsoletes:	XFree86-Xserver < 1:7.0.0
