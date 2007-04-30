@@ -241,7 +241,7 @@ Biblioteka rozszerzenia GLX dla serwera X.org.
 %setup -q -a1 -n xorg-server-%{version}
 %patch0 -p1
 %patch1 -p0
-%ifarch %{x8664}
+%ifarch %{x8664} i486
 %patch2 -p1
 %endif
 %patch3 -p2
