@@ -2,14 +2,14 @@ Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
 Version:	1.3.0.0
-Release:	5
+Release:	6
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
 # Source0-md5:	a51a7d482e3c689394755bb17bda8526
-%define		mesa_version	7.0
+%define		mesa_version	7.0.1
 Source1:	http://dl.sourceforge.net/mesa3d/MesaLib-%{mesa_version}.tar.bz2
-# Source1-md5:	50c371455fa7532c04aa0a970f9bc51f
+# Source1-md5:	c056abd763e899114bf745c9eedbf9ad
 Source2:	xserver.pamd
 Patch0:		%{name}-ncurses.patch
 Patch1:		%{name}-xwrapper.patch
