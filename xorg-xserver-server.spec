@@ -2,7 +2,7 @@ Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
 Version:	1.3.0.0
-Release:	6
+Release:	7
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
@@ -234,7 +234,7 @@ Provides:	xorg-xserver-libglx(glapi) = %{mesa_version}
 Provides:	xorg-xserver-modules-libglx
 Obsoletes:	X11-OpenGL-core < 1:7.0.0
 Obsoletes:	XFree86-OpenGL-core < 1:7.0.0
-Obsoletes:	xorg-driver-video-nvidia
+Conflicts:	xorg-driver-video-nvidia
 
 %description -n xorg-xserver-libglx
 GLX extension library fo X.org server.
