@@ -2,7 +2,7 @@ Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
 Version:	1.3.0.0
-Release:	7
+Release:	7.1
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
@@ -17,6 +17,7 @@ Patch1:		%{name}-xwrapper.patch
 Patch2:		%{name}-gcc-x86_64-workaround.patch
 Patch3:		%{name}-drop-GLinterface.patch
 Patch4:		%{name}-mesa.patch
+Patch5:		intel.patch
 URL:		http://xorg.freedesktop.org/
 # for glx headers
 BuildRequires:	OpenGL-GLX-devel
@@ -212,6 +213,7 @@ Summary:	Header files for X.org server
 Summary(pl.UTF-8):	Pliki nagłówkowe dla servera X.org
 Group:		X11/Development/Libraries
 Requires:	libdrm-devel >= 2.2.0
+Requires:	pixman-devel
 Requires:	xorg-proto-fontsproto-devel
 Requires:	xorg-proto-renderproto-devel
 Requires:	xorg-proto-videoproto-devel
@@ -251,6 +253,7 @@ Biblioteka rozszerzenia GLX dla serwera X.org.
 %endif
 %patch3 -p2
 %patch4 -p2
+%patch5 -p1
 
 %build
 %{__libtoolize}
