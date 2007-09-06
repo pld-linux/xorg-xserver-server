@@ -262,6 +262,8 @@ Biblioteka rozszerzenia GLX dla serwera X.org.
 %configure \
 	--with-os-name="PLD/Linux" \
 	--with-os-vendor="PLD/Team" \
+	--enable-aiglx \
+	--enable-glx-tls \
 	--enable-dga \
 	--enable-builddocs \
 	--enable-lbx \
