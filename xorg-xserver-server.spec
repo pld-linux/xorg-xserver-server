@@ -83,14 +83,20 @@ BuildRequires:	xorg-proto-xf86vidmodeproto-devel
 BuildRequires:	xorg-proto-xineramaproto-devel
 BuildRequires:	xorg-proto-xproto-devel
 BuildRequires:	xorg-util-util-macros >= 0.99.2
+# see hw/xfree86/common/xf86Module.h
+Provides:	xorg-xserver-server(ansic-abi) = 0.3
+Provides:	xorg-xserver-server(extension-abi) = 0.3
+Provides:	xorg-xserver-server(font-abi) = 0.5
+Provides:	xorg-xserver-server(videodrv-abi) = 2.0
+Provides:	xorg-xserver-server(xinput-abi) = 2.0
 # xcalibrateproto, tslib (for KDRIVE only)
 # glitz-devel >= 0.4.3 (for XGL and EGL only)
 # for rgb.txt
 Requires:	xorg-app-rgb >= 0.99.3
 Requires:	xorg-app-xkbcomp
 # just for %{_includedir}/bitmaps dir
-Requires:	xorg-data-xbitmaps
 Requires:	xkeyboard-config
+Requires:	xorg-data-xbitmaps
 # xserver requires fixed and cursor fonts
 Requires:	xorg-font-font-alias
 Requires:	xorg-font-font-cursor-misc
