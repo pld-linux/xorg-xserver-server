@@ -97,7 +97,6 @@ Requires:	xorg-font-font-cursor-misc
 Requires:	xorg-font-font-misc-misc-base >= 1.0.0-0.3
 # for new app-defaults location
 Requires:	xorg-lib-libXt >= 1.0.0
-# see hw/xfree86/common/xf86Module.h
 Provides:	xorg-xserver-server(ansic-abi) = %{xorg_xserver_server_ansic_abi}
 Provides:	xorg-xserver-server(extension-abi) = %{xorg_xserver_server_extension_abi}
 Provides:	xorg-xserver-server(font-abi) = %{xorg_xserver_server_font_abi}
@@ -252,6 +251,7 @@ GLX extension library fo X.org server.
 %description -n xorg-xserver-libglx -l pl.UTF-8
 Biblioteka rozszerzenia GLX dla serwera X.org.
 
+# see hw/xfree86/common/xf86Module.h
 %define	xorg_xserver_server_ansic_abi		0.3
 %define	xorg_xserver_server_extension_abi	0.3
 %define	xorg_xserver_server_font_abi		0.5
