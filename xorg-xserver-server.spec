@@ -84,11 +84,11 @@ BuildRequires:	xorg-proto-xineramaproto-devel
 BuildRequires:	xorg-proto-xproto-devel
 BuildRequires:	xorg-util-util-macros >= 0.99.2
 # see hw/xfree86/common/xf86Module.h
-Provides:	xorg-xserver-server(ansic-abi) = 0.3
-Provides:	xorg-xserver-server(extension-abi) = 0.3
-Provides:	xorg-xserver-server(font-abi) = 0.5
-Provides:	xorg-xserver-server(videodrv-abi) = 2.0
-Provides:	xorg-xserver-server(xinput-abi) = 2.0
+Provides:	xorg-xserver-server(ansic-abi) = %{xorg_xserver_server_ansic_abi}
+Provides:	xorg-xserver-server(extension-abi) = %{xorg_xserver_server_extension_abi}
+Provides:	xorg-xserver-server(font-abi) = %{xorg_xserver_server_font_abi}
+Provides:	xorg-xserver-server(videodrv-abi) = %{xorg_xserver_server_videodrv_abi}
+Provides:	xorg-xserver-server(xinput-abi) = %{xorg_xserver_server_xinput_abi}
 # xcalibrateproto, tslib (for KDRIVE only)
 # glitz-devel >= 0.4.3 (for XGL and EGL only)
 # for rgb.txt
@@ -251,6 +251,12 @@ GLX extension library fo X.org server.
 %description -n xorg-xserver-libglx -l pl.UTF-8
 Biblioteka rozszerzenia GLX dla serwera X.org.
 
+%define	xorg_xserver_server_ansic_abi		0.3
+%define	xorg_xserver_server_extension_abi	0.3
+%define	xorg_xserver_server_font_abi		0.5
+%define	xorg_xserver_server_videodrv_abi	2.0
+%define	xorg_xserver_server_xinput_abi		2.0
+
 %prep
 %setup -q -a1 -n xorg-server-%{version}
 %patch0 -p1
@@ -264,6 +270,35 @@ Biblioteka rozszerzenia GLX dla serwera X.org.
 sed -i -e 's#<pixman\.h#<pixman-1/pixman.h#g' ./fb/fb.h ./include/miscstruct.h ./render/picture.h
 
 %build
+if API=$(awk '/#define ABI_ANSIC_VERSION/ { split($0,A,/[(,)]/); printf("%d.%d",A[2], A[3]); }' hw/xfree86/common/xf86Module.h) && \
+	[ $API != %{xorg_xserver_server_ansic_abi} ]; then
+        echo "Set %%define xorg_xserver_server_ansic_abi to $API and rerun."
+        exit 1
+fi
+
+if API=$(awk '/#define ABI_EXTENSION_VERSION/ { split($0,A,/[(,)]/); printf("%d.%d",A[2], A[3]); }' hw/xfree86/common/xf86Module.h) && \
+        [ $API != %{xorg_xserver_server_extension_abi} ]; then
+        echo "Set %%define xorg_xserver_server_extension_abi to $API and rerun."
+        exit 1
+fi
+
+if API=$(awk '/#define ABI_FONT_VERSION/ { split($0,A,/[(,)]/); printf("%d.%d",A[2], A[3]); }' hw/xfree86/common/xf86Module.h) && \
+        [ $API != %{xorg_xserver_server_font_abi} ]; then
+        echo "Set %%define xorg_xserver_server_font_abi to $API and rerun."
+        exit 1
+fi
+if API=$(awk '/#define ABI_VIDEODRV_VERSION/ { split($0,A,/[(,)]/); printf("%d.%d",A[2], A[3]); }' hw/xfree86/common/xf86Module.h) && \
+        [ $API != %{xorg_xserver_server_videodrv_abi} ]; then
+        echo "Set %%define xorg_xserver_server_videodrv_abi to $API and rerun."
+        exit 1
+fi
+if API=$(awk '/#define ABI_XINPUT_VERSION/ { split($0,A,/[(,)]/); printf("%d.%d",A[2], A[3]); }' hw/xfree86/common/xf86Module.h) && \
+        [ $API != %{xorg_xserver_server_xinput_abi} ]; then
+        echo "Set %%define xorg_xserver_server_xinput_abi to $API and rerun."
+        exit 1
+fi
+
+
 %{__libtoolize}
 %{__aclocal}
 %{__autoconf}
