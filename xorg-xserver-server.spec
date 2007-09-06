@@ -1,12 +1,12 @@
 Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
-Version:	1.3.0.0
-Release:	7.1
+Version:	1.4
+Release:	0.1
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
-# Source0-md5:	a51a7d482e3c689394755bb17bda8526
+# Source0-md5:	a06d9fe4f9f1d459ae02657f9ce64220
 %define		mesa_version	7.0.1
 Source1:	http://dl.sourceforge.net/mesa3d/MesaLib-%{mesa_version}.tar.bz2
 # Source1-md5:	c056abd763e899114bf745c9eedbf9ad
@@ -15,9 +15,7 @@ Patch0:		%{name}-ncurses.patch
 Patch1:		%{name}-xwrapper.patch
 # nasty hack for http://gcc.gnu.org/bugzilla/show_bug.cgi?id=30052
 Patch2:		%{name}-gcc-x86_64-workaround.patch
-Patch3:		%{name}-drop-GLinterface.patch
-Patch4:		%{name}-mesa.patch
-Patch5:		intel.patch
+Patch3:		%{name}-link.patch
 URL:		http://xorg.freedesktop.org/
 # for glx headers
 BuildRequires:	OpenGL-GLX-devel
@@ -29,6 +27,7 @@ BuildRequires:	libtool
 BuildRequires:	ncurses-devel
 BuildRequires:	pam-devel
 BuildRequires:	perl-base
+BuildRequires:	pixman-devel >= 0.9.5
 BuildRequires:	pkgconfig >= 1:0.19
 BuildRequires:	xorg-app-mkfontscale
 BuildRequires:	xorg-lib-libX11-devel
@@ -67,7 +66,7 @@ BuildRequires:	xorg-proto-kbproto-devel >= 1.0.3
 BuildRequires:	xorg-proto-printproto-devel
 BuildRequires:	xorg-proto-randrproto-devel >= 1.2
 BuildRequires:	xorg-proto-recordproto-devel
-BuildRequires:	xorg-proto-renderproto-devel
+BuildRequires:	xorg-proto-renderproto-devel >= 0.9.3
 BuildRequires:	xorg-proto-resourceproto-devel
 BuildRequires:	xorg-proto-scrnsaverproto-devel >= 1.1.0
 BuildRequires:	xorg-proto-trapproto-devel
@@ -250,9 +249,7 @@ Biblioteka rozszerzenia GLX dla serwera X.org.
 %ifarch %{x8664} i486
 %patch2 -p1
 %endif
-%patch3 -p2
-%patch4 -p2
-%patch5 -p1
+%patch3 -p1
 
 %build
 %{__libtoolize}
@@ -309,10 +306,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/out[bwl]
 %attr(755,root,root) %{_bindir}/pcitweak
 %attr(755,root,root) %{_bindir}/scanpci
-%attr(755,root,root) %{_bindir}/xorgcfg
 %attr(755,root,root) %{_bindir}/xorgconfig
-%{_includedir}/X11/bitmaps/*
-%{_includedir}/X11/pixmaps
 %{_libdir}/X11/Cards
 %{_libdir}/X11/Options
 %dir %{_libdir}/xorg
@@ -336,7 +330,6 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/xorg/modules/lib*.so
 %dir %{_libdir}/xserver
 %{_libdir}/xserver/SecurityPolicy
-%{_datadir}/X11/app-defaults/XOrgCfg
 %dir /var/lib/xkb
 /var/lib/xkb/README.compiled
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/pam.d/xserver
@@ -348,11 +341,11 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man1/gtf.1x*
 %{_mandir}/man1/pcitweak.1x*
 %{_mandir}/man1/scanpci.1x*
-%{_mandir}/man1/xorgcfg.1x*
 %{_mandir}/man1/xorgconfig.1*
 %{_mandir}/man4/exa.4*
 %{_mandir}/man4/fbdevhw.4*
 %{_mandir}/man5/xorg.conf.5x*
+%{_mandir}/man5/SecurityPolicy.5x*
 
 %files -n xorg-xserver-Xdmx
 %defattr(644,root,root,755)
