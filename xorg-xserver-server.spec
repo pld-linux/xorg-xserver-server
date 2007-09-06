@@ -63,7 +63,7 @@ BuildRequires:	xorg-proto-fixesproto-devel >= 4.0
 BuildRequires:	xorg-proto-fontcacheproto-devel
 BuildRequires:	xorg-proto-fontsproto-devel
 BuildRequires:	xorg-proto-glproto-devel >= 1.4.8
-BuildRequires:	xorg-proto-inputproto-devel >= 1.4
+BuildRequires:	xorg-proto-inputproto-devel >= 1.4.2
 BuildRequires:	xorg-proto-kbproto-devel >= 1.0.3
 BuildRequires:	xorg-proto-printproto-devel
 BuildRequires:	xorg-proto-randrproto-devel >= 1.2
@@ -81,7 +81,7 @@ BuildRequires:	xorg-proto-xf86driproto-devel
 BuildRequires:	xorg-proto-xf86miscproto-devel
 BuildRequires:	xorg-proto-xf86vidmodeproto-devel
 BuildRequires:	xorg-proto-xineramaproto-devel
-BuildRequires:	xorg-proto-xproto-devel
+BuildRequires:	xorg-proto-xproto-devel >= 7.0.9
 BuildRequires:	xorg-util-util-macros >= 0.99.2
 # xcalibrateproto, tslib (for KDRIVE only)
 Requires:	xkeyboard-config
@@ -222,9 +222,10 @@ Group:		X11/Development/Libraries
 Requires:	libdrm-devel >= 2.3.0
 Requires:	pixman-devel >= 0.9.5
 Requires:	xorg-proto-fontsproto-devel
-Requires:	xorg-proto-renderproto-devel
+Requires:	xorg-proto-renderproto-devel >= 0.9.3
 Requires:	xorg-proto-videoproto-devel
 Requires:	xorg-proto-xextproto-devel
+Requires:	xorg-proto-xproto-devel >= 7.0.9
 Obsoletes:	X11-Xserver-devel < 1:7.0.0
 Obsoletes:	XFree86-Xserver-devel < 1:7.0.0
 
