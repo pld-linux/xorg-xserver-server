@@ -1,8 +1,16 @@
+
+# ABI versions, see hw/xfree86/common/xf86Module.h
+%define	xorg_xserver_server_ansic_abi		0.3
+%define	xorg_xserver_server_extension_abi	0.3
+%define	xorg_xserver_server_font_abi		0.5
+%define	xorg_xserver_server_videodrv_abi	2.0
+%define	xorg_xserver_server_xinput_abi		2.0
+
 Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
 Version:	1.4
-Release:	1
+Release:	2
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
@@ -267,13 +275,6 @@ GLX extension library fo X.org server.
 
 %description -n xorg-xserver-libglx -l pl.UTF-8
 Biblioteka rozszerzenia GLX dla serwera X.org.
-
-# see hw/xfree86/common/xf86Module.h
-%define	xorg_xserver_server_ansic_abi		0.3
-%define	xorg_xserver_server_extension_abi	0.3
-%define	xorg_xserver_server_font_abi		0.5
-%define	xorg_xserver_server_videodrv_abi	2.0
-%define	xorg_xserver_server_xinput_abi		2.0
 
 %prep
 %setup -q -a1 -n xorg-server-%{version}
