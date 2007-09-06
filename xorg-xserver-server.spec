@@ -24,7 +24,7 @@ BuildRequires:	automake
 BuildRequires:	cpp
 BuildRequires:	dbus-devel
 BuildRequires:	hal-devel
-BuildRequires:	libdrm-devel >= 2.2.0
+BuildRequires:	libdrm-devel >= 2.3.0
 BuildRequires:	libtool
 BuildRequires:	ncurses-devel
 BuildRequires:	pam-devel
@@ -83,19 +83,13 @@ BuildRequires:	xorg-proto-xf86vidmodeproto-devel
 BuildRequires:	xorg-proto-xineramaproto-devel
 BuildRequires:	xorg-proto-xproto-devel
 BuildRequires:	xorg-util-util-macros >= 0.99.2
-# see hw/xfree86/common/xf86Module.h
-Provides:	xorg-xserver-server(ansic-abi) = %{xorg_xserver_server_ansic_abi}
-Provides:	xorg-xserver-server(extension-abi) = %{xorg_xserver_server_extension_abi}
-Provides:	xorg-xserver-server(font-abi) = %{xorg_xserver_server_font_abi}
-Provides:	xorg-xserver-server(videodrv-abi) = %{xorg_xserver_server_videodrv_abi}
-Provides:	xorg-xserver-server(xinput-abi) = %{xorg_xserver_server_xinput_abi}
 # xcalibrateproto, tslib (for KDRIVE only)
+Requires:	xkeyboard-config
 # glitz-devel >= 0.4.3 (for XGL and EGL only)
 # for rgb.txt
 Requires:	xorg-app-rgb >= 0.99.3
 Requires:	xorg-app-xkbcomp
 # just for %{_includedir}/bitmaps dir
-Requires:	xkeyboard-config
 Requires:	xorg-data-xbitmaps
 # xserver requires fixed and cursor fonts
 Requires:	xorg-font-font-alias
@@ -103,6 +97,12 @@ Requires:	xorg-font-font-cursor-misc
 Requires:	xorg-font-font-misc-misc-base >= 1.0.0-0.3
 # for new app-defaults location
 Requires:	xorg-lib-libXt >= 1.0.0
+# see hw/xfree86/common/xf86Module.h
+Provides:	xorg-xserver-server(ansic-abi) = %{xorg_xserver_server_ansic_abi}
+Provides:	xorg-xserver-server(extension-abi) = %{xorg_xserver_server_extension_abi}
+Provides:	xorg-xserver-server(font-abi) = %{xorg_xserver_server_font_abi}
+Provides:	xorg-xserver-server(videodrv-abi) = %{xorg_xserver_server_videodrv_abi}
+Provides:	xorg-xserver-server(xinput-abi) = %{xorg_xserver_server_xinput_abi}
 Obsoletes:	X11-Xserver < 1:7.0.0
 Obsoletes:	X11-driver-i2c < 1:7.0.0
 Obsoletes:	X11-modules < 1:7.0.0
@@ -219,8 +219,8 @@ serwera X, ale odmawiają uruchomienia bez niego.
 Summary:	Header files for X.org server
 Summary(pl.UTF-8):	Pliki nagłówkowe dla servera X.org
 Group:		X11/Development/Libraries
-Requires:	libdrm-devel >= 2.2.0
-Requires:	pixman-devel
+Requires:	libdrm-devel >= 2.3.0
+Requires:	pixman-devel >= 0.9.5
 Requires:	xorg-proto-fontsproto-devel
 Requires:	xorg-proto-renderproto-devel
 Requires:	xorg-proto-videoproto-devel
@@ -308,12 +308,12 @@ fi
 	--with-os-name="PLD/Linux" \
 	--with-os-vendor="PLD/Team" \
 	--enable-aiglx \
-	--enable-glx-tls \
-	--enable-dga \
 	--enable-builddocs \
+	--enable-dga \
+	--enable-dmx \
+	--enable-glx-tls \
 	--enable-lbx \
 	--enable-xevie \
-	--enable-dmx \
 	--enable-xprint \
 	--with-dri-driver-path=%{_libdir}/xorg/modules/dri \
 	--with-default-font-path="%{_fontsdir}/misc,%{_fontsdir}/TTF,%{_fontsdir}/OTF,%{_fontsdir}/Type1,%{_fontsdir}/100dpi,%{_fontsdir}/75dpi" \
