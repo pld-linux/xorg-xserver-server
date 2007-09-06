@@ -22,6 +22,8 @@ BuildRequires:	OpenGL-GLX-devel
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake
 BuildRequires:	cpp
+BuildRequires:	dbus-devel
+BuildRequires:	hal-devel
 BuildRequires:	libdrm-devel >= 2.2.0
 BuildRequires:	libtool
 BuildRequires:	ncurses-devel
