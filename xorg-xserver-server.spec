@@ -214,6 +214,7 @@ Summary:	Header files for X.org server
 Summary(pl.UTF-8):	Pliki nagłówkowe dla servera X.org
 Group:		X11/Development/Libraries
 Requires:	libdrm-devel >= 2.2.0
+Requires:	pixman-devel
 Requires:	xorg-proto-fontsproto-devel
 Requires:	xorg-proto-renderproto-devel
 Requires:	xorg-proto-videoproto-devel
