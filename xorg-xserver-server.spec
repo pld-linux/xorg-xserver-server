@@ -55,7 +55,7 @@ BuildRequires:	xorg-lib-libxkbfile-devel
 BuildRequires:	xorg-lib-libxkbui-devel >= 1.0.2
 BuildRequires:	xorg-lib-xtrans-devel
 BuildRequires:	xorg-proto-bigreqsproto-devel
-BuildRequires:	xorg-proto-compositeproto-devel >= 0.3
+BuildRequires:	xorg-proto-compositeproto-devel >= 0.4
 BuildRequires:	xorg-proto-damageproto-devel >= 1.1
 BuildRequires:	xorg-proto-dmxproto-devel
 BuildRequires:	xorg-proto-evieext-devel
