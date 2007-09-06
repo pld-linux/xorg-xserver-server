@@ -89,14 +89,10 @@ Requires:	xkeyboard-config
 # for rgb.txt
 Requires:	xorg-app-rgb >= 0.99.3
 Requires:	xorg-app-xkbcomp
-# just for %{_includedir}/bitmaps dir
-Requires:	xorg-data-xbitmaps
 # xserver requires fixed and cursor fonts
 Requires:	xorg-font-font-alias
 Requires:	xorg-font-font-cursor-misc
 Requires:	xorg-font-font-misc-misc-base >= 1.0.0-0.3
-# for new app-defaults location
-Requires:	xorg-lib-libXt >= 1.0.0
 Provides:	xorg-xserver-server(ansic-abi) = %{xorg_xserver_server_ansic_abi}
 Provides:	xorg-xserver-server(extension-abi) = %{xorg_xserver_server_extension_abi}
 Provides:	xorg-xserver-server(font-abi) = %{xorg_xserver_server_font_abi}
@@ -234,6 +230,27 @@ Header files for X.org server.
 %description devel -l pl.UTF-8
 Pliki nagłówkowe dla serwera X.org.
 
+%package xorgcfg
+Summary:	xorgcfg - graphical configuration tool for X.org server
+Summary(pl.UTF-8):	xorgcfg - graficzne narzędzie konfiguracyjne dla serwera X.org
+Group:		X11/Servers
+Requires:	%{name} = %{version}-%{release}
+# just for %{_includedir}/bitmaps dir?
+Requires:	xorg-data-xbitmaps
+# for new app-defaults location
+Requires:	xorg-lib-libXt >= 1.0.0
+Requires:	xorg-lib-libxkbui >= 1.0.2
+
+%description xorgcfg
+xorgcfg is a tool to configure X.org server, and can be used to either
+write the initial configuration file or make customizations to the
+current configuration.
+
+%description xorgcfg -l pl.UTF-8
+xorgcfg to narzędzie do konfiguracji serwera X.org. Można go użyć do
+utworzenia początkowego pliku konfiguracyjnego lub dokonania
+modyfikacji istniejącej konfiguracji.
+
 %package -n xorg-xserver-libglx
 Summary:	GLX extension library fo X.org server
 Summary(pl.UTF-8):	Biblioteka rozszerzenia GLX dla serwera X.org
@@ -299,7 +316,6 @@ if API=$(awk '/#define ABI_XINPUT_VERSION/ { split($0,A,/[(,)]/); printf("%d.%d"
         exit 1
 fi
 
-
 %{__libtoolize}
 %{__aclocal}
 %{__autoconf}
@@ -315,6 +331,7 @@ fi
 	--enable-glx-tls \
 	--enable-lbx \
 	--enable-xevie \
+	--enable-xorgcfg \
 	--enable-xprint \
 	--with-dri-driver-path=%{_libdir}/xorg/modules/dri \
 	--with-default-font-path="%{_fontsdir}/misc,%{_fontsdir}/TTF,%{_fontsdir}/OTF,%{_fontsdir}/Type1,%{_fontsdir}/100dpi,%{_fontsdir}/75dpi" \
@@ -345,7 +362,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc COPYING
+%doc COPYING ChangeLog
 %attr(755,root,root) %{_bindir}/X
 %attr(755,root,root) %{_bindir}/Xorg
 %attr(4755,root,root) %{_bindir}/Xwrapper
@@ -438,6 +455,14 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/libxf86config.a
 %{_aclocaldir}/xorg-server.m4
 %{_pkgconfigdir}/xorg-server.pc
+
+%files xorgcfg
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_bindir}/xorgcfg
+%{_includedir}/X11/bitmaps/*
+%{_includedir}/X11/pixmaps
+%{_datadir}/X11/app-defaults/XOrgCfg
+%{_mandir}/man1/xorgcfg.1x*
 
 %files -n xorg-xserver-libglx
 %defattr(644,root,root,755)
