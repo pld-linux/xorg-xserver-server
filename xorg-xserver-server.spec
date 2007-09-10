@@ -24,6 +24,7 @@ Patch1:		%{name}-xwrapper.patch
 # nasty hack for http://gcc.gnu.org/bugzilla/show_bug.cgi?id=30052
 Patch2:		%{name}-gcc-x86_64-workaround.patch
 Patch3:		%{name}-link.patch
+Patch4:		%{name}-dbus.patch
 URL:		http://xorg.freedesktop.org/
 # for glx headers
 BuildRequires:	OpenGL-GLX-devel
@@ -284,6 +285,7 @@ Biblioteka rozszerzenia GLX dla serwera X.org.
 %patch2 -p1
 %endif
 %patch3 -p1
+%patch4 -p0
 
 # xserver uses pixman-1 API/ABI so put that explictly here
 sed -i -e 's#<pixman\.h#<pixman-1/pixman.h#g' ./fb/fb.h ./include/miscstruct.h ./render/picture.h
