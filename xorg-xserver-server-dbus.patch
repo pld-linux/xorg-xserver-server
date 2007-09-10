@@ -8,3 +8,37 @@
  AM_CONDITIONAL(DBUS, [test "x$DBUS" = xyes])
  
  AM_CONDITIONAL(XV, [test "x$XV" = xyes])
+;
+;
+The code in connect_hook incorrectly checks for dbus_bus_request_name failure.
+The dbus_bus_request_name error indicator is -1, not 0. This leads
+to subsequent assertion failure in libdbus
+---
+ config/dbus.c |    6 ++++--
+ 1 files changed, 4 insertions(+), 2 deletions(-)
+
+diff --git config/dbus.c config/dbus.c
+index c6f4af0..7eabcb9 100644
+--- config/dbus.c
++++ config/dbus.c
+@@ -353,8 +353,10 @@ connect_hook(DBusConnection *connection, void *data)
+ 
+     dbus_error_init(&error);
+ 
+-    if (!dbus_bus_request_name(info->connection, info->busname,
+-                               0, &error)) {
++    dbus_bus_request_name(info->connection, info->busname,
++                               0, &error);
++
++    if (dbus_error_is_set(&error)) {
+         ErrorF("[config/dbus] couldn't take over org.x.config: %s (%s)\n",
+                error.name, error.message);
+         goto err_start;
+-- 
+1.5.3
+
+_______________________________________________
+xorg mailing list
+xorg@lists.freedesktop.org
+http://lists.freedesktop.org/mailman/listinfo/xorg
+
