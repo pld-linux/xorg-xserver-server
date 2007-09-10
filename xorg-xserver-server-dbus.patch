@@ -1,15 +1,3 @@
---- configure.ac.org	2006-11-03 13:35:15.294001312 +0000
-+++ configure.ac	2006-11-03 13:37:02.207579844 +0000
-@@ -539,6 +539,7 @@
-        REQUIRED_LIBS="$REQUIRED_LIBS dbus-1"
- fi
- CONFIG_LIB='$(top_builddir)/config/libconfig.a'
-+CONFIG_LIB="$CONFIG_LIB $DBUS_LIBS"
- AM_CONDITIONAL(DBUS, [test "x$DBUS" = xyes])
- 
- AM_CONDITIONAL(XV, [test "x$XV" = xyes])
-;
-;
 The code in connect_hook incorrectly checks for dbus_bus_request_name failure.
 The dbus_bus_request_name error indicator is -1, not 0. This leads
 to subsequent assertion failure in libdbus
