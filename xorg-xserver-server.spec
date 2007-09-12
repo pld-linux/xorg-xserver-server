@@ -102,6 +102,7 @@ Requires:	xorg-app-xkbcomp
 Requires:	xorg-font-font-alias
 Requires:	xorg-font-font-cursor-misc
 Requires:	xorg-font-font-misc-misc-base >= 1.0.0-0.3
+Requires:	pixman >= 0.9.5
 Provides:	xorg-xserver-server(ansic-abi) = %{xorg_xserver_server_ansic_abi}
 Provides:	xorg-xserver-server(extension-abi) = %{xorg_xserver_server_extension_abi}
 Provides:	xorg-xserver-server(font-abi) = %{xorg_xserver_server_font_abi}
