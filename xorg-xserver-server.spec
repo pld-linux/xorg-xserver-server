@@ -92,9 +92,10 @@ BuildRequires:	xorg-proto-xf86vidmodeproto-devel
 BuildRequires:	xorg-proto-xineramaproto-devel
 BuildRequires:	xorg-proto-xproto-devel >= 7.0.9
 BuildRequires:	xorg-util-util-macros >= 0.99.2
-# xcalibrateproto, tslib (for KDRIVE only)
+#BR: xcalibrateproto, tslib (for KDRIVE only)
+#BR: glitz-devel >= 0.4.3 (for XGL and EGL only)
+Requires:	pixman >= 0.9.5
 Requires:	xkeyboard-config
-# glitz-devel >= 0.4.3 (for XGL and EGL only)
 # for rgb.txt
 Requires:	xorg-app-rgb >= 0.99.3
 Requires:	xorg-app-xkbcomp
@@ -102,7 +103,6 @@ Requires:	xorg-app-xkbcomp
 Requires:	xorg-font-font-alias
 Requires:	xorg-font-font-cursor-misc
 Requires:	xorg-font-font-misc-misc-base >= 1.0.0-0.3
-Requires:	pixman >= 0.9.5
 Provides:	xorg-xserver-server(ansic-abi) = %{xorg_xserver_server_ansic_abi}
 Provides:	xorg-xserver-server(extension-abi) = %{xorg_xserver_server_extension_abi}
 Provides:	xorg-xserver-server(font-abi) = %{xorg_xserver_server_font_abi}
