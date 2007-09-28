@@ -6,6 +6,10 @@
 %define	xorg_xserver_server_videodrv_abi	2.0
 %define	xorg_xserver_server_xinput_abi		2.0
 
+#
+# Conditional build:
+%bcond_with	multigl		# package libglx.so in a way allowing concurrent install with nvidia/fglrx drivers
+
 Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
@@ -363,6 +367,12 @@ install hw/xfree86/parser/libxf86config.a $RPM_BUILD_ROOT%{_libdir}/libxf86confi
 
 rm -f $RPM_BUILD_ROOT%{_libdir}/xorg/modules/{*,*/*}.{la,a}
 
+%if %{with multigl}
+cd $RPM_BUILD_ROOT%{_libdir}/xorg/modules/extensions
+mv -f libglx.so libglx.so.%{version}
+ln -sf libglx.so.%{version} libglx.so
+%endif
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -472,4 +482,9 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -n xorg-xserver-libglx
 %defattr(644,root,root,755)
+%if %{with multigl}
+%ghost %{_libdir}/xorg/modules/extensions/libglx.so
+%attr(755,root,root) %{_libdir}/xorg/modules/extensions/libglx.so.%{version}
+%else
 %attr(755,root,root) %{_libdir}/xorg/modules/extensions/libglx.so
+%endif
