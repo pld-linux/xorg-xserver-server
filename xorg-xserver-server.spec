@@ -378,6 +378,13 @@ ln -sf libglx.so.%{version} libglx.so
 %clean
 rm -rf $RPM_BUILD_ROOT
 
+%if %{with multigl}
+%post -n xorg-xserver-libglx
+if [ ! -e %{_libdir}/xorg/modules/extensions/libglx.so ]; then
+	ln -sf libglx.so.%{version} %{_libdir}/xorg/modules/extensions/libglx.so
+fi
+%endif
+
 %files
 %defattr(644,root,root,755)
 %doc COPYING ChangeLog
