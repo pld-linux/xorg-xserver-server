@@ -275,7 +275,9 @@ Provides:	xorg-xserver-libglx(glapi) = %{mesa_version}
 Provides:	xorg-xserver-modules-libglx
 Obsoletes:	X11-OpenGL-core < 1:7.0.0
 Obsoletes:	XFree86-OpenGL-core < 1:7.0.0
+%if !%{with multigl}
 Conflicts:	xorg-driver-video-nvidia
+%endif
 
 %description -n xorg-xserver-libglx
 GLX extension library fo X.org server.
