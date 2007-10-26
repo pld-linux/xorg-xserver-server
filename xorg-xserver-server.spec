@@ -14,7 +14,7 @@ Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
 Version:	1.4
-Release:	4%{?with_multigl:.mgl}
+Release:	5%{?with_multigl:.mgl}
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
@@ -33,6 +33,8 @@ Patch5:		%{name}-dbus_core.patch
 Patch6:		%{name}-exa.patch
 Patch7:		%{name}-bug-12528.patch
 Patch8:		%{name}-bug-8080.patch
+# This is only workaround. Waiting for official, proper, upstream fix.
+Patch9:		%{name}-bug-12434.patch
 URL:		http://xorg.freedesktop.org/
 # for glx headers
 BuildRequires:	OpenGL-GLX-devel
@@ -301,6 +303,7 @@ Biblioteka rozszerzenia GLX dla serwera X.org.
 %patch6 -p1
 %patch7 -p1
 %patch8 -p1
+%patch9 -p1
 
 # xserver uses pixman-1 API/ABI so put that explictly here
 sed -i -e 's#<pixman\.h#<pixman-1/pixman.h#g' ./fb/fb.h ./include/miscstruct.h ./render/picture.h
