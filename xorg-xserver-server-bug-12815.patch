@@ -1,0 +1,25 @@
+EXA: Don't attempt to move in pixmaps that can't be accelerated.
+
+From: Michel Dänzer <michel@tungstengraphics.com>
+
+Fixes https://bugs.freedesktop.org/show_bug.cgi?id=12815 .
+---
+
+ exa/exa_migration.c |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
+
+diff --git a/exa/exa_migration.c b/exa/exa_migration.c
+index 70d8e12..ff81041 100644
+--- a/exa/exa_migration.c
++++ b/exa/exa_migration.c
+@@ -319,6 +319,10 @@ exaMoveInPixmap (PixmapPtr pPixmap)
+     if (pPixmap->drawable.bitsPerPixel < 8)
+ 	return;
+ 
++    if (pPixmap->drawable.width > pExaScr->info->maxX ||
++	pPixmap->drawable.height > pExaScr->info->maxY)
++	return;
++
+     if (pExaPixmap->area == NULL) {
+ 	pExaPixmap->area =
+ 	    exaOffscreenAlloc (pScreen, pExaPixmap->fb_size,
