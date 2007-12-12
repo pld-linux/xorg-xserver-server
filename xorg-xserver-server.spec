@@ -13,12 +13,12 @@
 Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
-Version:	1.4
-Release:	7%{?with_multigl:.mgl}
+Version:	1.4.0.90
+Release:	0.1%{?with_multigl:.mgl}
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
-# Source0-md5:	a06d9fe4f9f1d459ae02657f9ce64220
+# Source0-md5:	bb16e969850dbb5d3805cb88d35656d0
 %define		mesa_version	7.0.2
 Source1:	http://dl.sourceforge.net/mesa3d/MesaLib-%{mesa_version}.tar.bz2
 # Source1-md5:	93e6ed7924ff069a4f883b4fce5349dc
@@ -28,14 +28,6 @@ Patch1:		%{name}-xwrapper.patch
 # nasty hack for http://gcc.gnu.org/bugzilla/show_bug.cgi?id=30052
 Patch2:		%{name}-gcc-x86_64-workaround.patch
 Patch3:		%{name}-link.patch
-Patch4:		%{name}-dbus.patch
-Patch5:		%{name}-dbus_core.patch
-Patch6:		%{name}-exa.patch
-Patch7:		%{name}-bug-12528.patch
-Patch8:		%{name}-bug-8080.patch
-# This is only workaround. Waiting for official, proper, upstream fix.
-Patch9:		%{name}-bug-12434.patch
-Patch10:	%{name}-bug-12815.patch
 URL:		http://xorg.freedesktop.org/
 # for glx headers
 BuildRequires:	OpenGL-GLX-devel
@@ -299,13 +291,8 @@ Biblioteka rozszerzenia GLX dla serwera X.org.
 %patch2 -p1
 %endif
 %patch3 -p1
-%patch4 -p0
-%patch5 -p1
-%patch6 -p1
-%patch7 -p1
-%patch8 -p1
-%patch9 -p1
-%patch10 -p1
+
+rm hw/xprint/{miinitext-wrapper,dpmsstubs-wrapper}.c
 
 # xserver uses pixman-1 API/ABI so put that explictly here
 sed -i -e 's#<pixman\.h#<pixman-1/pixman.h#g' ./fb/fb.h ./include/miscstruct.h ./render/picture.h
