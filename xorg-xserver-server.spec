@@ -273,7 +273,7 @@ Provides:	xorg-xserver-libglx(glapi) = %{mesa_version}
 Provides:	xorg-xserver-modules-libglx
 Obsoletes:	X11-OpenGL-core < 1:7.0.0
 Obsoletes:	XFree86-OpenGL-core < 1:7.0.0
-%if !%{with multigl}
+%if %{without multigl}
 Conflicts:	xorg-driver-video-nvidia
 %endif
 
@@ -298,32 +298,32 @@ rm hw/xprint/{miinitext-wrapper,dpmsstubs-wrapper}.c
 sed -i -e 's#<pixman\.h#<pixman-1/pixman.h#g' ./fb/fb.h ./include/miscstruct.h ./render/picture.h
 
 %build
-if API=$(awk '/#define ABI_ANSIC_VERSION/ { split($0,A,/[(,)]/); printf("%d.%d",A[2], A[3]); }' hw/xfree86/common/xf86Module.h) && \
-	[ $API != %{xorg_xserver_server_ansic_abi} ]; then
-        echo "Set %%define xorg_xserver_server_ansic_abi to $API and rerun."
-        exit 1
+API=$(awk '/#define ABI_ANSIC_VERSION/ { split($0,A,/[(,)]/); printf("%d.%d",A[2], A[3]); }' hw/xfree86/common/xf86Module.h)
+if [ $API != %{xorg_xserver_server_ansic_abi} ]; then
+	echo "Set %%define xorg_xserver_server_ansic_abi to $API and rerun."
+	exit 1
 fi
 
-if API=$(awk '/#define ABI_EXTENSION_VERSION/ { split($0,A,/[(,)]/); printf("%d.%d",A[2], A[3]); }' hw/xfree86/common/xf86Module.h) && \
-        [ $API != %{xorg_xserver_server_extension_abi} ]; then
-        echo "Set %%define xorg_xserver_server_extension_abi to $API and rerun."
-        exit 1
+API=$(awk '/#define ABI_EXTENSION_VERSION/ { split($0,A,/[(,)]/); printf("%d.%d",A[2], A[3]); }' hw/xfree86/common/xf86Module.h)
+if [ $API != %{xorg_xserver_server_extension_abi} ]; then
+	echo "Set %%define xorg_xserver_server_extension_abi to $API and rerun."
+	exit 1
 fi
 
-if API=$(awk '/#define ABI_FONT_VERSION/ { split($0,A,/[(,)]/); printf("%d.%d",A[2], A[3]); }' hw/xfree86/common/xf86Module.h) && \
-        [ $API != %{xorg_xserver_server_font_abi} ]; then
-        echo "Set %%define xorg_xserver_server_font_abi to $API and rerun."
-        exit 1
+API=$(awk '/#define ABI_FONT_VERSION/ { split($0,A,/[(,)]/); printf("%d.%d",A[2], A[3]); }' hw/xfree86/common/xf86Module.h)
+if [ $API != %{xorg_xserver_server_font_abi} ]; then
+	echo "Set %%define xorg_xserver_server_font_abi to $API and rerun."
+	exit 1
 fi
-if API=$(awk '/#define ABI_VIDEODRV_VERSION/ { split($0,A,/[(,)]/); printf("%d.%d",A[2], A[3]); }' hw/xfree86/common/xf86Module.h) && \
-        [ $API != %{xorg_xserver_server_videodrv_abi} ]; then
-        echo "Set %%define xorg_xserver_server_videodrv_abi to $API and rerun."
-        exit 1
+API=$(awk '/#define ABI_VIDEODRV_VERSION/ { split($0,A,/[(,)]/); printf("%d.%d",A[2], A[3]); }' hw/xfree86/common/xf86Module.h)
+if [ $API != %{xorg_xserver_server_videodrv_abi} ]; then
+	echo "Set %%define xorg_xserver_server_videodrv_abi to $API and rerun."
+	exit 1
 fi
-if API=$(awk '/#define ABI_XINPUT_VERSION/ { split($0,A,/[(,)]/); printf("%d.%d",A[2], A[3]); }' hw/xfree86/common/xf86Module.h) && \
-        [ $API != %{xorg_xserver_server_xinput_abi} ]; then
-        echo "Set %%define xorg_xserver_server_xinput_abi to $API and rerun."
-        exit 1
+API=$(awk '/#define ABI_XINPUT_VERSION/ { split($0,A,/[(,)]/); printf("%d.%d",A[2], A[3]); }' hw/xfree86/common/xf86Module.h)
+if [ $API != %{xorg_xserver_server_xinput_abi} ]; then
+	echo "Set %%define xorg_xserver_server_xinput_abi to $API and rerun."
+	exit 1
 fi
 
 %{__libtoolize}
