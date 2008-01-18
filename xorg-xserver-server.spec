@@ -14,7 +14,7 @@ Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
 Version:	1.4.0.90
-Release:	0.1%{?with_multigl:.mgl}
+Release:	1%{?with_multigl:.mgl}
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
@@ -28,6 +28,7 @@ Patch1:		%{name}-xwrapper.patch
 # nasty hack for http://gcc.gnu.org/bugzilla/show_bug.cgi?id=30052
 Patch2:		%{name}-gcc-x86_64-workaround.patch
 Patch3:		%{name}-link.patch
+Patch4:		ftp://ftp.freedesktop.org/pub/xorg/X11R7.3/patches/xorg-xserver-1.4-multiple-overflows.diff
 URL:		http://xorg.freedesktop.org/
 # for glx headers
 BuildRequires:	OpenGL-GLX-devel
@@ -291,6 +292,7 @@ Biblioteka rozszerzenia GLX dla serwera X.org.
 %patch2 -p1
 %endif
 %patch3 -p1
+%patch4 -p1
 
 rm hw/xprint/{miinitext-wrapper,dpmsstubs-wrapper}.c
 
