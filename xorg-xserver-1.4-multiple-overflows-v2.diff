@@ -49,7 +49,7 @@ index 6bfa278..781b9ce 100644
      citems[CUP_BLACK_PIXEL].pixel = 
  	screenInfo.screens[stuff->screen]->blackPixel;
 diff --git a/Xext/sampleEVI.c b/Xext/sampleEVI.c
-index 7508aa7..b274b8d 100644
+index 7508aa7..b871bfd 100644
 --- a/Xext/sampleEVI.c
 +++ b/Xext/sampleEVI.c
 @@ -34,6 +34,13 @@ THE USE OR PERFORMANCE OF THIS SOFTWARE.
@@ -131,7 +131,7 @@ index ba057de..e9d48c9 100644
  
  
 diff --git a/Xext/shm.c b/Xext/shm.c
-index ac587be..5633be9 100644
+index ac587be..6f99e90 100644
 --- a/Xext/shm.c
 +++ b/Xext/shm.c
 @@ -711,6 +711,8 @@ ProcPanoramiXShmCreatePixmap(
@@ -143,7 +143,7 @@ index ac587be..5633be9 100644
      PanoramiXRes *newPix;
  
      REQUEST_SIZE_MATCH(xShmCreatePixmapReq);
-@@ -724,11 +726,26 @@ ProcPanoramiXShmCreatePixmap(
+@@ -724,11 +726,18 @@ ProcPanoramiXShmCreatePixmap(
  	return rc;
  
      VERIFY_SHMPTR(stuff->shmseg, stuff->offset, TRUE, shmdesc, client);
@@ -159,8 +159,21 @@ index ac587be..5633be9 100644
      }
 +    if (width > 32767 || height > 32767)
 +        return BadAlloc;
++
+     if (stuff->depth != 1)
+     {
+         pDepth = pDraw->pScreen->allowedDepths;
+@@ -738,10 +747,18 @@ ProcPanoramiXShmCreatePixmap(
+ 	client->errorValue = stuff->depth;
+         return BadValue;
+     }
++
+ CreatePmap:
+-    VERIFY_SHMSIZE(shmdesc, stuff->offset,
+-		   PixmapBytePad(stuff->width, stuff->depth) * stuff->height,
+-		   client);
 +    size = PixmapBytePad(width, depth) * height;
-+    if (sizeof(size) == 4) {
++    if (sizeof(size) == 4 && BitsPerPixel(depth) > 8) {
 +        if (size < width * height)
 +            return BadAlloc;
 +        /* thankfully, offset is unsigned */
@@ -168,21 +181,11 @@ index ac587be..5633be9 100644
 +            return BadAlloc;
 +    }
 +
-     if (stuff->depth != 1)
-     {
-         pDepth = pDraw->pScreen->allowedDepths;
-@@ -739,9 +756,7 @@ ProcPanoramiXShmCreatePixmap(
-         return BadValue;
-     }
- CreatePmap:
--    VERIFY_SHMSIZE(shmdesc, stuff->offset,
--		   PixmapBytePad(stuff->width, stuff->depth) * stuff->height,
--		   client);
 +    VERIFY_SHMSIZE(shmdesc, stuff->offset, size, client);
  
      if(!(newPix = (PanoramiXRes *) xalloc(sizeof(PanoramiXRes))))
  	return BadAlloc;
-@@ -1040,6 +1055,8 @@ ProcShmCreatePixmap(client)
+@@ -1040,6 +1057,8 @@ ProcShmCreatePixmap(client)
      register int i, rc;
      ShmDescPtr shmdesc;
      REQUEST(xShmCreatePixmapReq);
@@ -191,7 +194,7 @@ index ac587be..5633be9 100644
  
      REQUEST_SIZE_MATCH(xShmCreatePixmapReq);
      client->errorValue = stuff->pid;
-@@ -1052,11 +1069,26 @@ ProcShmCreatePixmap(client)
+@@ -1052,11 +1071,18 @@ ProcShmCreatePixmap(client)
  	return rc;
  
      VERIFY_SHMPTR(stuff->shmseg, stuff->offset, TRUE, shmdesc, client);
@@ -207,8 +210,21 @@ index ac587be..5633be9 100644
      }
 +    if (width > 32767 || height > 32767)
 +	return BadAlloc;
++
+     if (stuff->depth != 1)
+     {
+         pDepth = pDraw->pScreen->allowedDepths;
+@@ -1066,10 +1092,18 @@ ProcShmCreatePixmap(client)
+ 	client->errorValue = stuff->depth;
+         return BadValue;
+     }
++
+ CreatePmap:
+-    VERIFY_SHMSIZE(shmdesc, stuff->offset,
+-		   PixmapBytePad(stuff->width, stuff->depth) * stuff->height,
+-		   client);
 +    size = PixmapBytePad(width, depth) * height;
-+    if (sizeof(size) == 4) {
++    if (sizeof(size) == 4 && BitsPerPixel(depth) > 8) {
 +	if (size < width * height)
 +	    return BadAlloc;
 +	/* thankfully, offset is unsigned */
@@ -216,16 +232,6 @@ index ac587be..5633be9 100644
 +	    return BadAlloc;
 +    }
 +
-     if (stuff->depth != 1)
-     {
-         pDepth = pDraw->pScreen->allowedDepths;
-@@ -1067,9 +1099,7 @@ ProcShmCreatePixmap(client)
-         return BadValue;
-     }
- CreatePmap:
--    VERIFY_SHMSIZE(shmdesc, stuff->offset,
--		   PixmapBytePad(stuff->width, stuff->depth) * stuff->height,
--		   client);
 +    VERIFY_SHMSIZE(shmdesc, stuff->offset, size, client);
      pMap = (*shmFuncs[pDraw->pScreen->myNum]->CreatePixmap)(
  			    pDraw->pScreen, stuff->width,
