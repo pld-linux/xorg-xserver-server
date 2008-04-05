@@ -1,4 +1,6 @@
 
+%bcond_with	xprint	# broken, upstream doesn't intend to fix it
+
 # ABI versions, see hw/xfree86/common/xf86Module.h
 %define	xorg_xserver_server_ansic_abi		0.3
 %define	xorg_xserver_server_extension_abi	0.3
@@ -14,14 +16,14 @@ Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
 Version:	1.4.0.90
-Release:	2%{?with_multigl:.mgl}
+Release:	3%{?with_multigl:.mgl}
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
 # Source0-md5:	bb16e969850dbb5d3805cb88d35656d0
-%define		mesa_version	7.0.2
+%define		mesa_version	7.0.3
 Source1:	http://dl.sourceforge.net/mesa3d/MesaLib-%{mesa_version}.tar.bz2
-# Source1-md5:	93e6ed7924ff069a4f883b4fce5349dc
+# Source1-md5:	e6e6379d7793af40a6bc3ce1bace572e
 Source2:	xserver.pamd
 Patch0:		%{name}-ncurses.patch
 Patch1:		%{name}-xwrapper.patch
@@ -344,7 +346,7 @@ fi
 	--enable-lbx \
 	--enable-xevie \
 	--enable-xorgcfg \
-	--enable-xprint \
+	--%{?with_xprint:en}%{!?with_xprint:dis}able-xprint \
 	--with-dri-driver-path=%{_libdir}/xorg/modules/dri \
 	--with-default-font-path="%{_fontsdir}/misc,%{_fontsdir}/TTF,%{_fontsdir}/OTF,%{_fontsdir}/Type1,%{_fontsdir}/100dpi,%{_fontsdir}/75dpi" \
 	--with-mesa-source="`pwd`/Mesa-%{mesa_version}" \
@@ -463,11 +465,13 @@ fi
 %attr(755,root,root) %{_bindir}/Xnest
 %{_mandir}/man1/Xnest.1x*
 
+%if %{with xprint}
 %files -n xorg-xserver-Xprt
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/Xprt
 %{_libdir}/X11/xserver
 %{_mandir}/man1/Xprt.1x*
+%endif
 
 %files -n xorg-xserver-Xvfb
 %defattr(644,root,root,755)
