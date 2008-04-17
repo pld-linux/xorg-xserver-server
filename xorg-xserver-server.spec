@@ -3,34 +3,33 @@
 
 # ABI versions, see hw/xfree86/common/xf86Module.h
 %define	xorg_xserver_server_ansic_abi		0.3
-%define	xorg_xserver_server_extension_abi	0.3
+%define	xorg_xserver_server_extension_abi	1.0
 %define	xorg_xserver_server_font_abi		0.5
-%define	xorg_xserver_server_videodrv_abi	2.0
+%define	xorg_xserver_server_videodrv_abi	4.0
 %define	xorg_xserver_server_xinput_abi		2.0
 
 #
 # Conditional build:
 %bcond_with	multigl		# package libglx.so in a way allowing concurrent install with nvidia/fglrx drivers
-
+#
+%define	snap	20080417
 Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
-Version:	1.4.0.90
-Release:	3%{?with_multigl:.mgl}
+Version:	1.4.99.901
+Release:	0.1%{?with_multigl:.mgl}
 License:	MIT
 Group:		X11/Servers
-Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
-# Source0-md5:	bb16e969850dbb5d3805cb88d35656d0
-%define		mesa_version	7.0.3
-Source1:	http://dl.sourceforge.net/mesa3d/MesaLib-%{mesa_version}.tar.bz2
-# Source1-md5:	e6e6379d7793af40a6bc3ce1bace572e
+# Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
+Source0:	xorg-server-%{snap}.tar.bz2
+# Source0-md5:	864e0ff5e0a756b17da15999f602fadb
+%define		mesa_version	7.1.0
+# Source1:	http://dl.sourceforge.net/mesa3d/MesaLib-%{mesa_version}.tar.bz2
+Source1:	mesa-20080417.tar.bz2
+# Source1-md5:	c00a8fec549e2aebd4cdb2cd76225420
 Source2:	xserver.pamd
 Patch0:		%{name}-ncurses.patch
 Patch1:		%{name}-xwrapper.patch
-# nasty hack for http://gcc.gnu.org/bugzilla/show_bug.cgi?id=30052
-Patch2:		%{name}-gcc-x86_64-workaround.patch
-Patch3:		%{name}-link.patch
-Patch4:		ftp://ftp.freedesktop.org/pub/xorg/X11R7.3/patches/xorg-xserver-1.4-multiple-overflows-v2.diff
 URL:		http://xorg.freedesktop.org/
 # for glx headers
 BuildRequires:	OpenGL-GLX-devel
@@ -92,7 +91,7 @@ BuildRequires:	xorg-proto-xcmiscproto-devel
 BuildRequires:	xorg-proto-xextproto-devel
 BuildRequires:	xorg-proto-xf86bigfontproto-devel
 BuildRequires:	xorg-proto-xf86dgaproto-devel
-BuildRequires:	xorg-proto-xf86driproto-devel
+BuildRequires:	xorg-proto-xf86driproto-devel >= 2.0.4
 BuildRequires:	xorg-proto-xf86miscproto-devel
 BuildRequires:	xorg-proto-xf86vidmodeproto-devel
 BuildRequires:	xorg-proto-xineramaproto-devel
@@ -287,16 +286,9 @@ GLX extension library fo X.org server.
 Biblioteka rozszerzenia GLX dla serwera X.org.
 
 %prep
-%setup -q -a1 -n xorg-server-%{version}
+%setup -q -a1 -n xorg-server
 %patch0 -p1
 %patch1 -p0
-%ifarch %{x8664} i486
-%patch2 -p1
-%endif
-%patch3 -p1
-%patch4 -p1
-
-rm hw/xprint/{miinitext-wrapper,dpmsstubs-wrapper}.c
 
 # xserver uses pixman-1 API/ABI so put that explictly here
 sed -i -e 's#<pixman\.h#<pixman-1/pixman.h#g' ./fb/fb.h ./include/miscstruct.h ./render/picture.h
@@ -345,12 +337,14 @@ fi
 	--enable-glx-tls \
 	--enable-lbx \
 	--enable-xevie \
+	--enable-secure-rpc \
 	--enable-xorgcfg \
 	--%{?with_xprint:en}%{!?with_xprint:dis}able-xprint \
 	--with-dri-driver-path=%{_libdir}/xorg/modules/dri \
 	--with-default-font-path="%{_fontsdir}/misc,%{_fontsdir}/TTF,%{_fontsdir}/OTF,%{_fontsdir}/Type1,%{_fontsdir}/100dpi,%{_fontsdir}/75dpi" \
-	--with-mesa-source="`pwd`/Mesa-%{mesa_version}" \
+	--with-mesa-source="`pwd`/mesa" \
 	--with-xkb-output=/var/lib/xkb
+# --with-mesa-source="`pwd`/Mesa-%{mesa_version}" \
 
 %{__make}
 
@@ -398,12 +392,11 @@ fi
 %attr(755,root,root) %{_bindir}/in[bwl]
 %attr(755,root,root) %{_bindir}/ioport
 %attr(755,root,root) %{_bindir}/out[bwl]
-%attr(755,root,root) %{_bindir}/pcitweak
-%attr(755,root,root) %{_bindir}/scanpci
 %attr(755,root,root) %{_bindir}/xorgconfig
 %{_libdir}/X11/Cards
 %{_libdir}/X11/Options
 %dir %{_libdir}/xorg
+%{_libdir}/xorg/protocol.txt
 %dir %{_libdir}/xorg/modules
 %dir %{_libdir}/xorg/modules/dri
 %dir %{_libdir}/xorg/modules/drivers
@@ -411,8 +404,8 @@ fi
 %attr(755,root,root) %{_libdir}/xorg/modules/extensions/libGLcore.so
 %attr(755,root,root) %{_libdir}/xorg/modules/extensions/libdbe.so
 %attr(755,root,root) %{_libdir}/xorg/modules/extensions/libdri.so
+%attr(755,root,root) %{_libdir}/xorg/modules/extensions/libdri2.so
 %attr(755,root,root) %{_libdir}/xorg/modules/extensions/libextmod.so
-%attr(755,root,root) %{_libdir}/xorg/modules/extensions/librecord.so
 %attr(755,root,root) %{_libdir}/xorg/modules/extensions/libxtrap.so
 %dir %{_libdir}/xorg/modules/fonts
 %attr(755,root,root) %{_libdir}/xorg/modules/fonts/lib*.so
@@ -422,8 +415,6 @@ fi
 %dir %{_libdir}/xorg/modules/multimedia
 %attr(755,root,root) %{_libdir}/xorg/modules/multimedia/*.so
 %attr(755,root,root) %{_libdir}/xorg/modules/lib*.so
-%dir %{_libdir}/xserver
-%{_libdir}/xserver/SecurityPolicy
 %dir /var/lib/xkb
 /var/lib/xkb/README.compiled
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/pam.d/xserver
@@ -433,13 +424,10 @@ fi
 %{_mandir}/man1/Xserver.1x*
 %{_mandir}/man1/cvt.1*
 %{_mandir}/man1/gtf.1x*
-%{_mandir}/man1/pcitweak.1x*
-%{_mandir}/man1/scanpci.1x*
 %{_mandir}/man1/xorgconfig.1*
 %{_mandir}/man4/exa.4*
 %{_mandir}/man4/fbdevhw.4*
 %{_mandir}/man5/xorg.conf.5x*
-%{_mandir}/man5/SecurityPolicy.5x*
 
 %files -n xorg-xserver-Xdmx
 %defattr(644,root,root,755)
