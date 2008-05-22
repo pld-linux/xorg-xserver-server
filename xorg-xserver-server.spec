@@ -12,17 +12,15 @@
 # Conditional build:
 %bcond_with	multigl		# package libglx.so in a way allowing concurrent install with nvidia/fglrx drivers
 #
-%define	snap	20080417
 Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
-Version:	1.4.99.901
+Version:	1.4.99.902
 Release:	0.1%{?with_multigl:.mgl}
 License:	MIT
 Group:		X11/Servers
-# Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
-Source0:	xorg-server-%{snap}.tar.bz2
-# Source0-md5:	864e0ff5e0a756b17da15999f602fadb
+Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
+# Source0-md5:	60044ff0d0c0283f89e48eee600563e9
 %define		mesa_version	7.1.0
 # Source1:	http://dl.sourceforge.net/mesa3d/MesaLib-%{mesa_version}.tar.bz2
 Source1:	mesa-20080417.tar.bz2
@@ -286,7 +284,7 @@ GLX extension library fo X.org server.
 Biblioteka rozszerzenia GLX dla serwera X.org.
 
 %prep
-%setup -q -a1 -n xorg-server
+%setup -q -a1 -n xorg-server-%{version}
 %patch0 -p1
 %patch1 -p0
 
