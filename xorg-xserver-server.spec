@@ -328,6 +328,7 @@ fi
 %configure \
 	--with-os-name="PLD/Linux" \
 	--with-os-vendor="PLD/Team" \
+	--disable-builtin-fonts \
 	--enable-aiglx \
 	--enable-builddocs \
 	--enable-dga \
