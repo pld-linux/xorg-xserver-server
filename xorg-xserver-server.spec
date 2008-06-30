@@ -2,11 +2,11 @@
 %bcond_with	xprint	# broken, upstream doesn't intend to fix it
 
 # ABI versions, see hw/xfree86/common/xf86Module.h
-%define	xorg_xserver_server_ansic_abi		0.3
-%define	xorg_xserver_server_extension_abi	1.0
-%define	xorg_xserver_server_font_abi		0.5
-%define	xorg_xserver_server_videodrv_abi	4.0
-%define	xorg_xserver_server_xinput_abi		2.0
+%define	xorg_xserver_server_ansic_abi		0.4
+%define	xorg_xserver_server_extension_abi	1.1
+%define	xorg_xserver_server_font_abi		0.6
+%define	xorg_xserver_server_videodrv_abi	4.1
+%define	xorg_xserver_server_xinput_abi		2.1
 
 #
 # Conditional build:
@@ -15,20 +15,17 @@
 Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
-Version:	1.4.99.902
+Version:	1.4.99.905
 Release:	0.1%{?with_multigl:.mgl}
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
-# Source0-md5:	60044ff0d0c0283f89e48eee600563e9
-%define		mesa_version	7.1.0
-# Source1:	http://dl.sourceforge.net/mesa3d/MesaLib-%{mesa_version}.tar.bz2
-Source1:	mesa-20080417.tar.bz2
-# Source1-md5:	c00a8fec549e2aebd4cdb2cd76225420
+# Source0-md5:	aa873a0d1571685959122aa101bd8b35
 Source2:	xserver.pamd
 Patch0:		%{name}-ncurses.patch
 Patch1:		%{name}-xwrapper.patch
 URL:		http://xorg.freedesktop.org/
+BuildRequires:	Mesa-libGL-devel >= 7.1.0
 # for glx headers
 BuildRequires:	OpenGL-GLX-devel
 BuildRequires:	autoconf >= 2.57
@@ -269,7 +266,6 @@ Summary:	GLX extension library fo X.org server
 Summary(pl.UTF-8):	Biblioteka rozszerzenia GLX dla serwera X.org
 Group:		X11/Servers
 Requires:	%{name} = %{version}-%{release}
-Provides:	xorg-xserver-libglx(glapi) = %{mesa_version}
 Provides:	xorg-xserver-modules-libglx
 Obsoletes:	X11-OpenGL-core < 1:7.0.0
 Obsoletes:	XFree86-OpenGL-core < 1:7.0.0
@@ -284,7 +280,7 @@ GLX extension library fo X.org server.
 Biblioteka rozszerzenia GLX dla serwera X.org.
 
 %prep
-%setup -q -a1 -n xorg-server-%{version}
+%setup -q -n xorg-server-%{version}
 %patch0 -p1
 %patch1 -p0
 
@@ -341,9 +337,7 @@ fi
 	--%{?with_xprint:en}%{!?with_xprint:dis}able-xprint \
 	--with-dri-driver-path=%{_libdir}/xorg/modules/dri \
 	--with-default-font-path="%{_fontsdir}/misc,%{_fontsdir}/TTF,%{_fontsdir}/OTF,%{_fontsdir}/Type1,%{_fontsdir}/100dpi,%{_fontsdir}/75dpi" \
-	--with-mesa-source="`pwd`/mesa" \
 	--with-xkb-output=/var/lib/xkb
-# --with-mesa-source="`pwd`/Mesa-%{mesa_version}" \
 
 %{__make}
 
