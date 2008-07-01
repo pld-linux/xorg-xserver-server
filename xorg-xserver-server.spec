@@ -11,6 +11,7 @@
 #
 # Conditional build:
 %bcond_with	multigl		# package libglx.so in a way allowing concurrent install with nvidia/fglrx drivers
+%bcond_with	dri2
 #
 Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
@@ -25,7 +26,7 @@ Source2:	xserver.pamd
 Patch0:		%{name}-ncurses.patch
 Patch1:		%{name}-xwrapper.patch
 URL:		http://xorg.freedesktop.org/
-BuildRequires:	Mesa-libGL-devel >= 7.1.0
+BuildRequires:	Mesa-libGL-devel >= 7.1
 # for glx headers
 BuildRequires:	OpenGL-GLX-devel
 BuildRequires:	autoconf >= 2.57
@@ -33,7 +34,7 @@ BuildRequires:	automake
 BuildRequires:	cpp
 BuildRequires:	dbus-devel
 BuildRequires:	hal-devel
-BuildRequires:	libdrm-devel >= 2.3.0
+BuildRequires:	libdrm-devel >= 2.3.1
 BuildRequires:	libtool
 BuildRequires:	ncurses-devel
 BuildRequires:	pam-devel
@@ -266,6 +267,8 @@ Summary:	GLX extension library fo X.org server
 Summary(pl.UTF-8):	Biblioteka rozszerzenia GLX dla serwera X.org
 Group:		X11/Servers
 Requires:	%{name} = %{version}-%{release}
+# Mesa-dri-driver-swrast replaces libGLcore.so
+Requires:	xorg-xserver-libglx(glapi)
 Provides:	xorg-xserver-modules-libglx
 Obsoletes:	X11-OpenGL-core < 1:7.0.0
 Obsoletes:	XFree86-OpenGL-core < 1:7.0.0
@@ -334,6 +337,7 @@ fi
 	--enable-xevie \
 	--enable-secure-rpc \
 	--enable-xorgcfg \
+	--%{?with_dri2:en}%{!?with_dri2:dis}able-dri2 \
 	--%{?with_xprint:en}%{!?with_xprint:dis}able-xprint \
 	--with-dri-driver-path=%{_libdir}/xorg/modules/dri \
 	--with-default-font-path="%{_fontsdir}/misc,%{_fontsdir}/TTF,%{_fontsdir}/OTF,%{_fontsdir}/Type1,%{_fontsdir}/100dpi,%{_fontsdir}/75dpi" \
@@ -394,10 +398,9 @@ fi
 %dir %{_libdir}/xorg/modules/dri
 %dir %{_libdir}/xorg/modules/drivers
 %dir %{_libdir}/xorg/modules/extensions
-%attr(755,root,root) %{_libdir}/xorg/modules/extensions/libGLcore.so
 %attr(755,root,root) %{_libdir}/xorg/modules/extensions/libdbe.so
 %attr(755,root,root) %{_libdir}/xorg/modules/extensions/libdri.so
-%attr(755,root,root) %{_libdir}/xorg/modules/extensions/libdri2.so
+%{?with_dri2:%attr(755,root,root) %{_libdir}/xorg/modules/extensions/libdri2.so}
 %attr(755,root,root) %{_libdir}/xorg/modules/extensions/libextmod.so
 %attr(755,root,root) %{_libdir}/xorg/modules/extensions/libxtrap.so
 %dir %{_libdir}/xorg/modules/fonts
