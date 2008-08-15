@@ -12,6 +12,7 @@
 # Conditional build:
 %bcond_with	multigl		# package libglx.so in a way allowing concurrent install with nvidia/fglrx drivers
 %bcond_with	dri2
+%bcond_with	hal
 #
 Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
@@ -33,8 +34,10 @@ BuildRequires:	OpenGL-GLX-devel
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake
 BuildRequires:	cpp
+%if %{with hal}
 BuildRequires:	dbus-devel
 BuildRequires:	hal-devel
+%endif
 BuildRequires:	libdrm-devel >= 2.3.1
 BuildRequires:	libtool
 BuildRequires:	ncurses-devel
@@ -330,6 +333,7 @@ fi
 	--with-os-name="PLD/Linux" \
 	--with-os-vendor="PLD/Team" \
 	--disable-builtin-fonts \
+	%{?!with_hal:--disable-config-hal} \
 	--enable-aiglx \
 	--enable-builddocs \
 	--enable-dga \
