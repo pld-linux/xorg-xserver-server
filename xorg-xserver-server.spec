@@ -10,12 +10,13 @@
 # Conditional build:
 %bcond_with	multigl		# package libglx.so in a way allowing concurrent install with nvidia/fglrx drivers
 %bcond_with	xprint
+%bcond_with	hal
 
 Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
 Version:	1.4.2
-Release:	1%{?with_multigl:.mgl}
+Release:	2%{?with_multigl:.mgl}
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
@@ -34,8 +35,10 @@ BuildRequires:	OpenGL-GLX-devel
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake
 BuildRequires:	cpp
+%if %{with hal}
 BuildRequires:	dbus-devel
 BuildRequires:	hal-devel
+%endif
 BuildRequires:	libdrm-devel >= 2.3.0
 BuildRequires:	libtool
 BuildRequires:	ncurses-devel
@@ -333,6 +336,7 @@ fi
 %configure \
 	--with-os-name="PLD/Linux" \
 	--with-os-vendor="PLD/Team" \
+	%{!?with_hal:--disable-config-hal} \
 	--enable-aiglx \
 	--enable-builddocs \
 	--enable-dga \
