@@ -64,7 +64,6 @@ BuildRequires:	xorg-lib-libXxf86misc-devel
 BuildRequires:	xorg-lib-libXxf86vm-devel
 BuildRequires:	xorg-lib-libdmx-devel
 BuildRequires:	xorg-lib-libfontenc-devel
-BuildRequires:	xorg-lib-liblbxutil-devel
 BuildRequires:	xorg-lib-libxkbfile-devel
 BuildRequires:	xorg-lib-libxkbui-devel >= 1.0.2
 BuildRequires:	xorg-lib-xtrans-devel
@@ -339,7 +338,6 @@ fi
 	--enable-dga \
 	--enable-dmx \
 	--enable-glx-tls \
-	--enable-lbx \
 	--enable-xevie \
 	--enable-secure-rpc \
 	--enable-xorgcfg \
