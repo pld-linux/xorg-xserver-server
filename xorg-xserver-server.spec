@@ -64,10 +64,10 @@ BuildRequires:	xorg-lib-libXxf86misc-devel
 BuildRequires:	xorg-lib-libXxf86vm-devel
 BuildRequires:	xorg-lib-libdmx-devel
 BuildRequires:	xorg-lib-libfontenc-devel
+BuildRequires:	xorg-lib-libpciaccess-devel
 BuildRequires:	xorg-lib-libxkbfile-devel
 BuildRequires:	xorg-lib-libxkbui-devel >= 1.0.2
 BuildRequires:	xorg-lib-xtrans-devel
-BuildRequires:	xorg-lib-libpciaccess-devel
 BuildRequires:	xorg-proto-bigreqsproto-devel
 BuildRequires:	xorg-proto-compositeproto-devel >= 0.4
 BuildRequires:	xorg-proto-damageproto-devel >= 1.1
