@@ -4,6 +4,8 @@
 %bcond_with	multigl	# package libglx.so in a way allowing concurrent install with nvidia/fglrx drivers
 %bcond_with	dri2	# DRI2 support
 %bcond_with	hal	# HAL support
+%bcond_with	record	# RECORD extension
+%bcond_with	xtrap	# XTrap extension (deprecated)
 #
 # ABI versions, see hw/xfree86/common/xf86Module.h
 %define	xorg_xserver_server_ansic_abi		0.4
@@ -79,11 +81,11 @@ BuildRequires:	xorg-proto-inputproto-devel >= 1.4.2
 BuildRequires:	xorg-proto-kbproto-devel >= 1.0.3
 BuildRequires:	xorg-proto-printproto-devel
 BuildRequires:	xorg-proto-randrproto-devel >= 1.2
-BuildRequires:	xorg-proto-recordproto-devel
+%{?with_record:BuildRequires:	xorg-proto-recordproto-devel}
 BuildRequires:	xorg-proto-renderproto-devel >= 0.9.3
 BuildRequires:	xorg-proto-resourceproto-devel
 BuildRequires:	xorg-proto-scrnsaverproto-devel >= 1.1.0
-BuildRequires:	xorg-proto-trapproto-devel
+%{?with_xtrap:BuildRequires:	xorg-proto-trapproto-devel}
 BuildRequires:	xorg-proto-videoproto-devel
 BuildRequires:	xorg-proto-xcmiscproto-devel
 BuildRequires:	xorg-proto-xextproto-devel
@@ -331,15 +333,17 @@ fi
 	--with-os-name="PLD/Linux" \
 	--with-os-vendor="PLD/Team" \
 	--disable-builtin-fonts \
-	%{?!with_hal:--disable-config-hal} \
+	%{!?with_hal:--disable-config-hal} \
 	--enable-aiglx \
 	--enable-builddocs \
 	--enable-dga \
 	--enable-dmx \
 	--enable-glx-tls \
-	--enable-xevie \
+	%{?with_record:--enable-record} \
 	--enable-secure-rpc \
+	--enable-xevie \
 	--enable-xorgcfg \
+	%{?with_xtrap:--enable-xtrap} \
 	--%{?with_dri2:en}%{!?with_dri2:dis}able-dri2 \
 	--%{?with_xprint:en}%{!?with_xprint:dis}able-xprint \
 	--with-dri-driver-path=%{_libdir}/xorg/modules/dri \
@@ -405,6 +409,8 @@ fi
 %attr(755,root,root) %{_libdir}/xorg/modules/extensions/libdri.so
 %{?with_dri2:%attr(755,root,root) %{_libdir}/xorg/modules/extensions/libdri2.so}
 %attr(755,root,root) %{_libdir}/xorg/modules/extensions/libextmod.so
+%{?with_record:%attr(755,root,root) %{_libdir}/xorg/modules/extensions/librecord.so}
+%{?with_xtrap:%attr(755,root,root) %{_libdir}/xorg/modules/extensions/libxtrap.so}
 %dir %{_libdir}/xorg/modules/fonts
 %attr(755,root,root) %{_libdir}/xorg/modules/fonts/lib*.so
 %dir %{_libdir}/xorg/modules/input
