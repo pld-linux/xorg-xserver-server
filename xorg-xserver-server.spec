@@ -99,6 +99,7 @@ BuildRequires:	xorg-proto-xproto-devel >= 7.0.9
 BuildRequires:	xorg-util-util-macros >= 0.99.2
 #BR: xcalibrateproto, tslib (for KDRIVE only)
 #BR: glitz-devel >= 0.4.3 (for XGL and EGL only)
+Requires(triggerpostun):	sed >= 4.0
 Requires:	pixman >= 0.9.5
 Requires:	xkeyboard-config
 # for rgb.txt
@@ -382,6 +383,18 @@ if [ ! -e %{_libdir}/xorg/modules/extensions/libglx.so ]; then
 	ln -sf libglx.so.%{version} %{_libdir}/xorg/modules/extensions/libglx.so
 fi
 %endif
+
+%triggerpostun -- xorg-xserver-server < 1.5.0
+if [ -f /etc/X11/xorg.conf ]; then
+	sed -i -e 's/^\s*RgbPath.*$/#& # obsolete option/' /etc/X11/xorg.conf
+	sed -i -e 's/^\s*Load\s*"type1".*$/#& # obsolete module/' /etc/X11/xorg.conf
+%if %{without record}
+	sed -i -e 's/^\s*Load\s*"record".*$/#& # module disabled in this build/' /etc/X11/xorg.conf
+%endif
+%if %{without xtrap}
+	sed -i -e 's/^\s*Load\s*"xtrap".*$/#& # deprecated module, disabled/' /etc/X11/xorg.conf
+%endif
+fi
 
 %files
 %defattr(644,root,root,755)
