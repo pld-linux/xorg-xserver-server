@@ -339,6 +339,7 @@ fi
 	--enable-dga \
 	--enable-dmx \
 	--enable-glx-tls \
+	--enable-install-libxf86config \
 	%{?with_record:--enable-record} \
 	--enable-secure-rpc \
 	--enable-xevie \
@@ -361,9 +362,6 @@ rm -rf $RPM_BUILD_ROOT
 install -D %{SOURCE2} $RPM_BUILD_ROOT/etc/pam.d/xserver
 install -d $RPM_BUILD_ROOT/etc/security/console.apps
 install -d $RPM_BUILD_ROOT%{_libdir}/xorg/modules/{dri,drivers,input}
-install hw/xfree86/parser/xf86Parser.h $RPM_BUILD_ROOT%{_includedir}/xorg/xf86Parser.h
-install hw/xfree86/parser/xf86Optrec.h $RPM_BUILD_ROOT%{_includedir}/xorg/xf86Optrec.h
-install hw/xfree86/parser/libxf86config.a $RPM_BUILD_ROOT%{_libdir}/libxf86config.a
 :> $RPM_BUILD_ROOT/etc/security/console.apps/xserver
 :> $RPM_BUILD_ROOT/etc/security/blacklist.xserver
 
