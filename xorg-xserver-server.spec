@@ -1,6 +1,10 @@
-
-%bcond_with	xprint	# broken, upstream doesn't intend to fix it
-
+#
+# Conditional build:
+%bcond_with	xprint	# Xprint server (broken, upstream doesn't intend to fix it)
+%bcond_with	multigl	# package libglx.so in a way allowing concurrent install with nvidia/fglrx drivers
+%bcond_with	dri2	# DRI2 support
+%bcond_with	hal	# HAL support
+#
 # ABI versions, see hw/xfree86/common/xf86Module.h
 %define	xorg_xserver_server_ansic_abi		0.4
 %define	xorg_xserver_server_extension_abi	1.1
@@ -8,12 +12,6 @@
 %define	xorg_xserver_server_videodrv_abi	4.1
 %define	xorg_xserver_server_xinput_abi		2.1
 
-#
-# Conditional build:
-%bcond_with	multigl		# package libglx.so in a way allowing concurrent install with nvidia/fglrx drivers
-%bcond_with	dri2
-%bcond_with	hal
-#
 Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
