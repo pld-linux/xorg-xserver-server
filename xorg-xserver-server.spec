@@ -271,8 +271,8 @@ Summary:	GLX extension library fo X.org server
 Summary(pl.UTF-8):	Biblioteka rozszerzenia GLX dla serwera X.org
 Group:		X11/Servers
 Requires:	%{name} = %{version}-%{release}
-# Mesa-dri-driver-swrast replaces libGLcore.so
-Requires:	xorg-xserver-libglx(glapi)
+# Mesa version glapi tables in glx/ dir come from
+Provides:	xorg-xserver-libglx(glapi) = 7.1.0
 Provides:	xorg-xserver-modules-libglx
 Obsoletes:	X11-OpenGL-core < 1:7.0.0
 Obsoletes:	XFree86-OpenGL-core < 1:7.0.0
