@@ -246,7 +246,7 @@ index 2562094..8d9bcea 100644
  ExaOffscreenArea *
  exaOffscreenAlloc(ScreenPtr pScreen, int size, int align,
                    Bool locked,
-@@ -771,30 +786,23 @@ exaOffscreenFree(ScreenPtr pScreen, ExaOffscreenArea *area);
+@@ -786,15 +786,6 @@
  void
  ExaOffscreenMarkUsed (PixmapPtr pPixmap);
  
@@ -262,25 +262,16 @@ index 2562094..8d9bcea 100644
  void
  exaEnableDisableFBAccess (int index, Bool enable);
  
-+
-+/* in exa_migration.c */
- void
- exaMoveInPixmap (PixmapPtr pPixmap);
- 
+@@ -808,9 +799,6 @@
  void
  exaMoveOutPixmap (PixmapPtr pPixmap);
  
 -void *
 -exaGetPixmapDriverPrivate(PixmapPtr p);
- 
-+/* in exa_unaccel.c */
+-
  CARD32
  exaGetPixmapFirstPixel (PixmapPtr pPixmap);
  
-+
- /**
-  * Returns TRUE if the given planemask covers all the significant bits in the
-  * pixel values for pDrawable.
 diff --git a/exa/exa_accel.c b/exa/exa_accel.c
 index 3ec9625..1c07a0b 100644
 --- a/exa/exa_accel.c
