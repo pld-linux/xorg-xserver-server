@@ -1,9 +1,8 @@
 #
 # Conditional build:
-%bcond_with	xprint	# Xprint server (broken, upstream doesn't intend to fix it)
 %bcond_with	multigl	# package libglx.so in a way allowing concurrent install with nvidia/fglrx drivers
 %bcond_with	dri2	# DRI2 support
-%bcond_with	hal	# HAL support
+%bcond_without	hal	# HAL support
 %bcond_with	record	# RECORD extension
 %bcond_with	xtrap	# XTrap extension (deprecated)
 #
@@ -18,7 +17,7 @@ Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
 Version:	1.5.3
-Release:	2%{?with_multigl:.mgl}
+Release:	3%{?with_multigl:.mgl}
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
@@ -355,7 +354,7 @@ fi
 	--enable-xorgcfg \
 	%{?with_xtrap:--enable-xtrap} \
 	--%{?with_dri2:en}%{!?with_dri2:dis}able-dri2 \
-	--%{?with_xprint:en}%{!?with_xprint:dis}able-xprint \
+	--disable-xprint \
 	--with-dri-driver-path=%{_libdir}/xorg/modules/dri \
 	--with-default-font-path="%{_fontsdir}/misc,%{_fontsdir}/TTF,%{_fontsdir}/OTF,%{_fontsdir}/Type1,%{_fontsdir}/100dpi,%{_fontsdir}/75dpi" \
 	--with-xkb-output=/var/lib/xkb
@@ -475,14 +474,6 @@ fi
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/Xnest
 %{_mandir}/man1/Xnest.1x*
-
-%if %{with xprint}
-%files -n xorg-xserver-Xprt
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_bindir}/Xprt
-%{_libdir}/X11/xserver
-%{_mandir}/man1/Xprt.1x*
-%endif
 
 %files -n xorg-xserver-Xvfb
 %defattr(644,root,root,755)
