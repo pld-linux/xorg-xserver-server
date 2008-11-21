@@ -17,7 +17,7 @@ Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
 Version:	1.5.3
-Release:	3%{?with_multigl:.mgl}
+Release:	4%{?with_multigl:.mgl}
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
@@ -30,6 +30,7 @@ Patch3:		%{name}-edid.patch
 Patch4:		%{name}-sanity.patch
 Patch5:		%{name}-pic-libxf86config.patch
 Patch6:		%{name}-fb-size.patch
+Patch7:		%{name}-autoval.patch
 URL:		http://xorg.freedesktop.org/
 BuildRequires:	Mesa-libGL-devel >= 7.1
 # for glx headers
@@ -299,6 +300,7 @@ Biblioteka rozszerzenia GLX dla serwera X.org.
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
+%patch7 -p1
 
 # xserver uses pixman-1 API/ABI so put that explictly here
 sed -i -e 's#<pixman\.h#<pixman-1/pixman.h#g' ./fb/fb.h ./include/miscstruct.h ./render/picture.h
