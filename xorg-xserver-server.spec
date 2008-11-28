@@ -1,10 +1,9 @@
 #
 # Conditional build:
 %bcond_with	multigl	# package libglx.so in a way allowing concurrent install with nvidia/fglrx drivers
-%bcond_with	dri2	# DRI2 support
+%bcond_without	dri2	# DRI2 support
 %bcond_without	hal	# HAL support
 %bcond_with	record	# RECORD extension
-%bcond_with	xtrap	# XTrap extension (deprecated)
 #
 # ABI versions, see hw/xfree86/common/xf86Module.h
 %define	xorg_xserver_server_ansic_abi		0.4
@@ -76,7 +75,7 @@ BuildRequires:	xorg-proto-fixesproto-devel >= 4.0
 BuildRequires:	xorg-proto-fontcacheproto-devel
 BuildRequires:	xorg-proto-fontsproto-devel
 BuildRequires:	xorg-proto-glproto-devel >= 1.4.8
-BuildRequires:	xorg-proto-inputproto-devel >= 1.9.99.6
+BuildRequires:	xorg-proto-inputproto-devel >= 1.5.0
 BuildRequires:	xorg-proto-kbproto-devel >= 1.0.3
 BuildRequires:	xorg-proto-printproto-devel
 BuildRequires:	xorg-proto-randrproto-devel >= 1.2
@@ -84,7 +83,6 @@ BuildRequires:	xorg-proto-randrproto-devel >= 1.2
 BuildRequires:	xorg-proto-renderproto-devel >= 0.9.3
 BuildRequires:	xorg-proto-resourceproto-devel
 BuildRequires:	xorg-proto-scrnsaverproto-devel >= 1.1.0
-%{?with_xtrap:BuildRequires:	xorg-proto-trapproto-devel}
 BuildRequires:	xorg-proto-videoproto-devel
 BuildRequires:	xorg-proto-xcmiscproto-devel
 BuildRequires:	xorg-proto-xextproto-devel >= 7.0.3
@@ -121,6 +119,7 @@ Obsoletes:	XFree86-Xserver < 1:7.0.0
 Obsoletes:	XFree86-modules < 1:7.0.0
 Obsoletes:	XFree86-setup < 1:7.0.0
 Obsoletes:	Xserver
+Obsoletes:	xorg-xserver-server-xorgcfg
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 # avoid self-dependencies on included modules
@@ -245,27 +244,6 @@ Header files for X.org server.
 %description devel -l pl.UTF-8
 Pliki nagłówkowe dla serwera X.org.
 
-%package xorgcfg
-Summary:	xorgcfg - graphical configuration tool for X.org server
-Summary(pl.UTF-8):	xorgcfg - graficzne narzędzie konfiguracyjne dla serwera X.org
-Group:		X11/Servers
-Requires:	%{name} = %{version}-%{release}
-# just for %{_includedir}/bitmaps dir?
-Requires:	xorg-data-xbitmaps
-# for new app-defaults location
-Requires:	xorg-lib-libXt >= 1.0.0
-Requires:	xorg-lib-libxkbui >= 1.0.2
-
-%description xorgcfg
-xorgcfg is a tool to configure X.org server, and can be used to either
-write the initial configuration file or make customizations to the
-current configuration.
-
-%description xorgcfg -l pl.UTF-8
-xorgcfg to narzędzie do konfiguracji serwera X.org. Można go użyć do
-utworzenia początkowego pliku konfiguracyjnego lub dokonania
-modyfikacji istniejącej konfiguracji.
-
 %package -n xorg-xserver-libglx
 Summary:	GLX extension library fo X.org server
 Summary(pl.UTF-8):	Biblioteka rozszerzenia GLX dla serwera X.org
@@ -342,11 +320,7 @@ fi
 	--enable-install-libxf86config \
 	%{?with_record:--enable-record} \
 	--enable-secure-rpc \
-	--enable-xevie \
-	--enable-xorgcfg \
-	%{?with_xtrap:--enable-xtrap} \
 	--%{?with_dri2:en}%{!?with_dri2:dis}able-dri2 \
-	--disable-xprint \
 	--with-dri-driver-path=%{_libdir}/xorg/modules/dri \
 	--with-default-font-path="%{_fontsdir}/misc,%{_fontsdir}/TTF,%{_fontsdir}/OTF,%{_fontsdir}/Type1,%{_fontsdir}/100dpi,%{_fontsdir}/75dpi" \
 	--with-xkb-output=/var/lib/xkb
@@ -390,9 +364,7 @@ if [ -f /etc/X11/xorg.conf ]; then
 %if %{without record}
 	sed -i -e 's/^\s*Load\s*"record".*$/#& # module disabled in this build/' /etc/X11/xorg.conf
 %endif
-%if %{without xtrap}
 	sed -i -e 's/^\s*Load\s*"xtrap".*$/#& # deprecated module, disabled/' /etc/X11/xorg.conf
-%endif
 fi
 
 %files
@@ -420,7 +392,6 @@ fi
 %{?with_dri2:%attr(755,root,root) %{_libdir}/xorg/modules/extensions/libdri2.so}
 %attr(755,root,root) %{_libdir}/xorg/modules/extensions/libextmod.so
 %{?with_record:%attr(755,root,root) %{_libdir}/xorg/modules/extensions/librecord.so}
-%{?with_xtrap:%attr(755,root,root) %{_libdir}/xorg/modules/extensions/libxtrap.so}
 %dir %{_libdir}/xorg/modules/fonts
 %attr(755,root,root) %{_libdir}/xorg/modules/fonts/lib*.so
 %dir %{_libdir}/xorg/modules/input
@@ -478,14 +449,6 @@ fi
 %{_libdir}/libxf86config.a
 %{_aclocaldir}/xorg-server.m4
 %{_pkgconfigdir}/xorg-server.pc
-
-%files xorgcfg
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_bindir}/xorgcfg
-%{_includedir}/X11/bitmaps/*
-%{_includedir}/X11/pixmaps
-%{_datadir}/X11/app-defaults/XOrgCfg
-%{_mandir}/man1/xorgcfg.1x*
 
 %files -n xorg-xserver-libglx
 %defattr(644,root,root,755)
