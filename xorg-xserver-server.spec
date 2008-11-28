@@ -43,7 +43,7 @@ BuildRequires:	cpp
 BuildRequires:	dbus-devel
 BuildRequires:	hal-devel
 %endif
-BuildRequires:	libdrm-devel >= 2.3.1
+BuildRequires:	libdrm-devel >= 2.4.1
 BuildRequires:	libtool
 BuildRequires:	ncurses-devel
 BuildRequires:	pam-devel
@@ -77,6 +77,7 @@ BuildRequires:	xorg-proto-bigreqsproto-devel
 BuildRequires:	xorg-proto-compositeproto-devel >= 0.4
 BuildRequires:	xorg-proto-damageproto-devel >= 1.1
 BuildRequires:	xorg-proto-dmxproto-devel
+%{?with_dri2:BuildRequires:	xorg-proto-dri2proto >= 1.1}
 BuildRequires:	xorg-proto-evieext-devel
 BuildRequires:	xorg-proto-fixesproto-devel >= 4.0
 BuildRequires:	xorg-proto-fontcacheproto-devel
@@ -235,7 +236,7 @@ serwera X, ale odmawiają uruchomienia bez niego.
 Summary:	Header files for X.org server
 Summary(pl.UTF-8):	Pliki nagłówkowe dla servera X.org
 Group:		X11/Development/Libraries
-Requires:	libdrm-devel >= 2.3.0
+Requires:	libdrm-devel >= 2.4.1
 Requires:	pixman-devel >= 0.9.5
 Requires:	xorg-proto-fontsproto-devel
 Requires:	xorg-proto-renderproto-devel >= 0.9.3
