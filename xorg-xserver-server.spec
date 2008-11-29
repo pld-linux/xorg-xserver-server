@@ -365,7 +365,7 @@ if [ -f /etc/X11/xorg.conf ]; then
 %if %{without record}
 	sed -i -e 's/^\s*Load\s*"record".*$/#& # module disabled in this build/' /etc/X11/xorg.conf
 %endif
-	sed -i -e 's/^\s*Load\s*"xtrap".*$/#& # deprecated module, disabled/' /etc/X11/xorg.conf
+	sed -i -e 's/^\s*Load\s*"xtrap".*$/#& # obsolete module/' /etc/X11/xorg.conf
 fi
 
 %files
