@@ -3,6 +3,7 @@
 %bcond_with	multigl	# package libglx.so in a way allowing concurrent install with nvidia/fglrx drivers
 %bcond_without	dri2	# DRI2 support
 %bcond_without	hal	# HAL support
+%bcond_without	dmx	# DMX support
 %bcond_with	record	# RECORD extension
 #
 # ABI versions, see hw/xfree86/common/xf86Module.h
@@ -25,6 +26,8 @@ Source2:	xserver.pamd
 Patch0:		%{name}-xwrapper.patch
 Patch1:		%{name}-pic-libxf86config.patch
 Patch2:		%{name}-fb-size.patch
+Patch3:		%{name}-Xi.patch
+Patch4:		%{name}-glxproxy.patch
 URL:		http://xorg.freedesktop.org/
 BuildRequires:	Mesa-libGL-devel >= 7.2
 # for glx headers
@@ -50,7 +53,7 @@ BuildRequires:	xorg-lib-libXaw-devel
 BuildRequires:	xorg-lib-libXdmcp-devel
 BuildRequires:	xorg-lib-libXext-devel
 BuildRequires:	xorg-lib-libXfont-devel
-BuildRequires:	xorg-lib-libXi-devel >= 1.2.90
+BuildRequires:	xorg-lib-libXi-devel >= 1.2
 BuildRequires:	xorg-lib-libXmu-devel
 BuildRequires:	xorg-lib-libXpm-devel
 BuildRequires:	xorg-lib-libXrender-devel
@@ -60,7 +63,7 @@ BuildRequires:	xorg-lib-libXtst-devel
 BuildRequires:	xorg-lib-libXxf86dga-devel
 BuildRequires:	xorg-lib-libXxf86misc-devel
 BuildRequires:	xorg-lib-libXxf86vm-devel
-BuildRequires:	xorg-lib-libdmx-devel
+%{?with_dmx:BuildRequires:	xorg-lib-libdmx-devel}
 BuildRequires:	xorg-lib-libfontenc-devel
 BuildRequires:	xorg-lib-libpciaccess-devel
 BuildRequires:	xorg-lib-libxkbfile-devel
@@ -69,7 +72,7 @@ BuildRequires:	xorg-lib-xtrans-devel >= 1.2.2
 BuildRequires:	xorg-proto-bigreqsproto-devel
 BuildRequires:	xorg-proto-compositeproto-devel >= 0.4
 BuildRequires:	xorg-proto-damageproto-devel >= 1.1
-BuildRequires:	xorg-proto-dmxproto-devel
+%{?with_dmx:BuildRequires:	xorg-proto-dmxproto-devel}
 %{?with_dri2:BuildRequires:	xorg-proto-dri2proto-devel >= 1.99.3}
 BuildRequires:	xorg-proto-evieext-devel
 BuildRequires:	xorg-proto-fixesproto-devel >= 4.0
@@ -271,6 +274,8 @@ Biblioteka rozszerzenia GLX dla serwera X.org.
 %patch0 -p0
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
+%patch4 -p1
 
 # xserver uses pixman-1 API/ABI so put that explictly here
 sed -i -e 's#<pixman\.h#<pixman-1/pixman.h#g' ./fb/fb.h ./include/miscstruct.h ./render/picture.h
@@ -317,7 +322,7 @@ fi
 	--enable-aiglx \
 	--enable-builddocs \
 	--enable-dga \
-	--enable-dmx \
+	%{?with_dmx:--enable-dmx} \
 	--enable-glx-tls \
 	--enable-install-libxf86config \
 	%{?with_record:--enable-record} \
@@ -377,11 +382,6 @@ fi
 %attr(4755,root,root) %{_bindir}/Xwrapper
 %attr(755,root,root) %{_bindir}/cvt
 %attr(755,root,root) %{_bindir}/gtf
-%attr(755,root,root) %{_bindir}/in[bwl]
-%attr(755,root,root) %{_bindir}/ioport
-%attr(755,root,root) %{_bindir}/out[bwl]
-%attr(755,root,root) %{_bindir}/xorgconfig
-%{_libdir}/X11/Cards
 %{_libdir}/X11/Options
 %dir %{_libdir}/xorg
 %{_libdir}/xorg/protocol.txt
@@ -394,8 +394,6 @@ fi
 %{?with_dri2:%attr(755,root,root) %{_libdir}/xorg/modules/extensions/libdri2.so}
 %attr(755,root,root) %{_libdir}/xorg/modules/extensions/libextmod.so
 %{?with_record:%attr(755,root,root) %{_libdir}/xorg/modules/extensions/librecord.so}
-%dir %{_libdir}/xorg/modules/fonts
-%attr(755,root,root) %{_libdir}/xorg/modules/fonts/lib*.so
 %dir %{_libdir}/xorg/modules/input
 %dir %{_libdir}/xorg/modules/linux
 %attr(755,root,root) %{_libdir}/xorg/modules/linux/libfbdevhw.so
@@ -411,11 +409,11 @@ fi
 %{_mandir}/man1/Xserver.1x*
 %{_mandir}/man1/cvt.1*
 %{_mandir}/man1/gtf.1x*
-%{_mandir}/man1/xorgconfig.1*
 %{_mandir}/man4/exa.4*
 %{_mandir}/man4/fbdevhw.4*
 %{_mandir}/man5/xorg.conf.5x*
 
+%if %{with dmx}
 %files -n xorg-xserver-Xdmx
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/Xdmx
@@ -434,6 +432,7 @@ fi
 %{_mandir}/man1/dmxtodmx.1x*
 %{_mandir}/man1/vdltodmx.1x*
 %{_mandir}/man1/xdmxconfig.1x*
+%endif
 
 %files -n xorg-xserver-Xnest
 %defattr(644,root,root,755)
