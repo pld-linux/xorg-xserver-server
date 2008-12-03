@@ -15,18 +15,18 @@
 Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
-Version:	1.5.99.1
+Version:	1.5.99.2
 Release:	0.1%{?with_multigl:.mgl}
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
-# Source0-md5:	c1b7f11700a6ac7d3af51343c8ebf8a6
+# Source0-md5:	7bd70e8c36db2fdd7b568fd22770d766
 Source2:	xserver.pamd
 Patch0:		%{name}-xwrapper.patch
 Patch1:		%{name}-pic-libxf86config.patch
 Patch2:		%{name}-fb-size.patch
 URL:		http://xorg.freedesktop.org/
-BuildRequires:	Mesa-libGL-devel >= 7.1
+BuildRequires:	Mesa-libGL-devel >= 7.2
 # for glx headers
 BuildRequires:	OpenGL-GLX-devel
 BuildRequires:	autoconf >= 2.57
@@ -50,7 +50,7 @@ BuildRequires:	xorg-lib-libXaw-devel
 BuildRequires:	xorg-lib-libXdmcp-devel
 BuildRequires:	xorg-lib-libXext-devel
 BuildRequires:	xorg-lib-libXfont-devel
-BuildRequires:	xorg-lib-libXi-devel
+BuildRequires:	xorg-lib-libXi-devel >= 1.2.90
 BuildRequires:	xorg-lib-libXmu-devel
 BuildRequires:	xorg-lib-libXpm-devel
 BuildRequires:	xorg-lib-libXrender-devel
@@ -70,7 +70,7 @@ BuildRequires:	xorg-proto-bigreqsproto-devel
 BuildRequires:	xorg-proto-compositeproto-devel >= 0.4
 BuildRequires:	xorg-proto-damageproto-devel >= 1.1
 BuildRequires:	xorg-proto-dmxproto-devel
-%{?with_dri2:BuildRequires:	xorg-proto-dri2proto-devel >= 1.1}
+%{?with_dri2:BuildRequires:	xorg-proto-dri2proto-devel >= 1.99.3}
 BuildRequires:	xorg-proto-evieext-devel
 BuildRequires:	xorg-proto-fixesproto-devel >= 4.0
 BuildRequires:	xorg-proto-fontcacheproto-devel
@@ -79,7 +79,7 @@ BuildRequires:	xorg-proto-glproto-devel >= 1.4.8
 BuildRequires:	xorg-proto-inputproto-devel >= 1.5.0
 BuildRequires:	xorg-proto-kbproto-devel >= 1.0.3
 BuildRequires:	xorg-proto-printproto-devel
-BuildRequires:	xorg-proto-randrproto-devel >= 1.2
+BuildRequires:	xorg-proto-randrproto-devel >= 1.2.99.1
 %{?with_record:BuildRequires:	xorg-proto-recordproto-devel}
 BuildRequires:	xorg-proto-renderproto-devel >= 0.9.3
 BuildRequires:	xorg-proto-resourceproto-devel
