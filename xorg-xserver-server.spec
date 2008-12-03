@@ -235,12 +235,12 @@ Summary(pl.UTF-8):	Pliki nagłówkowe dla servera X.org
 Group:		X11/Development/Libraries
 Requires:	libdrm-devel >= 2.4.1
 Requires:	pixman-devel >= 0.13.2
+Requires:	xorg-lib-libxkbfile-devel
 Requires:	xorg-proto-fontsproto-devel
 Requires:	xorg-proto-renderproto-devel >= 0.9.3
 Requires:	xorg-proto-videoproto-devel
 Requires:	xorg-proto-xextproto-devel
 Requires:	xorg-proto-xproto-devel >= 7.0.9
-Requires:	xorg-lib-libxkbfile-devel
 Obsoletes:	X11-Xserver-devel < 1:7.0.0
 Obsoletes:	XFree86-Xserver-devel < 1:7.0.0
 
