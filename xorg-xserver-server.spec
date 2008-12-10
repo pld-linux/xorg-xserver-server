@@ -16,18 +16,16 @@
 Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
-Version:	1.5.99.2
+Version:	1.5.99.3
 Release:	0.1%{?with_multigl:.mgl}
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
-# Source0-md5:	7bd70e8c36db2fdd7b568fd22770d766
+# Source0-md5:	db87577456968e64c774124cc761cc7c
 Source2:	xserver.pamd
 Patch0:		%{name}-xwrapper.patch
 Patch1:		%{name}-pic-libxf86config.patch
 Patch2:		%{name}-fb-size.patch
-Patch3:		%{name}-Xi.patch
-Patch4:		%{name}-glxproxy.patch
 URL:		http://xorg.freedesktop.org/
 BuildRequires:	Mesa-libGL-devel >= 7.2
 # for glx headers
@@ -82,7 +80,7 @@ BuildRequires:	xorg-proto-glproto-devel >= 1.4.8
 BuildRequires:	xorg-proto-inputproto-devel >= 1.5.0
 BuildRequires:	xorg-proto-kbproto-devel >= 1.0.3
 BuildRequires:	xorg-proto-printproto-devel
-BuildRequires:	xorg-proto-randrproto-devel >= 1.2.99.1
+BuildRequires:	xorg-proto-randrproto-devel >= 1.2.99.2
 %{?with_record:BuildRequires:	xorg-proto-recordproto-devel}
 BuildRequires:	xorg-proto-renderproto-devel >= 0.9.3
 BuildRequires:	xorg-proto-resourceproto-devel
@@ -275,8 +273,6 @@ Biblioteka rozszerzenia GLX dla serwera X.org.
 %patch0 -p0
 %patch1 -p1
 %patch2 -p1
-%patch3 -p1
-%patch4 -p1
 
 # xserver uses pixman-1 API/ABI so put that explictly here
 sed -i -e 's#<pixman\.h#<pixman-1/pixman.h#g' ./fb/fb.h ./include/miscstruct.h ./render/picture.h
