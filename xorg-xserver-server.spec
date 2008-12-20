@@ -17,7 +17,7 @@ Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
 Version:	1.5.99.3
-Release:	0.1%{?with_multigl:.mgl}
+Release:	0.2%{?with_multigl:.mgl}
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
@@ -248,6 +248,23 @@ Header files for X.org server.
 %description devel -l pl.UTF-8
 Pliki nagłówkowe dla serwera X.org.
 
+%package -n xorg-xserver-libdri
+Summary:	DRI extension library fo X.org server
+Summary(pl.UTF-8):	Biblioteka rozszerzenia DRI dla serwera X.org
+Group:		X11/Servers
+Requires:	%{name} = %{version}-%{release}
+Provides:	xorg-xserver-modules-libdri
+%if %{without multigl}
+Conflicts:	xorg-driver-video-nvidia
+Conflicts:	xorg-driver-video-fglrx-libdri
+%endif
+
+%description -n xorg-xserver-libdri
+DRI extension library fo X.org server.
+
+%description -n xorg-xserver-libdri -l pl.UTF-8
+Biblioteka rozszerzenia DRI dla serwera X.org.
+
 %package -n xorg-xserver-libglx
 Summary:	GLX extension library fo X.org server
 Summary(pl.UTF-8):	Biblioteka rozszerzenia GLX dla serwera X.org
@@ -260,6 +277,7 @@ Obsoletes:	X11-OpenGL-core < 1:7.0.0
 Obsoletes:	XFree86-OpenGL-core < 1:7.0.0
 %if %{without multigl}
 Conflicts:	xorg-driver-video-nvidia
+Conflicts:	xorg-driver-video-fglrx-libglx
 %endif
 
 %description -n xorg-xserver-libglx
@@ -387,7 +405,6 @@ fi
 %dir %{_libdir}/xorg/modules/drivers
 %dir %{_libdir}/xorg/modules/extensions
 %attr(755,root,root) %{_libdir}/xorg/modules/extensions/libdbe.so
-%attr(755,root,root) %{_libdir}/xorg/modules/extensions/libdri.so
 %{?with_dri2:%attr(755,root,root) %{_libdir}/xorg/modules/extensions/libdri2.so}
 %attr(755,root,root) %{_libdir}/xorg/modules/extensions/libextmod.so
 %{?with_record:%attr(755,root,root) %{_libdir}/xorg/modules/extensions/librecord.so}
@@ -447,6 +464,10 @@ fi
 %{_libdir}/libxf86config.a
 %{_aclocaldir}/xorg-server.m4
 %{_pkgconfigdir}/xorg-server.pc
+
+%files -n xorg-xserver-libdri
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/xorg/modules/extensions/libdri.so
 
 %files -n xorg-xserver-libglx
 %defattr(644,root,root,755)
