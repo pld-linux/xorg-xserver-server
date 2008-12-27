@@ -249,7 +249,7 @@ Header files for X.org server.
 Pliki nagłówkowe dla serwera X.org.
 
 %package -n xorg-xserver-libdri
-Summary:	DRI extension library fo X.org server
+Summary:	DRI extension library for X.org server
 Summary(pl.UTF-8):	Biblioteka rozszerzenia DRI dla serwera X.org
 Group:		X11/Servers
 Requires:	%{name} = %{version}-%{release}
@@ -260,13 +260,13 @@ Conflicts:	xorg-driver-video-fglrx-libdri
 %endif
 
 %description -n xorg-xserver-libdri
-DRI extension library fo X.org server.
+DRI extension library for X.org server.
 
 %description -n xorg-xserver-libdri -l pl.UTF-8
 Biblioteka rozszerzenia DRI dla serwera X.org.
 
 %package -n xorg-xserver-libglx
-Summary:	GLX extension library fo X.org server
+Summary:	GLX extension library for X.org server
 Summary(pl.UTF-8):	Biblioteka rozszerzenia GLX dla serwera X.org
 Group:		X11/Servers
 Requires:	%{name} = %{version}-%{release}
@@ -281,7 +281,7 @@ Conflicts:	xorg-driver-video-fglrx-libglx
 %endif
 
 %description -n xorg-xserver-libglx
-GLX extension library fo X.org server.
+GLX extension library for X.org server.
 
 %description -n xorg-xserver-libglx -l pl.UTF-8
 Biblioteka rozszerzenia GLX dla serwera X.org.
