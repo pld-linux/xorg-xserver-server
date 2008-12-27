@@ -270,6 +270,7 @@ Summary:	GLX extension library for X.org server
 Summary(pl.UTF-8):	Biblioteka rozszerzenia GLX dla serwera X.org
 Group:		X11/Servers
 Requires:	%{name} = %{version}-%{release}
+Requires:	xorg-xserver-libdri = %{version}-%{release}
 # Mesa version glapi tables in glx/ dir come from
 Provides:	xorg-xserver-libglx(glapi) = 7.1.0
 Provides:	xorg-xserver-module(glx)
