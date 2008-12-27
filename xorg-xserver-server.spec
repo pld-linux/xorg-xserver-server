@@ -253,7 +253,7 @@ Summary:	DRI extension library for X.org server
 Summary(pl.UTF-8):	Biblioteka rozszerzenia DRI dla serwera X.org
 Group:		X11/Servers
 Requires:	%{name} = %{version}-%{release}
-Provides:	xorg-xserver-modules-libdri
+Provides:	xorg-xserver-module(dri)
 %if %{without multigl}
 Conflicts:	xorg-driver-video-nvidia
 Conflicts:	xorg-driver-video-fglrx-libdri
@@ -272,7 +272,7 @@ Group:		X11/Servers
 Requires:	%{name} = %{version}-%{release}
 # Mesa version glapi tables in glx/ dir come from
 Provides:	xorg-xserver-libglx(glapi) = 7.1.0
-Provides:	xorg-xserver-modules-libglx
+Provides:	xorg-xserver-module(glx)
 Obsoletes:	X11-OpenGL-core < 1:7.0.0
 Obsoletes:	XFree86-OpenGL-core < 1:7.0.0
 %if %{without multigl}
