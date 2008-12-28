@@ -17,7 +17,7 @@ Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
 Version:	1.5.3
-Release:	5%{?with_multigl:.mgl}
+Release:	6%{?with_multigl:.mgl}
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
@@ -273,22 +273,41 @@ xorgcfg to narzędzie do konfiguracji serwera X.org. Można go użyć do
 utworzenia początkowego pliku konfiguracyjnego lub dokonania
 modyfikacji istniejącej konfiguracji.
 
+%package -n xorg-xserver-libdri
+Summary:	DRI extension library for X.org server
+Summary(pl.UTF-8):	Biblioteka rozszerzenia DRI dla serwera X.org
+Group:		X11/Servers
+Requires:	%{name} = %{version}-%{release}
+Provides:	xorg-xserver-module(dri)
+%if %{without multigl}
+Conflicts:	xorg-driver-video-nvidia
+Conflicts:	xorg-driver-video-fglrx-libdri
+%endif
+
+%description -n xorg-xserver-libdri
+DRI extension library for X.org server.
+
+%description -n xorg-xserver-libdri -l pl.UTF-8
+Biblioteka rozszerzenia DRI dla serwera X.org.
+
 %package -n xorg-xserver-libglx
-Summary:	GLX extension library fo X.org server
+Summary:	GLX extension library for X.org server
 Summary(pl.UTF-8):	Biblioteka rozszerzenia GLX dla serwera X.org
 Group:		X11/Servers
 Requires:	%{name} = %{version}-%{release}
+Requires:	xorg-xserver-libdri = %{version}-%{release}
 # Mesa version glapi tables in glx/ dir come from
 Provides:	xorg-xserver-libglx(glapi) = 7.1.0
-Provides:	xorg-xserver-modules-libglx
+Provides:	xorg-xserver-module(glx)
 Obsoletes:	X11-OpenGL-core < 1:7.0.0
 Obsoletes:	XFree86-OpenGL-core < 1:7.0.0
 %if %{without multigl}
 Conflicts:	xorg-driver-video-nvidia
+Conflicts:	xorg-driver-video-fglrx-libglx
 %endif
 
 %description -n xorg-xserver-libglx
-GLX extension library fo X.org server.
+GLX extension library for X.org server.
 
 %description -n xorg-xserver-libglx -l pl.UTF-8
 Biblioteka rozszerzenia GLX dla serwera X.org.
@@ -429,7 +448,6 @@ fi
 %dir %{_libdir}/xorg/modules/drivers
 %dir %{_libdir}/xorg/modules/extensions
 %attr(755,root,root) %{_libdir}/xorg/modules/extensions/libdbe.so
-%attr(755,root,root) %{_libdir}/xorg/modules/extensions/libdri.so
 %{?with_dri2:%attr(755,root,root) %{_libdir}/xorg/modules/extensions/libdri2.so}
 %attr(755,root,root) %{_libdir}/xorg/modules/extensions/libextmod.so
 %{?with_record:%attr(755,root,root) %{_libdir}/xorg/modules/extensions/librecord.so}
@@ -499,6 +517,10 @@ fi
 %{_includedir}/X11/pixmaps
 %{_datadir}/X11/app-defaults/XOrgCfg
 %{_mandir}/man1/xorgcfg.1x*
+
+%files -n xorg-xserver-libdri
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/xorg/modules/extensions/libdri.so
 
 %files -n xorg-xserver-libglx
 %defattr(644,root,root,755)
