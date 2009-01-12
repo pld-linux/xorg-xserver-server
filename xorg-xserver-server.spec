@@ -16,12 +16,12 @@
 Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
-Version:	1.5.99.3
-Release:	0.2%{?with_multigl:.mgl}
+Version:	1.5.99.901
+Release:	0.1%{?with_multigl:.mgl}
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
-# Source0-md5:	db87577456968e64c774124cc761cc7c
+# Source0-md5:	905970280ee831ddbde1aa7bef352ada
 Source2:	xserver.pamd
 Patch0:		%{name}-xwrapper.patch
 Patch1:		%{name}-pic-libxf86config.patch
@@ -80,7 +80,7 @@ BuildRequires:	xorg-proto-glproto-devel >= 1.4.8
 BuildRequires:	xorg-proto-inputproto-devel >= 1.5.0
 BuildRequires:	xorg-proto-kbproto-devel >= 1.0.3
 BuildRequires:	xorg-proto-printproto-devel
-BuildRequires:	xorg-proto-randrproto-devel >= 1.2.99.2
+BuildRequires:	xorg-proto-randrproto-devel >= 1.2.99.3
 %{?with_record:BuildRequires:	xorg-proto-recordproto-devel}
 BuildRequires:	xorg-proto-renderproto-devel >= 0.9.3
 BuildRequires:	xorg-proto-resourceproto-devel
