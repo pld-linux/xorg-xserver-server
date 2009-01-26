@@ -27,7 +27,7 @@ Patch0:		%{name}-xwrapper.patch
 Patch1:		%{name}-pic-libxf86config.patch
 Patch2:		%{name}-fb-size.patch
 URL:		http://xorg.freedesktop.org/
-BuildRequires:	Mesa-libGL-devel >= 7.2
+BuildRequires:	Mesa-libGL-devel >= 7.3
 # for glx headers
 BuildRequires:	OpenGL-GLX-devel
 BuildRequires:	autoconf >= 2.57
@@ -37,7 +37,7 @@ BuildRequires:	cpp
 BuildRequires:	dbus-devel
 BuildRequires:	hal-devel
 %endif
-BuildRequires:	libdrm-devel >= 2.4.1
+BuildRequires:	libdrm-devel >= 2.4.4
 BuildRequires:	libtool
 BuildRequires:	ncurses-devel
 BuildRequires:	pam-devel
@@ -231,7 +231,7 @@ serwera X, ale odmawiają uruchomienia bez niego.
 Summary:	Header files for X.org server
 Summary(pl.UTF-8):	Pliki nagłówkowe dla servera X.org
 Group:		X11/Development/Libraries
-Requires:	libdrm-devel >= 2.4.1
+Requires:	libdrm-devel >= 2.4.4
 Requires:	pixman-devel >= 0.13.2
 Requires:	xorg-lib-libxkbfile-devel
 Requires:	xorg-proto-fontsproto-devel
