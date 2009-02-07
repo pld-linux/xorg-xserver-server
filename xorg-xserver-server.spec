@@ -42,7 +42,7 @@ BuildRequires:	libtool
 BuildRequires:	ncurses-devel
 BuildRequires:	pam-devel
 BuildRequires:	perl-base
-BuildRequires:	pixman-devel >= 0.13.2
+BuildRequires:	pixman-devel >= 0.14.0
 BuildRequires:	pkgconfig >= 1:0.19
 BuildRequires:	xorg-app-mkfontscale
 BuildRequires:	xorg-lib-libX11-devel
@@ -99,7 +99,7 @@ BuildRequires:	xorg-util-util-macros >= 0.99.2
 #BR: xcalibrateproto, tslib (for KDRIVE only)
 #BR: glitz-devel >= 0.4.3 (for XGL and EGL only)
 Requires(triggerpostun):	sed >= 4.0
-Requires:	pixman >= 0.13.2
+Requires:	pixman >= 0.14.0
 Requires:	xkeyboard-config
 # for rgb.txt
 Requires:	xorg-app-rgb >= 0.99.3
@@ -232,7 +232,7 @@ Summary:	Header files for X.org server
 Summary(pl.UTF-8):	Pliki nagłówkowe dla servera X.org
 Group:		X11/Development/Libraries
 Requires:	libdrm-devel >= 2.4.4
-Requires:	pixman-devel >= 0.13.2
+Requires:	pixman-devel >= 0.14.0
 Requires:	xorg-lib-libxkbfile-devel
 Requires:	xorg-proto-fontsproto-devel
 Requires:	xorg-proto-renderproto-devel >= 0.9.3
