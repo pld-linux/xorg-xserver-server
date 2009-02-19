@@ -333,7 +333,6 @@ fi
 %configure \
 	--with-os-name="PLD/Linux" \
 	--with-os-vendor="PLD/Team" \
-	--disable-builtin-fonts \
 	%{!?with_hal:--disable-config-hal} \
 	--enable-aiglx \
 	--enable-builddocs \
