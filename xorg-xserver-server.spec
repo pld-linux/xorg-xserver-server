@@ -16,12 +16,12 @@
 Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
-Version:	1.5.99.903
-Release:	0.1%{?with_multigl:.mgl}
+Version:	1.6.0
+Release:	1%{?with_multigl:.mgl}
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
-# Source0-md5:	c80db7b363ea9303243c58e77c464df0
+# Source0-md5:	aafe73f5807ce8bb534727ecb72467c7
 Source2:	xserver.pamd
 Patch0:		%{name}-xwrapper.patch
 Patch1:		%{name}-pic-libxf86config.patch
@@ -37,7 +37,7 @@ BuildRequires:	cpp
 BuildRequires:	dbus-devel
 BuildRequires:	hal-devel
 %endif
-BuildRequires:	libdrm-devel >= 2.4.4
+BuildRequires:	libdrm-devel >= 2.4.5
 BuildRequires:	libtool
 BuildRequires:	ncurses-devel
 BuildRequires:	pam-devel
@@ -231,7 +231,7 @@ serwera X, ale odmawiają uruchomienia bez niego.
 Summary:	Header files for X.org server
 Summary(pl.UTF-8):	Pliki nagłówkowe dla servera X.org
 Group:		X11/Development/Libraries
-Requires:	libdrm-devel >= 2.4.4
+Requires:	libdrm-devel >= 2.4.5
 Requires:	pixman-devel >= 0.14.0
 Requires:	xorg-lib-libxkbfile-devel
 Requires:	xorg-proto-fontsproto-devel
