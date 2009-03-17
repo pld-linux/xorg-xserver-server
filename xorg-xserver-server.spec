@@ -2,6 +2,7 @@
 # Conditional build:
 %bcond_with	multigl	# package libglx.so in a way allowing concurrent install with nvidia/fglrx drivers
 %bcond_without	dri2	# DRI2 support
+%bcond_without	dbus	# D-BUS support
 %bcond_without	hal	# HAL support
 %bcond_without	dmx	# DMX support
 %bcond_with	record	# RECORD extension
@@ -17,7 +18,7 @@ Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
 Version:	1.6.0
-Release:	2%{?with_multigl:.mgl}
+Release:	3%{?with_multigl:.mgl}
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
@@ -34,10 +35,10 @@ BuildRequires:	OpenGL-GLX-devel
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake
 BuildRequires:	cpp
-%if %{with hal}
+%if %{with hal} || %{with dbus}
 BuildRequires:	dbus-devel
-BuildRequires:	hal-devel
 %endif
+%{?with_hal:BuildRequires:	hal-devel}
 BuildRequires:	libdrm-devel >= 2.4.5
 BuildRequires:	libtool
 BuildRequires:	ncurses-devel
@@ -179,20 +180,39 @@ Xnest - це сервер X Window System, який працює у вікні X
 для Xnest в той час, як Xnest керує вікнами та графічними запитами для
 своїх власних клієнтів.
 
-%package -n xorg-xserver-Xprt
-Summary:	Xprt - Xprint server for X
-Summary(pl.UTF-8):	Xprt - serwer Xprint dla X
+%package -n xorg-xserver-Xephyr
+Summary:	Xephyr - nested X server
+Summary(pl.UTF-8):	Xephyr - zagnieżdżony serwer X
 Group:		X11/Servers
-Obsoletes:	X11-Xprt < 1:7.0.0
-Obsoletes:	XFree86-Xprt < 1:7.0.0
 
-%description -n xorg-xserver-Xprt
-Xprt is the Xprint print server for X Window System for non display
-devices such as printers and fax machines.
+%description -n xorg-xserver-Xephyr
+Xephyr is a a kdrive server that outputs to a window on a pre-existing
+'host' X display. Think Xnest but with support for modern extensions
+like composite, damage and randr.
 
-%description -n xorg-xserver-Xprt -l pl.UTF-8
-Xprt to serwer wydruków Xprint dla X Window System dla urządzeń nie
-wyświetlających, takich jak drukarki czy faksy.
+Unlike Xnest which is an X proxy, i.e.  limited to the
+capabilities of the host X server, Xephyr is a real X server which
+uses the host X server window as "framebuffer" via fast SHM XImages.
+
+It also has support for 'visually' debugging what the server is
+painting.
+
+%description -n xorg-xserver-Xephyr -l pl.UTF-8
+Xephyr jest serwerem opartym na kdrive wyświetlającym w oknie na
+istniejącym ekranie X. Można o nim myśleć jako o Xnest ze wsparciem
+do wspólczesnych rozszerzeń jak composite, damage i randr.
+
+%package -n xorg-xserver-Xfbdev
+Summary:	Xfbdev - Linux framebuffer device X server
+Summary(pl.UTF-8):	Xfbdev - serwer X dla framebuffera
+Group:		X11/Servers
+
+%description -n xorg-xserver-Xfbdev
+Xfbdev is a Linux framebuffer device X server based on the
+kdrive X server.
+
+%description -n xorg-xserver-Xfbdev -l pl.UTF-8
+Xfbdev jest serwerem X dla framebuffera opartym na kdrive.
 
 %package -n xorg-xserver-Xvfb
 Summary:	Xvfb - virtual framebuffer X server
@@ -335,6 +355,7 @@ fi
 %configure \
 	--with-os-name="PLD/Linux" \
 	--with-os-vendor="PLD/Team" \
+	--%{?with_dbus:en}%{!?with_dbus:dis}able-config-dbus \
 	%{!?with_hal:--disable-config-hal} \
 	--enable-aiglx \
 	--enable-builddocs \
@@ -343,6 +364,11 @@ fi
 	--enable-glx-tls \
 	--enable-install-libxf86config \
 	%{?with_record:--enable-record} \
+	--enable-kdrive \
+	--enable-xephyr \
+	--enable-xfbdev \
+	--disable-xsdl \
+	--disable-xfake \
 	--enable-secure-rpc \
 	--%{?with_dri2:en}%{!?with_dri2:dis}able-dri2 \
 	--with-dri-driver-path=%{_libdir}/xorg/modules/dri \
@@ -421,6 +447,7 @@ fi
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/pam.d/xserver
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/security/blacklist.xserver
 %config(missingok) /etc/security/console.apps/xserver
+%{?with_dbus:%{_sysconfdir}/dbus-1/system.d/xorg-server.conf}
 %{_mandir}/man1/Xorg.1x*
 %{_mandir}/man1/Xserver.1x*
 %{_mandir}/man1/cvt.1*
@@ -454,6 +481,15 @@ fi
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/Xnest
 %{_mandir}/man1/Xnest.1x*
+
+%files -n xorg-xserver-Xephyr
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_bindir}/Xephyr
+%{_mandir}/man1/Xephyr.1x*
+
+%files -n xorg-xserver-Xfbdev
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_bindir}/Xfbdev
 
 %files -n xorg-xserver-Xvfb
 %defattr(644,root,root,755)
