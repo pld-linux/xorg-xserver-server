@@ -1,0 +1,2 @@
+- bugfix for xinerama related segfaults
+  [ https://bugs.freedesktop.org/show_bug.cgi?id=20557 ]
