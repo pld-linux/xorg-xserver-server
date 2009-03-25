@@ -18,7 +18,7 @@ Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
 Version:	1.6.0
-Release:	4%{?with_multigl:.mgl}
+Release:	5%{?with_multigl:.mgl}
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
@@ -61,6 +61,7 @@ BuildRequires:	xorg-lib-libXrender-devel
 BuildRequires:	xorg-lib-libXres-devel
 BuildRequires:	xorg-lib-libXt-devel >= 1.0.0
 BuildRequires:	xorg-lib-libXtst-devel
+BuildRequires:	xorg-lib-libXv-devel
 BuildRequires:	xorg-lib-libXxf86dga-devel
 BuildRequires:	xorg-lib-libXxf86misc-devel
 BuildRequires:	xorg-lib-libXxf86vm-devel
