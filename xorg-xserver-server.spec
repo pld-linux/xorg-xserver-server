@@ -264,6 +264,7 @@ Requires:	libdrm-devel >= 2.4.5
 Requires:	pixman-devel >= 0.14.0
 Requires:	xorg-lib-libpciaccess-devel
 Requires:	xorg-lib-libxkbfile-devel
+Requires:	xorg-proto-dri2proto-devel
 Requires:	xorg-proto-fontsproto-devel
 Requires:	xorg-proto-renderproto-devel >= 0.9.3
 Requires:	xorg-proto-videoproto-devel
