@@ -18,7 +18,7 @@ Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
 Version:	1.6.0
-Release:	6%{?with_multigl:.mgl}
+Release:	7%{?with_multigl:.mgl}
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
@@ -35,6 +35,7 @@ Patch7:		%{name}-xtest-pointerscreen.patch
 Patch8:		%{name}-less-acpi-brokenness.patch
 Patch9:		%{name}-xiproptoint.patch
 Patch10:	%{name}-xatom-float.patch
+Patch11:	%{name}-xkb-color-geometry-fix.patch
 URL:		http://xorg.freedesktop.org/
 BuildRequires:	Mesa-libGL-devel >= 7.3
 # for glx headers
@@ -331,6 +332,7 @@ Biblioteka rozszerzenia GLX dla serwera X.org.
 %patch8 -p1
 %patch9 -p1
 %patch10 -p1
+%patch11 -p1
 
 # xserver uses pixman-1 API/ABI so put that explictly here
 sed -i -e 's#<pixman\.h#<pixman-1/pixman.h#g' ./fb/fb.h ./include/miscstruct.h ./render/picture.h
