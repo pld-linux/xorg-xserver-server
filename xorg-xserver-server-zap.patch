@@ -1,0 +1,22 @@
+--- xorg-server-1.6.1/hw/xfree86/common/xf86Config.c~	2009-04-14 19:14:57.000000000 +0200
++++ xorg-server-1.6.1/hw/xfree86/common/xf86Config.c	2009-04-22 16:41:46.000000000 +0200
+@@ -733,7 +733,7 @@
+   { FLAG_DONTVTSWITCH,		"DontVTSwitch",			OPTV_BOOLEAN,
+ 	{0}, FALSE },
+   { FLAG_DONTZAP,		"DontZap",			OPTV_BOOLEAN,
+-	{0}, TRUE },
++	{0}, FALSE },
+   { FLAG_DONTZOOM,		"DontZoom",			OPTV_BOOLEAN,
+ 	{0}, FALSE },
+   { FLAG_DISABLEVIDMODE,	"DisableVidModeExtension",	OPTV_BOOLEAN,
+--- xorg-server-1.6.1/hw/xfree86/doc/man/xorg.conf.man.pre~	2009-04-14 19:14:57.000000000 +0200
++++ xorg-server-1.6.1/hw/xfree86/doc/man/xorg.conf.man.pre	2009-04-22 16:42:55.000000000 +0200
+@@ -469,7 +469,7 @@
+ That sequence is normally used to terminate the __xservername__ server.
+ When this option is enabled (as per default), that key sequence has no
+ special meaning.
+-Default: on.
++Default: off.
+ .TP 7
+ .BI "Option \*qDontZoom\*q  \*q" boolean \*q
+ This disallows the use of the
