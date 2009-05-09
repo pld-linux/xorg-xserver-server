@@ -17,18 +17,17 @@
 Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
-Version:	1.6.1
-Release:	2%{?with_multigl:.mgl}
+Version:	1.6.1.901
+Release:	0.1%{?with_multigl:.mgl}
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
-# Source0-md5:	ed0878bf32a24d4948c3b8a122a39eff
+# Source0-md5:	e6cba1f07006143daa95ce3f11d999b2
 Source2:	xserver.pamd
 Patch0:		%{name}-xwrapper.patch
 Patch1:		%{name}-pic-libxf86config.patch
 Patch2:		%{name}-fb-size.patch
 Patch3:		%{name}-exa.patch
-Patch4:		%{name}-xinerama-bug20557.patch
 Patch5:		%{name}-xinerama-cursors.patch
 Patch6:		%{name}-less-acpi-brokenness.patch
 Patch7:		%{name}-zap.patch
@@ -321,7 +320,6 @@ Biblioteka rozszerzenia GLX dla serwera X.org.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
-%patch4 -p1
 %patch5 -p1
 %patch6 -p1
 %patch7 -p1
