@@ -254,7 +254,7 @@ serwera X, ale odmawiają uruchomienia bez niego.
 
 %package devel
 Summary:	Header files for X.org server
-Summary(pl.UTF-8):	Pliki nagłówkowe dla servera X.org
+Summary(pl.UTF-8):	Pliki nagłówkowe dla serwera X.org
 Group:		X11/Development/Libraries
 Requires:	libdrm-devel >= 2.4.5
 Requires:	pixman-devel >= 0.14.0
@@ -264,8 +264,8 @@ Requires:	xorg-proto-dri2proto-devel
 Requires:	xorg-proto-fontsproto-devel
 Requires:	xorg-proto-renderproto-devel >= 0.9.3
 Requires:	xorg-proto-videoproto-devel
-Requires:	xorg-proto-xextproto-devel
-Requires:	xorg-proto-xproto-devel >= 7.0.9
+Requires:	xorg-proto-xextproto-devel >= 7.0.3
+Requires:	xorg-proto-xproto-devel >= 7.0.13
 Obsoletes:	X11-Xserver-devel < 1:7.0.0
 Obsoletes:	XFree86-Xserver-devel < 1:7.0.0
 
