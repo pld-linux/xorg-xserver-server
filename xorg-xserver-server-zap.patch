@@ -9,6 +9,16 @@
    { FLAG_DONTZOOM,		"DontZoom",			OPTV_BOOLEAN,
  	{0}, FALSE },
    { FLAG_DISABLEVIDMODE,	"DisableVidModeExtension",	OPTV_BOOLEAN,
+@@ -845,8 +845,7 @@
+ 
+     xf86GetOptValBool(FlagOptions, FLAG_NOTRAPSIGNALS, &xf86Info.notrapSignals);
+     xf86GetOptValBool(FlagOptions, FLAG_DONTVTSWITCH, &xf86Info.dontVTSwitch);
+-    if (!xf86GetOptValBool(FlagOptions, FLAG_DONTZAP, &xf86Info.dontZap))
+-        xf86Info.dontZap = !party_like_its_1989;
++    xf86GetOptValBool(FlagOptions, FLAG_DONTZAP, &xf86Info.dontZap);
+     xf86GetOptValBool(FlagOptions, FLAG_DONTZOOM, &xf86Info.dontZoom);
+ 
+     xf86GetOptValBool(FlagOptions, FLAG_IGNORE_ABI, &xf86Info.ignoreABI);
 --- xorg-server-1.6.1/hw/xfree86/doc/man/xorg.conf.man.pre~	2009-04-14 19:14:57.000000000 +0200
 +++ xorg-server-1.6.1/hw/xfree86/doc/man/xorg.conf.man.pre	2009-04-22 16:42:55.000000000 +0200
 @@ -469,7 +469,7 @@
