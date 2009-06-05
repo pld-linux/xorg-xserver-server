@@ -18,7 +18,7 @@ Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
 Version:	1.6.1.901
-Release:	0.1%{?with_multigl:.mgl}
+Release:	0.2%{?with_multigl:.mgl}
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
@@ -110,6 +110,10 @@ Requires:	xkeyboard-config
 # for rgb.txt
 Requires:	xorg-app-rgb >= 0.99.3
 Requires:	xorg-app-xkbcomp
+# xserver default config expects evdev+dbus+hald
+Suggests:	dbus
+Suggests:	hal
+Suggests:	xorg-driver-input-evdev
 # xserver requires fixed and cursor fonts
 Requires:	xorg-font-font-alias
 Requires:	xorg-font-font-cursor-misc
@@ -194,17 +198,17 @@ Xephyr is a a kdrive server that outputs to a window on a pre-existing
 'host' X display. Think Xnest but with support for modern extensions
 like composite, damage and randr.
 
-Unlike Xnest which is an X proxy, i.e.  limited to the
-capabilities of the host X server, Xephyr is a real X server which
-uses the host X server window as "framebuffer" via fast SHM XImages.
+Unlike Xnest which is an X proxy, i.e. limited to the capabilities of
+the host X server, Xephyr is a real X server which uses the host X
+server window as "framebuffer" via fast SHM XImages.
 
 It also has support for 'visually' debugging what the server is
 painting.
 
 %description -n xorg-xserver-Xephyr -l pl.UTF-8
 Xephyr jest serwerem opartym na kdrive wyświetlającym w oknie na
-istniejącym ekranie X. Można o nim myśleć jako o Xnest ze wsparciem
-do wspólczesnych rozszerzeń jak composite, damage i randr.
+istniejącym ekranie X. Można o nim myśleć jako o Xnest ze wsparciem do
+wspólczesnych rozszerzeń jak composite, damage i randr.
 
 %package -n xorg-xserver-Xfbdev
 Summary:	Xfbdev - Linux framebuffer device X server
@@ -212,8 +216,8 @@ Summary(pl.UTF-8):	Xfbdev - serwer X dla framebuffera
 Group:		X11/Servers
 
 %description -n xorg-xserver-Xfbdev
-Xfbdev is a Linux framebuffer device X server based on the
-kdrive X server.
+Xfbdev is a Linux framebuffer device X server based on the kdrive X
+server.
 
 %description -n xorg-xserver-Xfbdev -l pl.UTF-8
 Xfbdev jest serwerem X dla framebuffera opartym na kdrive.
@@ -282,8 +286,8 @@ Group:		X11/Servers
 Requires:	%{name} = %{version}-%{release}
 Provides:	xorg-xserver-module(dri)
 %if %{without multigl}
-Conflicts:	xorg-driver-video-nvidia
 Conflicts:	xorg-driver-video-fglrx-libdri
+Conflicts:	xorg-driver-video-nvidia
 %endif
 
 %description -n xorg-xserver-libdri
@@ -304,8 +308,8 @@ Provides:	xorg-xserver-module(glx)
 Obsoletes:	X11-OpenGL-core < 1:7.0.0
 Obsoletes:	XFree86-OpenGL-core < 1:7.0.0
 %if %{without multigl}
-Conflicts:	xorg-driver-video-nvidia
 Conflicts:	xorg-driver-video-fglrx-libglx
+Conflicts:	xorg-driver-video-nvidia
 %endif
 
 %description -n xorg-xserver-libglx
@@ -456,7 +460,7 @@ fi
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/pam.d/xserver
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/security/blacklist.xserver
 %config(missingok) /etc/security/console.apps/xserver
-%{?with_dbus:%{_sysconfdir}/dbus-1/system.d/xorg-server.conf}
+%{?with_dbus:/etc/dbus-1/system.d/xorg-server.conf}
 %{_mandir}/man1/Xorg.1x*
 %{_mandir}/man1/Xserver.1x*
 %{_mandir}/man1/cvt.1*
