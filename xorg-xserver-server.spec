@@ -17,12 +17,12 @@
 Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
-Version:	1.6.1.901
-Release:	0.2%{?with_multigl:.mgl}
+Version:	1.6.1.902
+Release:	0.1%{?with_multigl:.mgl}
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
-# Source0-md5:	e6cba1f07006143daa95ce3f11d999b2
+# Source0-md5:	43de544c9b8b0c1d927f3e45f294211d
 Source2:	xserver.pamd
 Patch0:		%{name}-xwrapper.patch
 Patch1:		%{name}-pic-libxf86config.patch
@@ -30,7 +30,8 @@ Patch2:		%{name}-fb-size.patch
 Patch3:		%{name}-exa.patch
 Patch5:		%{name}-xinerama-cursors.patch
 Patch6:		%{name}-less-acpi-brokenness.patch
-Patch7:		%{name}-zap.patch
+Patch7:		%{name}-dri.patch
+Patch8:		%{name}-build.patch
 URL:		http://xorg.freedesktop.org/
 BuildRequires:	Mesa-libGL-devel >= 7.3
 # for glx headers
@@ -77,7 +78,7 @@ BuildRequires:	xorg-proto-bigreqsproto-devel
 BuildRequires:	xorg-proto-compositeproto-devel >= 0.4
 BuildRequires:	xorg-proto-damageproto-devel >= 1.1
 %{?with_dmx:BuildRequires:	xorg-proto-dmxproto-devel}
-%{?with_dri2:BuildRequires:	xorg-proto-dri2proto-devel >= 1.99.3}
+%{?with_dri2:BuildRequires:	xorg-proto-dri2proto-devel >= 2.1}
 BuildRequires:	xorg-proto-evieext-devel
 BuildRequires:	xorg-proto-fixesproto-devel >= 4.0
 BuildRequires:	xorg-proto-fontcacheproto-devel
@@ -264,7 +265,7 @@ Requires:	libdrm-devel >= 2.4.5
 Requires:	pixman-devel >= 0.14.0
 Requires:	xorg-lib-libpciaccess-devel
 Requires:	xorg-lib-libxkbfile-devel
-Requires:	xorg-proto-dri2proto-devel
+Requires:	xorg-proto-dri2proto-devel >= 2.1
 Requires:	xorg-proto-fontsproto-devel
 Requires:	xorg-proto-renderproto-devel >= 0.9.3
 Requires:	xorg-proto-videoproto-devel
@@ -327,6 +328,7 @@ Biblioteka rozszerzenia GLX dla serwera X.org.
 %patch5 -p1
 %patch6 -p1
 %patch7 -p1
+%patch8 -p1
 
 # xserver uses pixman-1 API/ABI so put that explictly here
 sed -i -e 's#<pixman\.h#<pixman-1/pixman.h#g' ./fb/fb.h ./include/miscstruct.h ./render/picture.h

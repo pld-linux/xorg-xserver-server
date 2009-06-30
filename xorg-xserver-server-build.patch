@@ -1,0 +1,21 @@
+--- xorg-server-1.6.1.902/hw/xfree86/common/Makefile.am~	2009-06-29 23:07:32.000000000 +0200
++++ xorg-server-1.6.1.902/hw/xfree86/common/Makefile.am	2009-06-30 08:32:35.758318463 +0200
+@@ -47,7 +47,7 @@
+               xf86PciInfo.h xf86Priv.h xf86Privstr.h xf86Resources.h \
+               xf86cmap.h xf86fbman.h xf86str.h xf86RAC.h xf86Xinput.h xisb.h \
+               $(XVSDKINCS) xorgVersion.h \
+-              xf86sbusBus.h xf86xv.h xf86xvmc.h xf86xvpriv.h
++              xf86sbusBus.h xf86xvpriv.h
+ 
+ DISTCLEANFILES = xf86Build.h
+ CLEANFILES = $(BUILT_SOURCES)
+--- xorg-server-1.6.1.902/hw/xfree86/parser/Makefile.am~	2009-06-30 08:34:09.558724639 +0200
++++ xorg-server-1.6.1.902/hw/xfree86/parser/Makefile.am	2009-06-30 08:37:41.372535747 +0200
+@@ -35,6 +35,4 @@
+ 	xf86tokens.h
+ 
+ sdk_HEADERS = \
+-	$(LIBHEADERS) \
+-	xf86Parser.h \
+-	xf86Optrec.h
++	$(LIBHEADERS)
