@@ -18,7 +18,7 @@ Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
 Version:	1.6.3
-Release:	2%{?with_multigl:.mgl}
+Release:	3%{?with_multigl:.mgl}
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
@@ -382,6 +382,7 @@ fi
 	--enable-kdrive \
 	--enable-xephyr \
 	--enable-xfbdev \
+	--enable-glx-tls \
 	--disable-xsdl \
 	--disable-xfake \
 	--enable-secure-rpc \
