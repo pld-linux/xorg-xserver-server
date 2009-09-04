@@ -4,31 +4,29 @@
 %bcond_without	dri2	# DRI2 support
 %bcond_without	dbus	# D-BUS support
 %bcond_without	hal	# HAL support
-%bcond_without	dmx	# DMX support
+%bcond_with	dmx	# DMX support
 %bcond_with	record	# RECORD extension
 #
 # ABI versions, see hw/xfree86/common/xf86Module.h
 %define	xorg_xserver_server_ansic_abi		0.4
 %define	xorg_xserver_server_extension_abi	2.0
 %define	xorg_xserver_server_font_abi		0.6
-%define	xorg_xserver_server_videodrv_abi	5.0
-%define	xorg_xserver_server_xinput_abi		4.0
+%define	xorg_xserver_server_videodrv_abi	6.0
+%define	xorg_xserver_server_xinput_abi		7.0
 
 Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
-Version:	1.6.3.901
+Version:	1.6.99.900
 Release:	1%{?with_multigl:.mgl}
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
-# Source0-md5:	8d43c4cb43e6a10550e68fbbcad10e9d
+# Source0-md5:	e12b367b44e27def991f4542d85a9c63
 Source2:	xserver.pamd
 Patch0:		%{name}-xwrapper.patch
 Patch1:		%{name}-pic-libxf86config.patch
 Patch2:		%{name}-fb-size.patch
-Patch3:		%{name}-exa.patch
-Patch5:		%{name}-xinerama-cursors.patch
 Patch6:		%{name}-less-acpi-brokenness.patch
 Patch7:		%{name}-ac.patch
 URL:		http://xorg.freedesktop.org/
@@ -47,7 +45,7 @@ BuildRequires:	libtool
 BuildRequires:	ncurses-devel
 BuildRequires:	pam-devel
 BuildRequires:	perl-base
-BuildRequires:	pixman-devel >= 0.14.0
+BuildRequires:	pixman-devel >= 0.16.0
 BuildRequires:	pkgconfig >= 1:0.19
 BuildRequires:	xorg-app-mkfontscale
 BuildRequires:	xorg-lib-libX11-devel
@@ -73,7 +71,7 @@ BuildRequires:	xorg-lib-libpciaccess-devel
 BuildRequires:	xorg-lib-libxkbfile-devel
 BuildRequires:	xorg-lib-libxkbui-devel >= 1.0.2
 BuildRequires:	xorg-lib-xtrans-devel >= 1.2.2
-BuildRequires:	xorg-proto-bigreqsproto-devel
+BuildRequires:	xorg-proto-bigreqsproto-devel >= 1.1.0
 BuildRequires:	xorg-proto-compositeproto-devel >= 0.4
 BuildRequires:	xorg-proto-damageproto-devel >= 1.1
 %{?with_dmx:BuildRequires:	xorg-proto-dmxproto-devel}
@@ -83,17 +81,17 @@ BuildRequires:	xorg-proto-fixesproto-devel >= 4.0
 BuildRequires:	xorg-proto-fontcacheproto-devel
 BuildRequires:	xorg-proto-fontsproto-devel
 BuildRequires:	xorg-proto-glproto-devel >= 1.4.8
-BuildRequires:	xorg-proto-inputproto-devel >= 1.5.0
+BuildRequires:	xorg-proto-inputproto-devel >= 1.9.99.902
 BuildRequires:	xorg-proto-kbproto-devel >= 1.0.3
 BuildRequires:	xorg-proto-printproto-devel
 BuildRequires:	xorg-proto-randrproto-devel >= 1.2.99.3
 %{?with_record:BuildRequires:	xorg-proto-recordproto-devel}
-BuildRequires:	xorg-proto-renderproto-devel >= 0.9.3
+BuildRequires:	xorg-proto-renderproto-devel >= 0.11
 BuildRequires:	xorg-proto-resourceproto-devel
 BuildRequires:	xorg-proto-scrnsaverproto-devel >= 1.1.0
 BuildRequires:	xorg-proto-videoproto-devel
-BuildRequires:	xorg-proto-xcmiscproto-devel
-BuildRequires:	xorg-proto-xextproto-devel >= 7.0.3
+BuildRequires:	xorg-proto-xcmiscproto-devel >= 1.2.0
+BuildRequires:	xorg-proto-xextproto-devel >= 1:7.0.99.3
 BuildRequires:	xorg-proto-xf86bigfontproto-devel
 BuildRequires:	xorg-proto-xf86dgaproto-devel
 BuildRequires:	xorg-proto-xf86driproto-devel >= 2.0.4
@@ -105,7 +103,7 @@ BuildRequires:	xorg-util-util-macros >= 0.99.2
 #BR: xcalibrateproto, tslib (for KDRIVE only)
 #BR: glitz-devel >= 0.4.3 (for XGL and EGL only)
 Requires(triggerpostun):	sed >= 4.0
-Requires:	pixman >= 0.14.0
+Requires:	pixman >= 0.16.0
 Requires:	xkeyboard-config
 # for rgb.txt
 Requires:	xorg-app-rgb >= 0.99.3
@@ -261,14 +259,14 @@ Summary:	Header files for X.org server
 Summary(pl.UTF-8):	Pliki nagłówkowe dla serwera X.org
 Group:		X11/Development/Libraries
 Requires:	libdrm-devel >= 2.4.5
-Requires:	pixman-devel >= 0.14.0
+Requires:	pixman-devel >= 0.16.0
 Requires:	xorg-lib-libpciaccess-devel
 Requires:	xorg-lib-libxkbfile-devel
 Requires:	xorg-proto-dri2proto-devel >= 2.1
 Requires:	xorg-proto-fontsproto-devel
 Requires:	xorg-proto-renderproto-devel >= 0.9.3
 Requires:	xorg-proto-videoproto-devel
-Requires:	xorg-proto-xextproto-devel >= 7.0.3
+Requires:	xorg-proto-xextproto-devel >= 1:7.0.99.3
 Requires:	xorg-proto-xproto-devel >= 7.0.13
 Obsoletes:	X11-Xserver-devel < 1:7.0.0
 Obsoletes:	XFree86-Xserver-devel < 1:7.0.0
@@ -323,8 +321,6 @@ Biblioteka rozszerzenia GLX dla serwera X.org.
 %patch0 -p0
 %patch1 -p1
 %patch2 -p1
-%patch3 -p1
-%patch5 -p1
 %patch6 -p1
 %patch7 -p0
 
@@ -361,7 +357,7 @@ if [ $API != %{xorg_xserver_server_xinput_abi} ]; then
 fi
 
 %{__libtoolize}
-%{__aclocal}
+%{__aclocal} -I m4
 %{__autoconf}
 %{__autoheader}
 %{__automake}
@@ -439,7 +435,6 @@ fi
 %attr(4755,root,root) %{_bindir}/Xwrapper
 %attr(755,root,root) %{_bindir}/cvt
 %attr(755,root,root) %{_bindir}/gtf
-%{_libdir}/X11/Options
 %dir %{_libdir}/xorg
 %{_libdir}/xorg/protocol.txt
 %dir %{_libdir}/xorg/modules
