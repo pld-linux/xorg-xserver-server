@@ -4,7 +4,7 @@
 %bcond_without	dri2	# DRI2 support
 %bcond_without	dbus	# D-BUS support
 %bcond_without	hal	# HAL support
-%bcond_with	dmx	# DMX support
+%bcond_without	dmx	# DMX support
 %bcond_with	record	# RECORD extension
 #
 # ABI versions, see hw/xfree86/common/xf86Module.h
@@ -17,12 +17,12 @@
 Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
-Version:	1.6.99.900
+Version:	1.6.99.901
 Release:	1%{?with_multigl:.mgl}
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
-# Source0-md5:	e12b367b44e27def991f4542d85a9c63
+# Source0-md5:	f30ecd48ae45f5bbe62fd17e81ee28c3
 Source2:	xserver.pamd
 Patch0:		%{name}-xwrapper.patch
 Patch1:		%{name}-pic-libxf86config.patch
