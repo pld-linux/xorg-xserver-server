@@ -17,12 +17,12 @@
 Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
-Version:	1.7.0
+Version:	1.7.0.901
 Release:	1%{?with_multigl:.mgl}
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
-# Source0-md5:	e0b70d3d542959f677210172d2b0f237
+# Source0-md5:	38c5cfbb5bda671aed9f390e9b7c34b4
 Source2:	xserver.pamd
 Patch0:		%{name}-xwrapper.patch
 Patch1:		%{name}-pic-libxf86config.patch
