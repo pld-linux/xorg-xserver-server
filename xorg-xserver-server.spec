@@ -60,12 +60,12 @@ BuildRequires:	xorg-lib-libXpm-devel
 BuildRequires:	xorg-lib-libXrender-devel
 BuildRequires:	xorg-lib-libXres-devel
 BuildRequires:	xorg-lib-libXt-devel >= 1.0.0
-BuildRequires:	xorg-lib-libXtst-devel
+BuildRequires:	xorg-lib-libXtst-devel >= 1.0.99.2
 BuildRequires:	xorg-lib-libXv-devel
 BuildRequires:	xorg-lib-libXxf86dga-devel
 BuildRequires:	xorg-lib-libXxf86misc-devel
 BuildRequires:	xorg-lib-libXxf86vm-devel
-%{?with_dmx:BuildRequires:	xorg-lib-libdmx-devel}
+%{?with_dmx:BuildRequires:	xorg-lib-libdmx-devel >= 1.0.99.1}
 BuildRequires:	xorg-lib-libfontenc-devel
 BuildRequires:	xorg-lib-libpciaccess-devel
 BuildRequires:	xorg-lib-libxkbfile-devel
