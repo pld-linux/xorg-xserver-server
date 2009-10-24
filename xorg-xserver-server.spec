@@ -31,6 +31,9 @@ Patch3:		%{name}-exa.patch
 Patch5:		%{name}-xinerama-cursors.patch
 Patch6:		%{name}-less-acpi-brokenness.patch
 Patch7:		%{name}-ac.patch
+# https://bugs.launchpad.net/ubuntu/+source/fglrx-installer/+bug/351186
+# harmless for non-fglrx
+Patch8:		%{name}-backclear.patch
 URL:		http://xorg.freedesktop.org/
 BuildRequires:	Mesa-libGL-devel >= 7.3
 # for glx headers
@@ -327,6 +330,7 @@ Biblioteka rozszerzenia GLX dla serwera X.org.
 %patch5 -p1
 %patch6 -p1
 %patch7 -p0
+%patch8 -p1
 
 # xserver uses pixman-1 API/ABI so put that explictly here
 sed -i -e 's#<pixman\.h#<pixman-1/pixman.h#g' ./fb/fb.h ./include/miscstruct.h ./render/picture.h
