@@ -264,6 +264,7 @@ Requires:	xorg-lib-libpciaccess-devel
 Requires:	xorg-lib-libxkbfile-devel
 Requires:	xorg-proto-dri2proto-devel >= 2.1
 Requires:	xorg-proto-fontsproto-devel
+Requires:	xorg-proto-randrproto-devel >= 1.2.99.3
 Requires:	xorg-proto-renderproto-devel >= 0.9.3
 Requires:	xorg-proto-videoproto-devel
 Requires:	xorg-proto-xextproto-devel >= 1:7.0.99.3
