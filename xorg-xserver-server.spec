@@ -43,6 +43,7 @@ BuildRequires:	dbus-devel
 BuildRequires:	libdrm-devel >= 2.4.5
 BuildRequires:	libtool
 BuildRequires:	ncurses-devel
+BuildRequires:	openssl-devel
 BuildRequires:	pam-devel
 BuildRequires:	perl-base
 BuildRequires:	pixman-devel >= 0.16.0
@@ -51,6 +52,7 @@ BuildRequires:	xorg-app-mkfontscale
 BuildRequires:	xorg-lib-libX11-devel
 BuildRequires:	xorg-lib-libXau-devel
 BuildRequires:	xorg-lib-libXaw-devel
+BuildRequires:	xorg-lib-libXdamage-devel
 BuildRequires:	xorg-lib-libXdmcp-devel
 BuildRequires:	xorg-lib-libXext-devel
 BuildRequires:	xorg-lib-libXfont-devel
@@ -76,7 +78,7 @@ BuildRequires:	xorg-proto-compositeproto-devel >= 0.4
 BuildRequires:	xorg-proto-damageproto-devel >= 1.1
 %{?with_dmx:BuildRequires:	xorg-proto-dmxproto-devel}
 %{?with_dri2:BuildRequires:	xorg-proto-dri2proto-devel >= 2.1}
-BuildRequires:	xorg-proto-evieext-devel
+#BuildRequires:	xorg-proto-evieext-devel
 BuildRequires:	xorg-proto-fixesproto-devel >= 4.1
 BuildRequires:	xorg-proto-fontcacheproto-devel
 BuildRequires:	xorg-proto-fontsproto-devel
