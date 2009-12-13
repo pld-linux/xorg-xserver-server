@@ -14,11 +14,12 @@
 %define	xorg_xserver_server_videodrv_abi	6.0
 %define	xorg_xserver_server_xinput_abi		7.0
 
+%define		rel		2
 Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
 Version:	1.7.3.901
-Release:	1%{?with_multigl:.mgl}
+Release:	%{rel}%{?with_multigl:.mgl}
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
@@ -112,6 +113,7 @@ Requires:	xorg-app-xkbcomp
 # xserver default config expects evdev+dbus+hald
 Suggests:	dbus
 Suggests:	hal
+Suggests:	udev-acl
 Suggests:	xorg-driver-input-evdev
 # xserver requires fixed and cursor fonts
 Requires:	xorg-font-font-alias
