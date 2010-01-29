@@ -193,6 +193,7 @@ Xnest - це сервер X Window System, який працює у вікні X
 Summary:	Xephyr - nested X server
 Summary(pl.UTF-8):	Xephyr - zagnieżdżony serwer X
 Group:		X11/Servers
+Requires:	pixman >= 0.15.0
 
 %description -n xorg-xserver-Xephyr
 Xephyr is a a kdrive server that outputs to a window on a pre-existing
