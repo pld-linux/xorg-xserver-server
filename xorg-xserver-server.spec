@@ -371,7 +371,7 @@ fi
 	--with-os-vendor="PLD/Team" \
 	--%{?with_dbus:en}%{!?with_dbus:dis}able-config-dbus \
 	%{!?with_hal:--disable-config-hal} \
-	--%{?with_dbus:en}%{!?with_dbus:dis}able-config-udev \
+	--%{?with_udev:en}%{!?with_udev:dis}able-config-udev \
 	--enable-aiglx \
 	--enable-builddocs \
 	--enable-dga \
