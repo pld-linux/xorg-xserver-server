@@ -5,7 +5,7 @@
 %bcond_without	dbus	# D-BUS support
 %bcond_without	hal	# HAL support
 %bcond_without	dmx	# DMX support
-%bcond_with	record	# RECORD extension
+%bcond_without	record	# RECORD extension
 #
 # ABI versions, see hw/xfree86/common/xf86Module.h
 %define	xorg_xserver_server_ansic_abi		0.4
@@ -18,12 +18,12 @@
 Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
-Version:	1.7.5
+Version:	1.7.5.901
 Release:	%{rel}%{?with_multigl:.mgl}
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
-# Source0-md5:	2856130aebf56e3df7b7d9be419bfb28
+# Source0-md5:	d436ce2f2239c196ee163c7c047c1dd2
 Source2:	xserver.pamd
 Patch0:		%{name}-xwrapper.patch
 Patch1:		%{name}-pic-libxf86config.patch
@@ -42,6 +42,7 @@ BuildRequires:	dbus-devel
 %endif
 %{?with_hal:BuildRequires:	hal-devel}
 BuildRequires:	libdrm-devel >= 2.4.5
+BuildRequires:	libselinux-devel >= 2.0.86
 BuildRequires:	libtool
 BuildRequires:	ncurses-devel
 BuildRequires:	openssl-devel
@@ -383,6 +384,7 @@ fi
 	--enable-xephyr \
 	--enable-xfbdev \
 	--enable-glx-tls \
+	--enable-xselinux \
 	--disable-xsdl \
 	--disable-xfake \
 	--enable-secure-rpc \
