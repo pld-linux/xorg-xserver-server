@@ -6,6 +6,7 @@
 %bcond_without	hal	# HAL support
 %bcond_without	dmx	# DMX support
 %bcond_without	record	# RECORD extension
+%bcond_with	selinux # SELinux support
 #
 # ABI versions, see hw/xfree86/common/xf86Module.h
 %define	xorg_xserver_server_ansic_abi		0.4
@@ -14,7 +15,7 @@
 %define	xorg_xserver_server_videodrv_abi	6.0
 %define	xorg_xserver_server_xinput_abi		7.0
 
-%define		rel		1
+%define		rel		2
 Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
@@ -42,7 +43,7 @@ BuildRequires:	dbus-devel
 %endif
 %{?with_hal:BuildRequires:	hal-devel}
 BuildRequires:	libdrm-devel >= 2.4.5
-BuildRequires:	libselinux-devel >= 2.0.86
+%{?with_selinux:BuildRequires:	libselinux-devel >= 2.0.86}
 BuildRequires:	libtool
 BuildRequires:	ncurses-devel
 BuildRequires:	openssl-devel
@@ -384,7 +385,7 @@ fi
 	--enable-xephyr \
 	--enable-xfbdev \
 	--enable-glx-tls \
-	--enable-xselinux \
+	%{?with_selinux:--enable-xselinux} \
 	--disable-xsdl \
 	--disable-xfake \
 	--enable-secure-rpc \
