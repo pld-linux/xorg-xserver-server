@@ -6,7 +6,7 @@
 %bcond_without	hal	# HAL support
 %bcond_without	dmx	# DMX support
 %bcond_without	record	# RECORD extension
-%bcond_with	selinux # SELinux support
+%bcond_without	selinux # SELinux support
 #
 # ABI versions, see hw/xfree86/common/xf86Module.h
 %define	xorg_xserver_server_ansic_abi		0.4
@@ -15,22 +15,22 @@
 %define	xorg_xserver_server_videodrv_abi	6.0
 %define	xorg_xserver_server_xinput_abi		7.0
 
-%define		rel		2
+%define		rel		1
 Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
-Version:	1.7.5.901
+Version:	1.7.5.902
 Release:	%{rel}%{?with_multigl:.mgl}
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
-# Source0-md5:	d436ce2f2239c196ee163c7c047c1dd2
+# Source0-md5:	47adb90279d3383cca2740cb31cb6510
 Source2:	xserver.pamd
 Patch0:		%{name}-xwrapper.patch
 Patch1:		%{name}-pic-libxf86config.patch
 Patch2:		%{name}-fb-size.patch
-Patch6:		%{name}-less-acpi-brokenness.patch
-Patch7:		%{name}-ac.patch
+Patch3:		%{name}-less-acpi-brokenness.patch
+Patch4:		%{name}-ac.patch
 URL:		http://xorg.freedesktop.org/
 BuildRequires:	Mesa-libGL-devel >= 7.3
 # for glx headers
@@ -329,8 +329,8 @@ Biblioteka rozszerzenia GLX dla serwera X.org.
 %patch0 -p0
 %patch1 -p1
 %patch2 -p1
-%patch6 -p1
-%patch7 -p0
+%patch3 -p1
+%patch4 -p0
 
 # xserver uses pixman-1 API/ABI so put that explictly here
 sed -i -e 's#<pixman\.h#<pixman-1/pixman.h#g' ./fb/fb.h ./include/miscstruct.h ./render/picture.h
