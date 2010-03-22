@@ -3,8 +3,8 @@
 %bcond_with	multigl	# package libglx.so in a way allowing concurrent install with nvidia/fglrx drivers
 %bcond_without	dri2	# DRI2 support
 %bcond_with	dbus	# D-BUS support
-%bcond_with	hal	# HAL support
-%bcond_without	udev	# UDEV support
+%bcond_without	hal	# HAL support
+%bcond_with	udev	# UDEV support
 %bcond_without	dmx	# DMX support
 %bcond_with	record	# RECORD extension
 #
@@ -15,7 +15,7 @@
 %define	xorg_xserver_server_videodrv_abi	7.0
 %define	xorg_xserver_server_xinput_abi		9.0
 
-%define		rel		0.1
+%define		rel		0.2
 Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
