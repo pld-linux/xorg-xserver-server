@@ -400,7 +400,7 @@ rm -rf $RPM_BUILD_ROOT
 	DESTDIR=$RPM_BUILD_ROOT
 
 install -D %{SOURCE2} $RPM_BUILD_ROOT/etc/pam.d/xserver
-install -d $RPM_BUILD_ROOT/etc/security/console.apps
+install -d $RPM_BUILD_ROOT/etc/{security/console.apps,X11/conf.d}
 install -d $RPM_BUILD_ROOT%{_libdir}/xorg/modules/{dri,drivers,input}
 :> $RPM_BUILD_ROOT/etc/security/console.apps/xserver
 :> $RPM_BUILD_ROOT/etc/security/blacklist.xserver
@@ -463,6 +463,7 @@ fi
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/security/blacklist.xserver
 %config(missingok) /etc/security/console.apps/xserver
 %{?with_dbus:/etc/dbus-1/system.d/xorg-server.conf}
+%dir /etc/X11/conf.d
 %{_mandir}/man1/Xorg.1x*
 %{_mandir}/man1/Xserver.1x*
 %{_mandir}/man1/cvt.1*
