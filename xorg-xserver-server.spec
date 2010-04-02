@@ -50,6 +50,7 @@ BuildRequires:	perl-base
 BuildRequires:	pixman-devel >= 0.16.0
 BuildRequires:	pkgconfig >= 1:0.19
 BuildRequires:	xorg-app-mkfontscale
+BuildRequires:	xorg-font-font-util >= 1.1
 BuildRequires:	xorg-lib-libX11-devel
 BuildRequires:	xorg-lib-libXau-devel
 BuildRequires:	xorg-lib-libXaw-devel
