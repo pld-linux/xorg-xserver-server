@@ -15,16 +15,16 @@
 %define	xorg_xserver_server_videodrv_abi	7.0
 %define	xorg_xserver_server_xinput_abi		9.0
 
-%define		rel		0.2
+%define		rel		1
 Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
-Version:	1.7.99.902
+Version:	1.8.0
 Release:	%{rel}%{?with_multigl:.mgl}
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
-# Source0-md5:	0f4d818bad13bb643caa93964f369249
+# Source0-md5:	7cec3a11890bb53f4a07854319360348
 Source2:	xserver.pamd
 Patch0:		%{name}-xwrapper.patch
 Patch1:		%{name}-pic-libxf86config.patch
@@ -478,6 +478,7 @@ fi
 %attr(755,root,root) %{_bindir}/Xdmx
 %attr(755,root,root) %{_bindir}/dmxaddinput
 %attr(755,root,root) %{_bindir}/dmxaddscreen
+%attr(755,root,root) %{_bindir}/dmxinfo
 %attr(755,root,root) %{_bindir}/dmxreconfig
 %attr(755,root,root) %{_bindir}/dmxresize
 %attr(755,root,root) %{_bindir}/dmxrminput
@@ -485,7 +486,6 @@ fi
 %attr(755,root,root) %{_bindir}/dmxtodmx
 %attr(755,root,root) %{_bindir}/dmxwininfo
 %attr(755,root,root) %{_bindir}/vdltodmx
-%attr(755,root,root) %{_bindir}/xdmx
 %attr(755,root,root) %{_bindir}/xdmxconfig
 %{_mandir}/man1/Xdmx.1x*
 %{_mandir}/man1/dmxtodmx.1x*
