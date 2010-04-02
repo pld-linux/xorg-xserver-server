@@ -101,7 +101,7 @@ BuildRequires:	xorg-proto-xf86miscproto-devel
 BuildRequires:	xorg-proto-xf86vidmodeproto-devel
 BuildRequires:	xorg-proto-xineramaproto-devel
 BuildRequires:	xorg-proto-xproto-devel >= 7.0.13
-BuildRequires:	xorg-util-util-macros >= 0.99.2
+BuildRequires:	xorg-util-util-macros >= 1.5
 #BR: xcalibrateproto, tslib (for KDRIVE only)
 #BR: glitz-devel >= 0.4.3 (for XGL and EGL only)
 Requires(triggerpostun):	sed >= 4.0
