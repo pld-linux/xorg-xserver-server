@@ -3,8 +3,8 @@
 %bcond_with	multigl	# package libglx.so in a way allowing concurrent install with nvidia/fglrx drivers
 %bcond_without	dri2	# DRI2 support
 %bcond_with	dbus	# D-BUS support
-%bcond_without	hal	# HAL support
-%bcond_with	udev	# UDEV support
+%bcond_with	hal	# HAL support
+%bcond_without	udev	# UDEV support
 %bcond_without	dmx	# DMX support
 %bcond_with	record	# RECORD extension
 #
@@ -15,7 +15,7 @@
 %define	xorg_xserver_server_videodrv_abi	7.0
 %define	xorg_xserver_server_xinput_abi		9.0
 
-%define		rel		1
+%define		rel		2
 Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
@@ -407,6 +407,10 @@ install -d $RPM_BUILD_ROOT%{_libdir}/xorg/modules/{dri,drivers,input}
 
 rm -f $RPM_BUILD_ROOT%{_libdir}/xorg/modules/{*,*/*}.{la,a}
 
+%if %{with udev}
+mv $RPM_BUILD_ROOT%{_prefix}/etc/X11/xorg.conf.d/10-evdev.conf $RPM_BUILD_ROOT/etc/X11/conf.d
+%endif
+
 %if %{with multigl}
 cd $RPM_BUILD_ROOT%{_libdir}/xorg/modules/extensions
 mv -f libglx.so libglx.so.%{version}
@@ -464,6 +468,9 @@ fi
 %config(missingok) /etc/security/console.apps/xserver
 %{?with_dbus:/etc/dbus-1/system.d/xorg-server.conf}
 %dir /etc/X11/conf.d
+%if %{with udev}
+%config(noreplace) %verify(not md5 mtime size) /etc/X11/conf.d/10-evdev.conf
+%endif
 %{_mandir}/man1/Xorg.1x*
 %{_mandir}/man1/Xserver.1x*
 %{_mandir}/man1/cvt.1*
