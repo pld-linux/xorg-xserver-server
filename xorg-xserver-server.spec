@@ -49,6 +49,7 @@ BuildRequires:	pam-devel
 BuildRequires:	perl-base
 BuildRequires:	pixman-devel >= 0.16.0
 BuildRequires:	pkgconfig >= 1:0.19
+BuildRequires:	udev-devel
 BuildRequires:	xorg-app-mkfontscale
 BuildRequires:	xorg-font-font-util >= 1.1
 BuildRequires:	xorg-lib-libX11-devel
