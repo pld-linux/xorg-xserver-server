@@ -15,7 +15,7 @@
 %define	xorg_xserver_server_videodrv_abi	7.0
 %define	xorg_xserver_server_xinput_abi		9.0
 
-%define		rel		3
+%define		rel		4
 Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
@@ -31,7 +31,7 @@ Patch1:		%{name}-pic-libxf86config.patch
 Patch2:		%{name}-fb-size.patch
 Patch3:		%{name}-less-acpi-brokenness.patch
 URL:		http://xorg.freedesktop.org/
-BuildRequires:	Mesa-libGL-devel >= 7.8
+BuildRequires:	Mesa-libGL-devel >= 7.8.1
 # for glx headers
 BuildRequires:	OpenGL-GLX-devel
 BuildRequires:	autoconf >= 2.57
