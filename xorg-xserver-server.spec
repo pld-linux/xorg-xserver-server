@@ -25,6 +25,7 @@ License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
 # Source0-md5:	7cec3a11890bb53f4a07854319360348
+Source1:	10-quirks.conf                
 Source2:	xserver.pamd
 Patch0:		%{name}-xwrapper.patch
 Patch1:		%{name}-pic-libxf86config.patch
@@ -411,6 +412,7 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/xorg/modules/{*,*/*}.{la,a}
 
 %if %{with udev}
 mv $RPM_BUILD_ROOT%{_prefix}/etc/X11/xorg.conf.d/10-evdev.conf $RPM_BUILD_ROOT/etc/X11/xorg.conf.d
+install %{SOURCE1} $RPM_BUILD_ROOT/etc/X11/xorg.conf.d/10-quirks.conf
 %endif
 
 %if %{with multigl}
@@ -472,6 +474,7 @@ fi
 %dir /etc/X11/xorg.conf.d
 %if %{with udev}
 %config(noreplace) %verify(not md5 mtime size) /etc/X11/xorg.conf.d/10-evdev.conf
+%config(noreplace) %verify(not md5 mtime size) /etc/X11/xorg.conf.d/10-quirks.conf
 %endif
 %{_mandir}/man1/Xorg.1x*
 %{_mandir}/man1/Xserver.1x*
