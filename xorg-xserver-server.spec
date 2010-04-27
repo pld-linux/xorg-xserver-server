@@ -19,12 +19,12 @@
 Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
-Version:	1.8.0
+Version:	1.8.0.901
 Release:	%{rel}%{?with_multigl:.mgl}
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
-# Source0-md5:	7cec3a11890bb53f4a07854319360348
+# Source0-md5:	5326bc5e84f2e3455321ab2baed26362
 Source1:	10-quirks.conf                
 Source2:	xserver.pamd
 Patch0:		%{name}-xwrapper.patch
@@ -405,15 +405,14 @@ rm -rf $RPM_BUILD_ROOT
 install -D %{SOURCE2} $RPM_BUILD_ROOT/etc/pam.d/xserver
 install -d $RPM_BUILD_ROOT/etc/{security/console.apps,X11/xorg.conf.d}
 install -d $RPM_BUILD_ROOT%{_libdir}/xorg/modules/{dri,drivers,input}
+install -d $RPM_BUILD_ROOT%{_datadir}/X11/xorg.conf.d
+
 :> $RPM_BUILD_ROOT/etc/security/console.apps/xserver
 :> $RPM_BUILD_ROOT/etc/security/blacklist.xserver
 
 rm -f $RPM_BUILD_ROOT%{_libdir}/xorg/modules/{*,*/*}.{la,a}
 
-%if %{with udev}
-mv $RPM_BUILD_ROOT%{_prefix}/etc/X11/xorg.conf.d/10-evdev.conf $RPM_BUILD_ROOT/etc/X11/xorg.conf.d
-install %{SOURCE1} $RPM_BUILD_ROOT/etc/X11/xorg.conf.d/10-quirks.conf
-%endif
+install %{SOURCE1} $RPM_BUILD_ROOT%{_datadir}/X11/xorg.conf.d/10-quirks.conf
 
 %if %{with multigl}
 cd $RPM_BUILD_ROOT%{_libdir}/xorg/modules/extensions
@@ -472,10 +471,9 @@ fi
 %config(missingok) /etc/security/console.apps/xserver
 %{?with_dbus:/etc/dbus-1/system.d/xorg-server.conf}
 %dir /etc/X11/xorg.conf.d
-%if %{with udev}
-%config(noreplace) %verify(not md5 mtime size) /etc/X11/xorg.conf.d/10-evdev.conf
-%config(noreplace) %verify(not md5 mtime size) /etc/X11/xorg.conf.d/10-quirks.conf
-%endif
+%dir %{_datadir}/X11/xorg.conf.d
+# overwrite these settings with local configs in /etc/X11/xorg.conf.d
+%verify(not md5 mtime size) %{_datadir}/X11/xorg.conf.d/*.conf
 %{_mandir}/man1/Xorg.1x*
 %{_mandir}/man1/Xserver.1x*
 %{_mandir}/man1/cvt.1*

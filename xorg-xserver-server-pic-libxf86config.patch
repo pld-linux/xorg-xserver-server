@@ -1,25 +1,10 @@
-From 6344659a33a7c192dffe6e796c771d02f78da5e5 Mon Sep 17 00:00:00 2001
-From: Adam Jackson <ajax@redhat.com>
-Date: Thu, 1 Nov 2007 15:02:24 -0400
-Subject: [PATCH] Build libxf86config with -fPIC.
-
----
- hw/xfree86/parser/Makefile.am |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
-
-diff --git a/hw/xfree86/parser/Makefile.am b/hw/xfree86/parser/Makefile.am
-index 849ee8b..0691158 100644
---- a/hw/xfree86/parser/Makefile.am
-+++ b/hw/xfree86/parser/Makefile.am
-@@ -25,7 +25,7 @@ libxf86config_a_SOURCES = \
- 	DRI.c \
- 	Extensions.c
+--- xorg-server-1.8.0.901/hw/xfree86/parser/Makefile.am~	2010-04-23 05:19:28.000000000 +0200
++++ xorg-server-1.8.0.901/hw/xfree86/parser/Makefile.am	2010-04-27 08:16:45.772678719 +0200
+@@ -35,6 +35,7 @@
+ libxf86config_a_CFLAGS = $(AM_CFLAGS)
  
--AM_CFLAGS = $(DIX_CFLAGS) $(XORG_CFLAGS)
-+AM_CFLAGS = $(DIX_CFLAGS) $(XORG_CFLAGS) -fPIC -fvisibility=hidden
+ AM_CFLAGS = $(DIX_CFLAGS) $(XORG_CFLAGS) \
++	-fPIC -fvisibility=hidden \
+ 	-DSYSCONFDIR=\"$(sysconfdir)\" \
+ 	-DDATADIR=\"$(datadir)\"
  
- EXTRA_DIST = \
- 	Configint.h \
--- 
-1.5.3.4
-
