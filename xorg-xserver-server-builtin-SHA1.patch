@@ -1,0 +1,679 @@
+From 3fbec7d4db59bbd24a9a768182000a1d004c5bc5 Mon Sep 17 00:00:00 2001
+From: Tiago Vignatti <tiago.vignatti@nokia.com>
+Date: Wed, 24 Mar 2010 17:27:43 +0200
+Subject: [PATCH] Revert "Revert "Render: Use built-in SHA1 library""
+
+This reverts commit a39377cbcbd3091095efbeab25bec18ae520147e.
+
+Conflicts:
+
+	configure.ac
+	include/dix-config.h.in
+	render/glyph.c
+
+
+Ok ok ok, it's the revert of a revert! Buhhh... 
+
+Once upon a time, back in 2007, Carl Worth was trying to boost render
+(4c6abe1c). He prefered to use a "strong hash" to compare glyphs (19b3b1fd)
+and used openssl library for this. Further, for the same purpose, people
+started to set other SHA1 implementations in autoconf. And a lot of
+alternatives appeared - six, to be precise. In the mean time, John Tapsell
+commit a builtin implementation of SHA1. In the same day, Keith Packard
+reverted, stating "X.org should not be providing a custom SHA1
+implementation." (a39377cb). Now, users ended up with Xorg setting the default
+as the openssl's one (libcrypto), which takes 88 kB of xserver's private RSS.
+Besides that, we have a ridiculous "configure dot fucking ac stanza to work
+out which lib to use is almost as long as sha1.c was", to quote daniels.
+
+My simple argument against Keith's decision is simple: we can save 316 kB of
+RSS in a standalone Xorg call. Therefore, I'm in favor to keep our own very
+simple and shiny SHA1 implementation.
+
+---
+I'm not comfortable yet to send this patch around without see if there's any
+regressions on render or eventually get some ack from Carl.
+
+
+ configure.ac            |   89 +------------------------
+ include/dix-config.h.in |   15 ----
+ os/Makefile.am          |    1 -
+ os/xsha1.c              |  168 ---------------------------------------------
+ render/Makefile.am      |    3 +
+ render/glyph.c          |   25 ++-----
+ render/sha1.c           |  173 +++++++++++++++++++++++++++++++++++++++++++++++
+ render/sha1.h           |   63 +++++++++++++++++
+ 8 files changed, 248 insertions(+), 289 deletions(-)
+ delete mode 100644 os/xsha1.c
+ create mode 100644 render/sha1.c
+ create mode 100644 render/sha1.h
+
+diff --git a/configure.ac b/configure.ac
+index 3e8ea10..ef21aa0 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -1305,7 +1305,7 @@ AC_DEFINE(BIGREQS, 1, [Support BigRequests extension])
+ 
+ if test "x$SPECIAL_DTRACE_OBJECTS" = "xyes" ; then
+   DIX_LIB='$(top_builddir)/dix/dix.O'
+-  OS_LIB='$(top_builddir)/os/os.O $(SHA1_LIBS)'
++  OS_LIB='$(top_builddir)/os/os.O'
+ else
+   DIX_LIB='$(top_builddir)/dix/libdix.la'
+   OS_LIB='$(top_builddir)/os/libos.la'
+@@ -1325,93 +1325,6 @@ MIEXT_SHADOW_INC='-I$(top_srcdir)/miext/shadow'
+ MIEXT_SHADOW_LIB='$(top_builddir)/miext/shadow/libshadow.la'
+ CORE_INCS='-I$(top_srcdir)/include -I$(top_builddir)/include'
+ 
+-# SHA1 hashing
+-AC_ARG_WITH([sha1],
+-            [AS_HELP_STRING([--with-sha1=libc|libmd|libgcrypt|libcrypto|libsha1|CommonCrypto],
+-                            [choose SHA1 implementation])])
+-AC_CHECK_FUNC([SHA1Init], [HAVE_SHA1_IN_LIBC=yes])
+-if test "x$with_sha1" = x && test "x$HAVE_SHA1_IN_LIBC" = xyes; then
+-	with_sha1=libc
+-fi
+-if test "x$with_sha1" = xlibc && test "x$HAVE_SHA1_IN_LIBC" != xyes; then
+-	AC_MSG_ERROR([libc requested but not found])
+-fi
+-if test "x$with_sha1" = xlibc; then
+-	AC_DEFINE([HAVE_SHA1_IN_LIBC], [1],
+-		[Use libc SHA1 functions])
+-	SHA1_LIBS=""
+-fi
+-AC_CHECK_FUNC([CC_SHA1_Init], [HAVE_SHA1_IN_COMMONCRYPTO=yes])
+-if test "x$with_sha1" = x && test "x$HAVE_SHA1_IN_COMMONCRYPTO" = xyes; then
+-	with_sha1=CommonCrypto
+-fi
+-if test "x$with_sha1" = xCommonCrypto && test "x$HAVE_SHA1_IN_COMMONCRYPTO" != xyes; then
+-	AC_MSG_ERROR([CommonCrypto requested but not found])
+-fi
+-if test "x$with_sha1" = xCommonCrypto; then
+-	AC_DEFINE([HAVE_SHA1_IN_COMMONCRYPTO], [1],
+-		[Use CommonCrypto SHA1 functions])
+-	SHA1_LIBS=""
+-fi
+-AC_CHECK_LIB([md], [SHA1Init], [HAVE_LIBMD=yes])
+-if test "x$with_sha1" = x && test "x$HAVE_LIBMD" = xyes; then
+-	with_sha1=libmd
+-fi
+-if test "x$with_sha1" = xlibmd && test "x$HAVE_LIBMD" != xyes; then
+-	AC_MSG_ERROR([libmd requested but not found])
+-fi
+-if test "x$with_sha1" = xlibmd; then
+-	AC_DEFINE([HAVE_SHA1_IN_LIBMD], [1],
+-	          [Use libmd SHA1 functions])
+-	SHA1_LIBS=-lmd
+-fi
+-AC_CHECK_LIB([gcrypt], [gcry_md_open], [HAVE_LIBGCRYPT=yes])
+-if test "x$with_sha1" = x && test "x$HAVE_LIBGCRYPT" = xyes; then
+-	with_sha1=libgcrypt
+-fi
+-if test "x$with_sha1" = xlibgcrypt; then
+-	AC_DEFINE([HAVE_SHA1_IN_LIBGCRYPT], [1],
+-	          [Use libgcrypt SHA1 functions])
+-	SHA1_LIBS=-lgcrypt
+-fi
+-AC_CHECK_LIB([sha1], [sha1_begin], [HAVE_LIBSHA1=yes])
+-if test "x$with_sha1" = x && test "x$HAVE_LIBSHA1" = xyes; then
+-   with_sha1=libsha1
+-fi
+-if test "x$with_sha1" = xlibsha1; then
+-	AC_DEFINE([HAVE_SHA1_IN_LIBSHA1], [1],
+-	          [Use libsha1 for SHA1])
+-	SHA1_LIBS=-lsha1
+-fi
+-# We don't need all of the OpenSSL libraries, just libcrypto
+-AC_CHECK_LIB([crypto], [SHA1_Init], [HAVE_LIBCRYPTO=yes])
+-PKG_CHECK_MODULES([OPENSSL], [openssl], [HAVE_OPENSSL_PKC=yes],
+-                  [HAVE_OPENSSL_PKC=no])
+-if test "x$HAVE_LIBCRYPTO" = xyes || test "x$HAVE_OPENSSL_PKC" = xyes; then
+-	if test "x$with_sha1" = x; then
+-		with_sha1=libcrypto
+-	fi
+-else
+-	if test "x$with_sha1" = xlibcrypto; then
+-		AC_MSG_ERROR([OpenSSL libcrypto requested but not found])
+-	fi
+-fi
+-if test "x$with_sha1" = xlibcrypto; then
+-	if test "x$HAVE_LIBCRYPTO" = xyes; then
+-		SHA1_LIBS=-lcrypto
+-	else
+-		SHA1_LIBS="$OPENSSL_LIBS"
+-		SHA1_CFLAGS="$OPENSSL_CFLAGS"
+-	fi
+-fi
+-AC_MSG_CHECKING([for SHA1 implementation])
+-if test "x$with_sha1" = x; then
+-	AC_MSG_ERROR([No suitable SHA1 implementation found])
+-fi
+-AC_MSG_RESULT([$with_sha1])
+-AC_SUBST(SHA1_LIBS)
+-AC_SUBST(SHA1_CFLAGS)
+-
+ PKG_CHECK_MODULES([XSERVERCFLAGS], [$REQUIRED_MODULES $REQUIRED_LIBS])
+ PKG_CHECK_MODULES([XSERVERLIBS], [$REQUIRED_LIBS])
+ 
+diff --git a/include/dix-config.h.in b/include/dix-config.h.in
+index 058c8fd..d6e99a5 100644
+--- a/include/dix-config.h.in
++++ b/include/dix-config.h.in
+@@ -160,21 +160,6 @@
+ /* Define to 1 if you have the <rpcsvc/dbm.h> header file. */
+ #undef HAVE_RPCSVC_DBM_H
+ 
+-/* Define to use libc SHA1 functions */
+-#undef HAVE_SHA1_IN_LIBC
+-
+-/* Define to use CommonCrypto SHA1 functions */
+-#undef HAVE_SHA1_IN_COMMONCRYPTO
+-
+-/* Define to use libmd SHA1 functions */
+-#undef HAVE_SHA1_IN_LIBMD
+-
+-/* Define to use libgcrypt SHA1 functions */
+-#undef HAVE_SHA1_IN_LIBGCRYPT
+-
+-/* Define to use libsha1 for SHA1 */
+-#undef HAVE_SHA1_IN_LIBSHA1
+-
+ /* Define to 1 if you have the `shmctl64' function. */
+ #undef HAVE_SHMCTL64
+ 
+diff --git a/os/Makefile.am b/os/Makefile.am
+index 66a4a0f..b8c1636 100644
+--- a/os/Makefile.am
++++ b/os/Makefile.am
+@@ -22,7 +22,6 @@ libos_la_SOURCES = 	\
+ 	strcasecmp.c	\
+ 	strcasestr.c	\
+ 	xdmauth.c	\
+-	xsha1.c		\
+ 	xstrans.c	\
+ 	xprintf.c	\
+ 	$(XORG_SRCS)
+diff --git a/os/xsha1.c b/os/xsha1.c
+deleted file mode 100644
+index 355862f..0000000
+--- a/os/xsha1.c
++++ /dev/null
+@@ -1,168 +0,0 @@
+-#ifdef HAVE_DIX_CONFIG_H
+-#include <dix-config.h>
+-#endif
+-
+-#include "os.h"
+-#include "xsha1.h"
+-
+-#if defined(HAVE_SHA1_IN_LIBMD)  /* Use libmd for SHA1 */ \
+-	|| defined(HAVE_SHA1_IN_LIBC) /* Use libc for SHA1 */
+-
+-# include <sha1.h>
+-
+-void *x_sha1_init(void)
+-{
+-    SHA1_CTX *ctx = xalloc(sizeof(*ctx));
+-    if (!ctx)
+-        return NULL;
+-    SHA1Init(ctx);
+-    return ctx;
+-}
+-
+-int x_sha1_update(void *ctx, void *data, int size)
+-{
+-    SHA1_CTX *sha1_ctx = ctx;
+-    SHA1Update(sha1_ctx, data, size);
+-    return 1;
+-}
+-
+-int x_sha1_final(void *ctx, unsigned char result[20])
+-{
+-    SHA1_CTX *sha1_ctx = ctx;
+-    SHA1Final(result, sha1_ctx);
+-    xfree(sha1_ctx);
+-    return 1;
+-}
+-
+-#elif defined(HAVE_SHA1_IN_COMMONCRYPTO) /* Use CommonCrypto for SHA1 */
+-
+-#include <CommonCrypto/CommonDigest.h>
+-
+-void *x_sha1_init(void)
+-{
+-    CC_SHA1_CTX *ctx = xalloc(sizeof(*ctx));
+-    if (!ctx)
+-        return NULL;
+-    CC_SHA1_Init(ctx);
+-    return ctx;
+-}
+-
+-int x_sha1_update(void *ctx, void *data, int size)
+-{
+-    CC_SHA1_CTX *sha1_ctx = ctx;
+-    CC_SHA1_Update(sha1_ctx, data, size);
+-    return 1;
+-}
+-
+-int x_sha1_final(void *ctx, unsigned char result[20])
+-{
+-    CC_SHA1_CTX *sha1_ctx = ctx;
+-    CC_SHA1_Final(result, sha1_ctx);
+-    xfree(sha1_ctx);
+-    return 1;
+-}
+-
+-#elif defined(HAVE_SHA1_IN_LIBGCRYPT) /* Use libgcrypt for SHA1 */
+-
+-# include <gcrypt.h>
+-
+-void *x_sha1_init(void)
+-{
+-    static int init;
+-    gcry_md_hd_t h;
+-    gcry_error_t err;
+-
+-    if (!init) {
+-        if (!gcry_check_version(NULL))
+-            return NULL;
+-        gcry_control(GCRYCTL_DISABLE_SECMEM, 0);
+-        gcry_control(GCRYCTL_INITIALIZATION_FINISHED, 0);
+-        init = 1;
+-    }
+-
+-    err = gcry_md_open(&h, GCRY_MD_SHA1, 0);
+-    if (err)
+-        return NULL;
+-    return h;
+-}
+-
+-int x_sha1_update(void *ctx, void *data, int size)
+-{
+-    gcry_md_hd_t h = ctx;
+-    gcry_md_write(h, data, size);
+-    return 1;
+-}
+-
+-int x_sha1_final(void *ctx, unsigned char result[20])
+-{
+-    gcry_md_hd_t h = ctx;
+-    memcpy(result, gcry_md_read(h, GCRY_MD_SHA1), 20);
+-    gcry_md_close(h);
+-    return 1;
+-}
+-
+-#elif defined(HAVE_SHA1_IN_LIBSHA1) /* Use libsha1 */
+-
+-# include <libsha1.h>
+-
+-void *x_sha1_init(void)
+-{
+-    sha1_ctx *ctx = xalloc(sizeof(*ctx));
+-    if(!ctx)
+-        return NULL;
+-    sha1_begin(ctx);
+-    return ctx;
+-}
+-
+-int x_sha1_update(void *ctx, void *data, int size)
+-{
+-    sha1_hash(data, size, ctx);
+-    return 1;
+-}
+-
+-int x_sha1_final(void *ctx, unsigned char result[20])
+-{
+-    sha1_end(result, ctx);
+-    xfree(ctx);
+-    return 1;
+-}
+-
+-#else /* Use OpenSSL's libcrypto */
+-
+-# include <stddef.h>  /* buggy openssl/sha.h wants size_t */
+-# include <openssl/sha.h>
+-
+-void *x_sha1_init(void)
+-{
+-    int ret;
+-    SHA_CTX *ctx = xalloc(sizeof(*ctx));
+-    if (!ctx)
+-        return NULL;
+-    ret = SHA1_Init(ctx);
+-    if (!ret) {
+-        xfree(ctx);
+-        return NULL;
+-    }
+-    return ctx;
+-}
+-
+-int x_sha1_update(void *ctx, void *data, int size)
+-{
+-    int ret;
+-    SHA_CTX *sha_ctx = ctx;
+-    ret = SHA1_Update(sha_ctx, data, size);
+-    if (!ret)
+-        xfree(sha_ctx);
+-    return ret;
+-}
+-
+-int x_sha1_final(void *ctx, unsigned char result[20])
+-{
+-    int ret;
+-    SHA_CTX *sha_ctx = ctx;
+-    ret = SHA1_Final(result, sha_ctx);
+-    xfree(sha_ctx);
+-    return ret;
+-}
+-
+-#endif
+diff --git a/render/Makefile.am b/render/Makefile.am
+index 216c613..bb46702 100644
+--- a/render/Makefile.am
++++ b/render/Makefile.am
+@@ -14,8 +14,11 @@ librender_la_SOURCES =	\
+ 	mitri.c		\
+ 	picture.c	\
+ 	render.c	\
++	sha1.c		\
+ 	renderedge.c
+ 
+ if XORG
+ sdk_HEADERS = picture.h mipict.h glyphstr.h picturestr.h renderedge.h
+ endif
++
++EXTRA_DIST = sha1.h
+diff --git a/render/glyph.c b/render/glyph.c
+index 0b864ad..e14530a 100644
+--- a/render/glyph.c
++++ b/render/glyph.c
+@@ -26,8 +26,7 @@
+ #include <dix-config.h>
+ #endif
+ 
+-#include "xsha1.h"
+-
++#include "sha1.h"
+ #include "misc.h"
+ #include "scrnintstr.h"
+ #include "os.h"
+@@ -193,21 +192,13 @@ HashGlyph (xGlyphInfo    *gi,
+ 	   unsigned long size,
+ 	   unsigned char sha1[20])
+ {
+-    void *ctx = x_sha1_init();
+-    int success;
+-
+-    if (!ctx)
+-	return BadAlloc;
+-
+-    success = x_sha1_update(ctx, gi, sizeof(xGlyphInfo));
+-    if (!success)
+-	return BadAlloc;
+-    success = x_sha1_update(ctx, bits, size);
+-    if (!success)
+-	return BadAlloc;
+-    success = x_sha1_final(ctx, sha1);
+-    if (!success)
+-	return BadAlloc;
++    SHA1_CTX ctx;
++
++    SHA1Init (&ctx);
++    SHA1Update (&ctx, gi, sizeof (xGlyphInfo));
++    SHA1Update (&ctx, bits, size);
++    SHA1Final (sha1, &ctx);
++
+     return Success;
+ }
+ 
+diff --git a/render/sha1.c b/render/sha1.c
+new file mode 100644
+index 0000000..820eb2a
+--- /dev/null
++++ b/render/sha1.c
+@@ -0,0 +1,173 @@
++/*
++ * SHA-1 in C
++ * By Steve Reid <steve@edmweb.com>
++ * 100% Public Domain
++ *
++ * Test Vectors (from FIPS PUB 180-1)
++ * "abc"
++ *   A9993E36 4706816A BA3E2571 7850C26C 9CD0D89D
++ * "abcdbcdecdefdefgefghfghighijhijkijkljklmklmnlmnomnopnopq"
++ *   84983E44 1C3BD26E BAAE4AA1 F95129E5 E54670F1
++ * A million repetitions of "a"
++ *   34AA973C D4C4DAA4 F61EEB2B DBAD2731 6534016F
++ */
++
++#include <sys/param.h>
++#include <string.h>
++#include <sha1.h>
++
++#define rol(value, bits) (((value) << (bits)) | ((value) >> (32 - (bits))))
++
++/*
++ * blk0() and blk() perform the initial expand.
++ * I got the idea of expanding during the round function from SSLeay
++ */
++#if BYTE_ORDER == LITTLE_ENDIAN
++# define blk0(i) (block->l[i] = (rol(block->l[i],24)&0xFF00FF00) \
++    |(rol(block->l[i],8)&0x00FF00FF))
++#else
++# define blk0(i) block->l[i]
++#endif
++#define blk(i) (block->l[i&15] = rol(block->l[(i+13)&15]^block->l[(i+8)&15] \
++    ^block->l[(i+2)&15]^block->l[i&15],1))
++
++/*
++ * (R0+R1), R2, R3, R4 are the different operations (rounds) used in SHA1
++ */
++#define R0(v,w,x,y,z,i) z+=((w&(x^y))^y)+blk0(i)+0x5A827999+rol(v,5);w=rol(w,30);
++#define R1(v,w,x,y,z,i) z+=((w&(x^y))^y)+blk(i)+0x5A827999+rol(v,5);w=rol(w,30);
++#define R2(v,w,x,y,z,i) z+=(w^x^y)+blk(i)+0x6ED9EBA1+rol(v,5);w=rol(w,30);
++#define R3(v,w,x,y,z,i) z+=(((w|x)&y)|(w&x))+blk(i)+0x8F1BBCDC+rol(v,5);w=rol(w,30);
++#define R4(v,w,x,y,z,i) z+=(w^x^y)+blk(i)+0xCA62C1D6+rol(v,5);w=rol(w,30);
++
++/*
++ * Hash a single 512-bit block. This is the core of the algorithm.
++ */
++void
++SHA1Transform(uint32_t state[5], const uint8_t buffer[SHA1_BLOCK_LENGTH])
++{
++	uint32_t a, b, c, d, e;
++	uint8_t workspace[SHA1_BLOCK_LENGTH];
++	typedef union {
++		uint8_t c[64];
++		uint32_t l[16];
++	} CHAR64LONG16;
++	CHAR64LONG16 *block = (CHAR64LONG16 *)workspace;
++
++	(void)memcpy(block, buffer, SHA1_BLOCK_LENGTH);
++
++	/* Copy context->state[] to working vars */
++	a = state[0];
++	b = state[1];
++	c = state[2];
++	d = state[3];
++	e = state[4];
++
++	/* 4 rounds of 20 operations each. Loop unrolled. */
++	R0(a,b,c,d,e, 0); R0(e,a,b,c,d, 1); R0(d,e,a,b,c, 2); R0(c,d,e,a,b, 3);
++	R0(b,c,d,e,a, 4); R0(a,b,c,d,e, 5); R0(e,a,b,c,d, 6); R0(d,e,a,b,c, 7);
++	R0(c,d,e,a,b, 8); R0(b,c,d,e,a, 9); R0(a,b,c,d,e,10); R0(e,a,b,c,d,11);
++	R0(d,e,a,b,c,12); R0(c,d,e,a,b,13); R0(b,c,d,e,a,14); R0(a,b,c,d,e,15);
++	R1(e,a,b,c,d,16); R1(d,e,a,b,c,17); R1(c,d,e,a,b,18); R1(b,c,d,e,a,19);
++	R2(a,b,c,d,e,20); R2(e,a,b,c,d,21); R2(d,e,a,b,c,22); R2(c,d,e,a,b,23);
++	R2(b,c,d,e,a,24); R2(a,b,c,d,e,25); R2(e,a,b,c,d,26); R2(d,e,a,b,c,27);
++	R2(c,d,e,a,b,28); R2(b,c,d,e,a,29); R2(a,b,c,d,e,30); R2(e,a,b,c,d,31);
++	R2(d,e,a,b,c,32); R2(c,d,e,a,b,33); R2(b,c,d,e,a,34); R2(a,b,c,d,e,35);
++	R2(e,a,b,c,d,36); R2(d,e,a,b,c,37); R2(c,d,e,a,b,38); R2(b,c,d,e,a,39);
++	R3(a,b,c,d,e,40); R3(e,a,b,c,d,41); R3(d,e,a,b,c,42); R3(c,d,e,a,b,43);
++	R3(b,c,d,e,a,44); R3(a,b,c,d,e,45); R3(e,a,b,c,d,46); R3(d,e,a,b,c,47);
++	R3(c,d,e,a,b,48); R3(b,c,d,e,a,49); R3(a,b,c,d,e,50); R3(e,a,b,c,d,51);
++	R3(d,e,a,b,c,52); R3(c,d,e,a,b,53); R3(b,c,d,e,a,54); R3(a,b,c,d,e,55);
++	R3(e,a,b,c,d,56); R3(d,e,a,b,c,57); R3(c,d,e,a,b,58); R3(b,c,d,e,a,59);
++	R4(a,b,c,d,e,60); R4(e,a,b,c,d,61); R4(d,e,a,b,c,62); R4(c,d,e,a,b,63);
++	R4(b,c,d,e,a,64); R4(a,b,c,d,e,65); R4(e,a,b,c,d,66); R4(d,e,a,b,c,67);
++	R4(c,d,e,a,b,68); R4(b,c,d,e,a,69); R4(a,b,c,d,e,70); R4(e,a,b,c,d,71);
++	R4(d,e,a,b,c,72); R4(c,d,e,a,b,73); R4(b,c,d,e,a,74); R4(a,b,c,d,e,75);
++	R4(e,a,b,c,d,76); R4(d,e,a,b,c,77); R4(c,d,e,a,b,78); R4(b,c,d,e,a,79);
++
++	/* Add the working vars back into context.state[] */
++	state[0] += a;
++	state[1] += b;
++	state[2] += c;
++	state[3] += d;
++	state[4] += e;
++
++	/* Wipe variables */
++	a = b = c = d = e = 0;
++}
++
++
++/*
++ * SHA1Init - Initialize new context
++ */
++void
++SHA1Init(SHA1_CTX *context)
++{
++
++	/* SHA1 initialization constants */
++	context->count = 0;
++	context->state[0] = 0x67452301;
++	context->state[1] = 0xEFCDAB89;
++	context->state[2] = 0x98BADCFE;
++	context->state[3] = 0x10325476;
++	context->state[4] = 0xC3D2E1F0;
++}
++
++
++/*
++ * Run your data through this.
++ */
++void
++SHA1Update(SHA1_CTX *context, const uint8_t *data, size_t len)
++{
++	size_t i, j;
++
++	j = (size_t)((context->count >> 3) & 63);
++	context->count += (len << 3);
++	if ((j + len) > 63) {
++		(void)memcpy(&context->buffer[j], data, (i = 64-j));
++		SHA1Transform(context->state, context->buffer);
++		for ( ; i + 63 < len; i += 64)
++			SHA1Transform(context->state, (uint8_t *)&data[i]);
++		j = 0;
++	} else {
++		i = 0;
++	}
++	(void)memcpy(&context->buffer[j], &data[i], len - i);
++}
++
++
++/*
++ * Add padding and return the message digest.
++ */
++void
++SHA1Pad(SHA1_CTX *context)
++{
++	uint8_t finalcount[8];
++	uint i;
++
++	for (i = 0; i < 8; i++) {
++		finalcount[i] = (uint8_t)((context->count >>
++		    ((7 - (i & 7)) * 8)) & 255);	/* Endian independent */
++	}
++	SHA1Update(context, (uint8_t *)"\200", 1);
++	while ((context->count & 504) != 448)
++		SHA1Update(context, (uint8_t *)"\0", 1);
++	SHA1Update(context, finalcount, 8); /* Should cause a SHA1Transform() */
++}
++
++void
++SHA1Final(uint8_t digest[SHA1_DIGEST_LENGTH], SHA1_CTX *context)
++{
++	uint i;
++
++	SHA1Pad(context);
++	if (digest) {
++		for (i = 0; i < SHA1_DIGEST_LENGTH; i++) {
++			digest[i] = (uint8_t)
++			   ((context->state[i>>2] >> ((3-(i & 3)) * 8) ) & 255);
++		}
++		memset(context, 0, sizeof(*context));
++	}
++}
++
+diff --git a/render/sha1.h b/render/sha1.h
+new file mode 100644
+index 0000000..ace7d97
+--- /dev/null
++++ b/render/sha1.h
+@@ -0,0 +1,63 @@
++/*
++ * SHA-1 in C
++ * By Steve Reid <steve@edmweb.com>
++ * 100% Public Domain
++ */
++
++#ifndef _SHA1_H
++#define _SHA1_H
++
++#include <stdint.h>
++#include <stddef.h>
++#include <unistd.h>
++
++
++#define	SHA1_BLOCK_LENGTH		64
++#define	SHA1_DIGEST_LENGTH		20
++#define	SHA1_DIGEST_STRING_LENGTH	(SHA1_DIGEST_LENGTH * 2 + 1)
++
++typedef struct {
++    uint32_t state[5];
++    uint64_t count;
++    uint8_t buffer[SHA1_BLOCK_LENGTH];
++} SHA1_CTX;
++
++#include <sys/cdefs.h>
++
++__BEGIN_DECLS
++void SHA1Init(SHA1_CTX *);
++void SHA1Pad(SHA1_CTX *);
++void SHA1Transform(uint32_t [5], const uint8_t [SHA1_BLOCK_LENGTH])
++	__attribute__((__bounded__(__minbytes__,1,5)))
++	__attribute__((__bounded__(__minbytes__,2,SHA1_BLOCK_LENGTH)));
++void SHA1Update(SHA1_CTX *, const uint8_t *, size_t)
++	__attribute__((__bounded__(__string__,2,3)));
++void SHA1Final(uint8_t [SHA1_DIGEST_LENGTH], SHA1_CTX *)
++	__attribute__((__bounded__(__minbytes__,1,SHA1_DIGEST_LENGTH)));
++char *SHA1End(SHA1_CTX *, char *)
++	__attribute__((__bounded__(__minbytes__,2,SHA1_DIGEST_STRING_LENGTH)));
++char *SHA1File(const char *, char *)
++	__attribute__((__bounded__(__minbytes__,2,SHA1_DIGEST_STRING_LENGTH)));
++char *SHA1FileChunk(const char *, char *, off_t, off_t)
++	__attribute__((__bounded__(__minbytes__,2,SHA1_DIGEST_STRING_LENGTH)));
++char *SHA1Data(const uint8_t *, size_t, char *)
++	__attribute__((__bounded__(__string__,1,2)))
++	__attribute__((__bounded__(__minbytes__,3,SHA1_DIGEST_STRING_LENGTH)));
++__END_DECLS
++
++#define HTONDIGEST(x) do {                                              \
++        x[0] = htonl(x[0]);                                             \
++        x[1] = htonl(x[1]);                                             \
++        x[2] = htonl(x[2]);                                             \
++        x[3] = htonl(x[3]);                                             \
++        x[4] = htonl(x[4]); } while (0)
++
++#define NTOHDIGEST(x) do {                                              \
++        x[0] = ntohl(x[0]);                                             \
++        x[1] = ntohl(x[1]);                                             \
++        x[2] = ntohl(x[2]);                                             \
++        x[3] = ntohl(x[3]);                                             \
++        x[4] = ntohl(x[4]); } while (0)
++
++#endif /* _SHA1_H */
++
+-- 
+1.6.0.4
+
