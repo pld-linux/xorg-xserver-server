@@ -1,0 +1,635 @@
+diff -urN -x '*.*lo' -x '*.la' -x .deps -x 'Makefile*' xorg-server-1.6.5/dbe/dbestruct.h xorg-server-1.6.5-proto/dbe/dbestruct.h
+--- xorg-server-1.6.5/dbe/dbestruct.h	2009-10-12 04:52:40.000000000 +0200
++++ xorg-server-1.6.5-proto/dbe/dbestruct.h	2009-10-28 07:56:19.000000000 +0100
+@@ -37,10 +37,24 @@
+ /* INCLUDES */
+ 
+ #define NEED_DBE_PROTOCOL
+-#include <X11/extensions/Xdbeproto.h>
++#include <X11/extensions/dbeproto.h>
+ #include "windowstr.h"
+ #include "privates.h"
+ 
++typedef struct
++{
++    VisualID    visual;    /* one visual ID that supports double-buffering */
++    int         depth;     /* depth of visual in bits                      */
++    int         perflevel; /* performance level of visual                  */
++}
++XdbeVisualInfo;
++
++typedef struct
++{
++    int                 count;          /* number of items in visual_depth   */
++    XdbeVisualInfo      *visinfo;       /* list of visuals & depths for scrn */
++}
++XdbeScreenVisualInfo;
+ 
+ /* DEFINES */
+ 
+@@ -74,7 +88,7 @@
+ /* Marker for free elements in the buffer ID array. */
+ #define DBE_FREE_ID_ELEMENT	0
+ 
+-extern void DbeExtensionInit (void);
++extern _X_EXPORT void DbeExtensionInit (void);
+ 
+ /* TYPEDEFS */
+ 
+diff -urN -x '*.*lo' -x '*.la' -x .deps -x 'Makefile*' xorg-server-1.6.5/dix/main.c xorg-server-1.6.5-proto/dix/main.c
+--- xorg-server-1.6.5/dix/main.c	2009-10-12 04:52:40.000000000 +0200
++++ xorg-server-1.6.5-proto/dix/main.c	2010-04-29 13:05:11.035249244 +0200
+@@ -112,7 +112,7 @@
+ 
+ #ifdef DPMSExtension
+ #define DPMS_SERVER
+-#include <X11/extensions/dpms.h>
++#include <X11/extensions/dpmsproto.h>
+ #include "dpmsproc.h"
+ #endif
+ 
+diff -urN -x '*.*lo' -x '*.la' -x .deps -x 'Makefile*' xorg-server-1.6.5/hw/dmx/dmx.c xorg-server-1.6.5-proto/hw/dmx/dmx.c
+--- xorg-server-1.6.5/hw/dmx/dmx.c	2009-10-12 04:52:40.000000000 +0200
++++ xorg-server-1.6.5-proto/hw/dmx/dmx.c	2010-04-29 13:30:20.526124234 +0200
+@@ -57,9 +57,7 @@
+ 
+ #include "dmxextension.h"
+ #include <X11/extensions/dmxproto.h>
+-
+-#define _DMX_SERVER_
+-#include <X11/extensions/dmxext.h>
++#include <X11/extensions/dmx.h>
+ 
+ #ifdef PANORAMIX
+ #include "panoramiX.h"
+diff -urN -x '*.*lo' -x '*.la' -x .deps -x 'Makefile*' xorg-server-1.6.5/hw/xfree86/common/xf86DPMS.c xorg-server-1.6.5-proto/hw/xfree86/common/xf86DPMS.c
+--- xorg-server-1.6.5/hw/xfree86/common/xf86DPMS.c	2009-10-12 04:52:40.000000000 +0200
++++ xorg-server-1.6.5-proto/hw/xfree86/common/xf86DPMS.c	2010-04-29 13:24:47.948125520 +0200
+@@ -41,7 +41,7 @@
+ #include "xf86Priv.h"
+ #ifdef DPMSExtension
+ #define DPMS_SERVER
+-#include <X11/extensions/dpms.h>
++#include <X11/extensions/dpmsproto.h>
+ #include "dpmsproc.h"
+ #endif
+ 
+diff -urN -x '*.*lo' -x '*.la' -x .deps -x 'Makefile*' xorg-server-1.6.5/hw/xfree86/common/xf86Events.c xorg-server-1.6.5-proto/hw/xfree86/common/xf86Events.c
+--- xorg-server-1.6.5/hw/xfree86/common/xf86Events.c	2009-10-12 04:52:40.000000000 +0200
++++ xorg-server-1.6.5-proto/hw/xfree86/common/xf86Events.c	2010-04-29 13:24:59.619187568 +0200
+@@ -83,7 +83,7 @@
+ 
+ #ifdef DPMSExtension
+ #define DPMS_SERVER
+-#include <X11/extensions/dpms.h>
++#include <X11/extensions/dpmsproto.h>
+ #include "dpmsproc.h"
+ #endif
+ 
+diff -urN -x '*.*lo' -x '*.la' -x .deps -x 'Makefile*' xorg-server-1.6.5/hw/xfree86/common/xf86Init.c xorg-server-1.6.5-proto/hw/xfree86/common/xf86Init.c
+--- xorg-server-1.6.5/hw/xfree86/common/xf86Init.c	2009-10-12 04:52:40.000000000 +0200
++++ xorg-server-1.6.5-proto/hw/xfree86/common/xf86Init.c	2010-04-29 13:24:35.177125305 +0200
+@@ -84,7 +84,7 @@
+ 
+ #ifdef DPMSExtension
+ #define DPMS_SERVER
+-#include <X11/extensions/dpms.h>
++#include <X11/extensions/dpmsproto.h>
+ #include "dpmsproc.h"
+ #endif
+ 
+diff -urN -x '*.*lo' -x '*.la' -x .deps -x 'Makefile*' xorg-server-1.6.5/hw/xfree86/common/xf86Xinput.c xorg-server-1.6.5-proto/hw/xfree86/common/xf86Xinput.c
+--- xorg-server-1.6.5/hw/xfree86/common/xf86Xinput.c	2009-10-12 04:52:40.000000000 +0200
++++ xorg-server-1.6.5-proto/hw/xfree86/common/xf86Xinput.c	2010-04-29 13:25:16.173126314 +0200
+@@ -66,7 +66,7 @@
+ 
+ #ifdef DPMSExtension
+ #define DPMS_SERVER
+-#include <X11/extensions/dpms.h>
++#include <X11/extensions/dpmsproto.h>
+ #include "dpmsproc.h"
+ #endif
+ 
+diff -urN -x '*.*lo' -x '*.la' -x .deps -x 'Makefile*' xorg-server-1.6.5/hw/xfree86/dixmods/extmod/modinit.h xorg-server-1.6.5-proto/hw/xfree86/dixmods/extmod/modinit.h
+--- xorg-server-1.6.5/hw/xfree86/dixmods/extmod/modinit.h	2009-10-12 04:52:40.000000000 +0200
++++ xorg-server-1.6.5-proto/hw/xfree86/dixmods/extmod/modinit.h	2010-04-29 13:19:42.097124843 +0200
+@@ -8,7 +8,7 @@
+ #endif
+ 
+ #define _SHAPE_SERVER_  /* don't want Xlib structures */
+-#include <X11/extensions/shapestr.h>
++#include <X11/extensions/shapeproto.h>
+ 
+ #ifdef MULTIBUFFER
+ extern void MultibufferExtensionInit(INITARGS);
+@@ -19,8 +19,7 @@
+ #ifdef XTEST
+ extern void XTestExtensionInit(INITARGS);
+ #define _XTEST_SERVER_
+-#include <X11/extensions/XTest.h>
+-#include <X11/extensions/xteststr.h>
++#include <X11/extensions/xtestproto.h>
+ #endif
+ 
+ #if 1
+@@ -35,19 +34,19 @@
+ #ifdef XF86VIDMODE
+ extern void	XFree86VidModeExtensionInit(INITARGS);
+ #define _XF86VIDMODE_SERVER_
+-#include <X11/extensions/xf86vmstr.h>
++#include <X11/extensions/xf86vmproto.h>
+ #endif
+ 
+ #ifdef XFreeXDGA
+ extern void XFree86DGAExtensionInit(INITARGS);
+ extern void XFree86DGARegister(INITARGS);
+ #define _XF86DGA_SERVER_
+-#include <X11/extensions/xf86dgastr.h>
++#include <X11/extensions/xf86dgaproto.h>
+ #endif
+ 
+ #ifdef DPMSExtension
+ extern void DPMSExtensionInit(INITARGS);
+-#include <X11/extensions/dpmsstr.h>
++#include <X11/extensions/dpmsproto.h>
+ #endif
+ 
+ #ifdef XV
+@@ -65,7 +64,7 @@
+ 
+ #ifdef SHM
+ extern void ShmExtensionInit(INITARGS);
+-#include <X11/extensions/shmstr.h>
++#include <X11/extensions/shmproto.h>
+ extern void ShmRegisterFuncs(
+     ScreenPtr pScreen,
+     ShmFuncsPtr funcs);
+diff -urN -x '*.*lo' -x '*.la' -x .deps -x 'Makefile*' xorg-server-1.6.5/hw/xfree86/fbdevhw/fbdevhw.c xorg-server-1.6.5-proto/hw/xfree86/fbdevhw/fbdevhw.c
+--- xorg-server-1.6.5/hw/xfree86/fbdevhw/fbdevhw.c	2009-10-12 04:52:40.000000000 +0200
++++ xorg-server-1.6.5-proto/hw/xfree86/fbdevhw/fbdevhw.c	2010-04-29 13:25:54.276187263 +0200
+@@ -26,7 +26,7 @@
+ 
+ #include "globals.h"
+ #define DPMS_SERVER
+-#include <X11/extensions/dpms.h>
++#include <X11/extensions/dpmsproto.h>
+ 
+ #define DEBUG 0
+ 
+diff -urN -x '*.*lo' -x '*.la' -x .deps -x 'Makefile*' xorg-server-1.6.5/hw/xfree86/modes/xf86Crtc.c xorg-server-1.6.5-proto/hw/xfree86/modes/xf86Crtc.c
+--- xorg-server-1.6.5/hw/xfree86/modes/xf86Crtc.c	2010-04-29 13:31:10.443248830 +0200
++++ xorg-server-1.6.5-proto/hw/xfree86/modes/xf86Crtc.c	2010-04-29 13:28:12.105124367 +0200
+@@ -41,7 +41,7 @@
+ #include "xf86RandR12.h"
+ #include "X11/extensions/render.h"
+ #define DPMS_SERVER
+-#include "X11/extensions/dpms.h"
++#include "X11/extensions/dpmsproto.h"
+ #include "X11/Xatom.h"
+ #ifdef RENDER
+ #include "picturestr.h"
+diff -urN -x '*.*lo' -x '*.la' -x .deps -x 'Makefile*' xorg-server-1.6.5/hw/xfree86/modes/xf86Cursors.c xorg-server-1.6.5-proto/hw/xfree86/modes/xf86Cursors.c
+--- xorg-server-1.6.5/hw/xfree86/modes/xf86Cursors.c	2009-10-12 04:52:40.000000000 +0200
++++ xorg-server-1.6.5-proto/hw/xfree86/modes/xf86Cursors.c	2010-04-29 13:28:24.450312165 +0200
+@@ -40,7 +40,7 @@
+ #include "xf86CursorPriv.h"
+ #include "X11/extensions/render.h"
+ #define DPMS_SERVER
+-#include "X11/extensions/dpms.h"
++#include "X11/extensions/dpmsproto.h"
+ #include "X11/Xatom.h"
+ #ifdef RENDER
+ #include "picturestr.h"
+diff -urN -x '*.*lo' -x '*.la' -x .deps -x 'Makefile*' xorg-server-1.6.5/hw/xfree86/modes/xf86Rotate.c xorg-server-1.6.5-proto/hw/xfree86/modes/xf86Rotate.c
+--- xorg-server-1.6.5/hw/xfree86/modes/xf86Rotate.c	2009-10-12 04:52:40.000000000 +0200
++++ xorg-server-1.6.5-proto/hw/xfree86/modes/xf86Rotate.c	2010-04-29 13:28:37.195124675 +0200
+@@ -41,7 +41,7 @@
+ #include "xf86RandR12.h"
+ #include "X11/extensions/render.h"
+ #define DPMS_SERVER
+-#include "X11/extensions/dpms.h"
++#include "X11/extensions/dpmsproto.h"
+ #include "X11/Xatom.h"
+ 
+ /* borrowed from composite extension, move to Render and publish? */
+diff -urN -x '*.*lo' -x '*.la' -x .deps -x 'Makefile*' xorg-server-1.6.5/hw/xfree86/vbe/vbe.c xorg-server-1.6.5-proto/hw/xfree86/vbe/vbe.c
+--- xorg-server-1.6.5/hw/xfree86/vbe/vbe.c	2009-10-12 04:52:40.000000000 +0200
++++ xorg-server-1.6.5-proto/hw/xfree86/vbe/vbe.c	2010-04-29 13:26:17.954124692 +0200
+@@ -19,7 +19,7 @@
+ #include "vbe.h"
+ #include <X11/Xarch.h>
+ #define DPMS_SERVER
+-#include <X11/extensions/dpms.h>
++#include <X11/extensions/dpmsproto.h>
+ 
+ #define VERSION(x) VBE_VERSION_MAJOR(x),VBE_VERSION_MINOR(x)
+ 
+diff -urN -x '*.*lo' -x '*.la' -x .deps -x 'Makefile*' xorg-server-1.6.5/hw/xfree86/vgahw/vgaHW.h xorg-server-1.6.5-proto/hw/xfree86/vgahw/vgaHW.h
+--- xorg-server-1.6.5/hw/xfree86/vgahw/vgaHW.h	2009-10-12 04:52:40.000000000 +0200
++++ xorg-server-1.6.5-proto/hw/xfree86/vgahw/vgaHW.h	2010-04-29 13:26:41.556124456 +0200
+@@ -26,7 +26,7 @@
+ 
+ #include "globals.h"
+ #define DPMS_SERVER
+-#include <X11/extensions/dpms.h>
++#include <X11/extensions/dpmsproto.h>
+ 
+ extern int vgaHWGetIndex(void);
+ 
+diff -urN -x '*.*lo' -x '*.la' -x .deps -x 'Makefile*' xorg-server-1.6.5/mi/mieq.c xorg-server-1.6.5-proto/mi/mieq.c
+--- xorg-server-1.6.5/mi/mieq.c	2009-10-12 04:52:40.000000000 +0200
++++ xorg-server-1.6.5-proto/mi/mieq.c	2010-04-29 13:10:14.108322448 +0200
+@@ -56,7 +56,7 @@
+ #ifdef DPMSExtension
+ # include "dpmsproc.h"
+ # define DPMS_SERVER
+-# include <X11/extensions/dpms.h>
++# include <X11/extensions/dpmsproto.h>
+ #endif
+ 
+ #define QUEUE_SIZE  512
+diff -urN -x '*.*lo' -x '*.la' -x .deps -x 'Makefile*' xorg-server-1.6.5/mi/miinitext.c xorg-server-1.6.5-proto/mi/miinitext.c
+--- xorg-server-1.6.5/mi/miinitext.c	2009-10-12 04:52:40.000000000 +0200
++++ xorg-server-1.6.5-proto/mi/miinitext.c	2010-04-29 13:27:43.849124639 +0200
+@@ -161,7 +161,7 @@
+ 
+ #ifdef MITSHM
+ #define _XSHM_SERVER_
+-#include <X11/extensions/shmstr.h>
++#include <X11/extensions/shmproto.h>
+ #endif
+ #ifdef XTEST
+ #define _XTEST_SERVER_
+diff -urN -x '*.*lo' -x '*.la' -x .deps -x 'Makefile*' xorg-server-1.6.5/mi/miscrinit.c xorg-server-1.6.5-proto/mi/miscrinit.c
+--- xorg-server-1.6.5/mi/miscrinit.c	2009-10-12 04:52:40.000000000 +0200
++++ xorg-server-1.6.5-proto/mi/miscrinit.c	2010-04-29 13:10:57.583125029 +0200
+@@ -40,7 +40,8 @@
+ #include "miline.h"
+ #ifdef MITSHM
+ #define _XSHM_SERVER_
+-#include <X11/extensions/XShm.h>
++#include <X11/extensions/shm.h>
++#include "shmint.h"
+ #endif
+ 
+ /* We use this structure to propogate some information from miScreenInit to
+diff -urN -x '*.*lo' -x '*.la' -x .deps -x 'Makefile*' xorg-server-1.6.5/os/WaitFor.c xorg-server-1.6.5-proto/os/WaitFor.c
+--- xorg-server-1.6.5/os/WaitFor.c	2009-10-12 04:52:40.000000000 +0200
++++ xorg-server-1.6.5-proto/os/WaitFor.c	2010-04-29 13:21:03.913124860 +0200
+@@ -110,7 +110,7 @@
+ 
+ #ifdef DPMSExtension
+ #define DPMS_SERVER
+-#include <X11/extensions/dpms.h>
++#include <X11/extensions/dpmsproto.h>
+ #endif
+ 
+ struct _OsTimerRec {
+diff -urN -x '*.*lo' -x '*.la' -x .deps -x 'Makefile*' xorg-server-1.6.5/Xext/bigreq.c xorg-server-1.6.5-proto/Xext/bigreq.c
+--- xorg-server-1.6.5/Xext/bigreq.c	2009-10-12 04:52:40.000000000 +0200
++++ xorg-server-1.6.5-proto/Xext/bigreq.c	2010-04-29 13:11:48.023124141 +0200
+@@ -37,7 +37,7 @@
+ #include "os.h"
+ #include "dixstruct.h"
+ #include "extnsionst.h"
+-#include <X11/extensions/bigreqstr.h>
++#include <X11/extensions/bigreqsproto.h>
+ #include "opaque.h"
+ #include "modinit.h"
+ 
+diff -urN -x '*.*lo' -x '*.la' -x .deps -x 'Makefile*' xorg-server-1.6.5/Xext/dpms.c xorg-server-1.6.5-proto/Xext/dpms.c
+--- xorg-server-1.6.5/Xext/dpms.c	2009-10-12 04:52:40.000000000 +0200
++++ xorg-server-1.6.5-proto/Xext/dpms.c	2010-04-29 13:20:30.279124649 +0200
+@@ -45,8 +45,7 @@
+ #include "extnsionst.h"
+ #include "opaque.h"
+ #define DPMS_SERVER
+-#include <X11/extensions/dpms.h>
+-#include <X11/extensions/dpmsstr.h>
++#include <X11/extensions/dpmsproto.h>
+ #include "dpmsproc.h"
+ #include "modinit.h"
+ 
+diff -urN -x '*.*lo' -x '*.la' -x .deps -x 'Makefile*' xorg-server-1.6.5/Xext/panoramiX.h xorg-server-1.6.5-proto/Xext/panoramiX.h
+--- xorg-server-1.6.5/Xext/panoramiX.h	2009-10-12 04:52:40.000000000 +0200
++++ xorg-server-1.6.5-proto/Xext/panoramiX.h	2010-04-29 13:04:25.291124119 +0200
+@@ -41,7 +41,7 @@
+ #define _PANORAMIX_H_
+ 
+ #define _PANORAMIX_SERVER
+-#include <X11/extensions/panoramiXext.h>
++#include <X11/extensions/panoramiXproto.h>
+ #undef _PANORAMIX_SERVER
+ 
+ #include "gcstruct.h"
+diff -urN -x '*.*lo' -x '*.la' -x .deps -x 'Makefile*' xorg-server-1.6.5/Xext/saver.c xorg-server-1.6.5-proto/Xext/saver.c
+--- xorg-server-1.6.5/Xext/saver.c	2009-10-12 04:52:40.000000000 +0200
++++ xorg-server-1.6.5-proto/Xext/saver.c	2010-04-29 13:20:18.457186677 +0200
+@@ -55,7 +55,7 @@
+ #endif
+ #ifdef DPMSExtension
+ #define DPMS_SERVER
+-#include <X11/extensions/dpms.h>
++#include <X11/extensions/dpmsproto.h>
+ #endif
+ 
+ #include <stdio.h>
+diff -urN -x '*.*lo' -x '*.la' -x .deps -x 'Makefile*' xorg-server-1.6.5/Xext/shape.c xorg-server-1.6.5-proto/Xext/shape.c
+--- xorg-server-1.6.5/Xext/shape.c	2009-10-12 04:52:40.000000000 +0200
++++ xorg-server-1.6.5-proto/Xext/shape.c	2010-04-29 13:16:24.906161539 +0200
+@@ -44,7 +44,7 @@
+ #include "resource.h"
+ #include "opaque.h"
+ #define _SHAPE_SERVER_	/* don't want Xlib structures */
+-#include <X11/extensions/shapestr.h>
++#include <X11/extensions/shapeproto.h>
+ #include "regionstr.h"
+ #include "gcstruct.h"
+ #include "modinit.h"
+diff -urN -x '*.*lo' -x '*.la' -x .deps -x 'Makefile*' xorg-server-1.6.5/Xext/shm.c xorg-server-1.6.5-proto/Xext/shm.c
+--- xorg-server-1.6.5/Xext/shm.c	2009-10-12 04:52:40.000000000 +0200
++++ xorg-server-1.6.5-proto/Xext/shm.c	2010-04-29 13:19:15.674123946 +0200
+@@ -55,7 +55,7 @@
+ #include "shmint.h"
+ #include "xace.h"
+ #define _XSHM_SERVER_
+-#include <X11/extensions/shmstr.h>
++#include <X11/extensions/shmproto.h>
+ #include <X11/Xfuncproto.h>
+ 
+ /* Needed for Solaris cross-zone shared memory extension */
+diff -urN -x '*.*lo' -x '*.la' -x .deps -x 'Makefile*' xorg-server-1.6.5/Xext/shmint.h xorg-server-1.6.5-proto/Xext/shmint.h
+--- xorg-server-1.6.5/Xext/shmint.h	2009-10-12 04:52:40.000000000 +0200
++++ xorg-server-1.6.5-proto/Xext/shmint.h	2009-10-28 07:56:18.000000000 +0100
+@@ -23,17 +23,47 @@
+ #ifndef _SHMINT_H_
+ #define _SHMINT_H_
+ 
+-#define _XSHM_SERVER_
+-#include <X11/extensions/shmstr.h>
++#include <X11/extensions/shmproto.h>
+ 
+ #include "screenint.h"
+ #include "pixmap.h"
+ #include "gc.h"
+ 
+-void
++#define XSHM_PUT_IMAGE_ARGS \
++    DrawablePtr		/* dst */, \
++    GCPtr		/* pGC */, \
++    int			/* depth */, \
++    unsigned int	/* format */, \
++    int			/* w */, \
++    int			/* h */, \
++    int			/* sx */, \
++    int			/* sy */, \
++    int			/* sw */, \
++    int			/* sh */, \
++    int			/* dx */, \
++    int			/* dy */, \
++    char *		/* data */
++
++#define XSHM_CREATE_PIXMAP_ARGS \
++    ScreenPtr	/* pScreen */, \
++    int		/* width */, \
++    int		/* height */, \
++    int		/* depth */, \
++    char *	/* addr */
++
++typedef struct _ShmFuncs {
++    PixmapPtr	(* CreatePixmap)(XSHM_CREATE_PIXMAP_ARGS);
++    void	(* PutImage)(XSHM_PUT_IMAGE_ARGS);
++} ShmFuncs, *ShmFuncsPtr;
++
++extern _X_EXPORT void
+ ShmRegisterFuncs(ScreenPtr pScreen, ShmFuncsPtr funcs);
+ 
+-void
++extern _X_EXPORT void
+ ShmRegisterFbFuncs(ScreenPtr pScreen);
+ 
++extern _X_EXPORT RESTYPE ShmSegType;
++extern _X_EXPORT int ShmCompletionCode;
++extern _X_EXPORT int BadShmSegCode;
++
+ #endif /* _SHMINT_H_ */
+diff -urN -x '*.*lo' -x '*.la' -x .deps -x 'Makefile*' xorg-server-1.6.5/Xext/sync.c xorg-server-1.6.5-proto/Xext/sync.c
+--- xorg-server-1.6.5/Xext/sync.c	2009-10-12 04:52:40.000000000 +0200
++++ xorg-server-1.6.5-proto/Xext/sync.c	2010-04-29 13:18:20.755124734 +0200
+@@ -68,8 +68,8 @@
+ #include "resource.h"
+ #include "opaque.h"
+ #define _SYNC_SERVER
+-#include <X11/extensions/sync.h>
+-#include <X11/extensions/syncstr.h>
++#include <X11/extensions/syncproto.h>
++#include "syncsrv.h"
+ 
+ #include <stdio.h>
+ #if !defined(WIN32)
+diff -urN -x '*.*lo' -x '*.la' -x .deps -x 'Makefile*' xorg-server-1.6.5/Xext/syncsrv.h xorg-server-1.6.5-proto/Xext/syncsrv.h
+--- xorg-server-1.6.5/Xext/syncsrv.h	1970-01-01 01:00:00.000000000 +0100
++++ xorg-server-1.6.5-proto/Xext/syncsrv.h	2009-10-28 07:56:18.000000000 +0100
+@@ -0,0 +1,177 @@
++/*
++
++Copyright 1991, 1993, 1994, 1998  The Open Group
++
++Permission to use, copy, modify, distribute, and sell this software and its
++documentation for any purpose is hereby granted without fee, provided that
++the above copyright notice appear in all copies and that both that
++copyright notice and this permission notice appear in supporting
++documentation.
++
++The above copyright notice and this permission notice shall be included in
++all copies or substantial portions of the Software.
++
++THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
++IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
++FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
++OPEN GROUP BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN
++AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
++CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
++
++Except as contained in this notice, the name of The Open Group shall not be
++used in advertising or otherwise to promote the sale, use or other dealings
++in this Software without prior written authorization from The Open Group.
++
++*/
++
++/***********************************************************
++Copyright 1991,1993 by Digital Equipment Corporation, Maynard, Massachusetts,
++and Olivetti Research Limited, Cambridge, England.
++
++                        All Rights Reserved
++
++Permission to use, copy, modify, and distribute this software and its 
++documentation for any purpose and without fee is hereby granted, 
++provided that the above copyright notice appear in all copies and that
++both that copyright notice and this permission notice appear in 
++supporting documentation, and that the names of Digital or Olivetti
++not be used in advertising or publicity pertaining to distribution of the
++software without specific, written prior permission.  
++
++DIGITAL AND OLIVETTI DISCLAIM ALL WARRANTIES WITH REGARD TO THIS
++SOFTWARE, INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND
++FITNESS, IN NO EVENT SHALL THEY BE LIABLE FOR ANY SPECIAL, INDIRECT OR
++CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF
++USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
++OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
++PERFORMANCE OF THIS SOFTWARE.
++
++******************************************************************/
++
++#ifndef _SYNCSRV_H_
++#define _SYNCSRV_H_
++
++#define CARD64 XSyncValue /* XXX temporary! need real 64 bit values for Alpha */
++
++typedef struct _SyncCounter {
++    ClientPtr		client;	/* Owning client. 0 for system counters */
++    XSyncCounter	id;		/* resource ID */
++    CARD64		value;		/* counter value */
++    struct _SyncTriggerList *pTriglist;	/* list of triggers */
++    Bool		beingDestroyed; /* in process of going away */
++    struct _SysCounterInfo *pSysCounterInfo; /* NULL if not a system counter */
++} SyncCounter;
++
++/*
++ * The System Counter interface
++ */
++
++typedef enum {
++    XSyncCounterNeverChanges,
++    XSyncCounterNeverIncreases,
++    XSyncCounterNeverDecreases,
++    XSyncCounterUnrestricted
++} SyncCounterType;
++
++typedef struct _SysCounterInfo {
++    char	*name;
++    CARD64	resolution;
++    CARD64	bracket_greater;
++    CARD64	bracket_less;
++    SyncCounterType counterType;  /* how can this counter change */
++    void        (*QueryValue)(
++			      pointer /*pCounter*/,
++			      CARD64 * /*freshvalue*/
++);
++    void	(*BracketValues)(
++				 pointer /*pCounter*/,
++				 CARD64 * /*lessthan*/,
++				 CARD64 * /*greaterthan*/
++);
++} SysCounterInfo;
++
++
++
++typedef struct _SyncTrigger {
++    SyncCounter *pCounter;
++    CARD64	wait_value;	/* wait value */
++    unsigned int value_type;     /* Absolute or Relative */
++    unsigned int test_type;	/* transition or Comparision type */
++    CARD64	test_value;	/* trigger event threshold value */
++    Bool	(*CheckTrigger)(
++				struct _SyncTrigger * /*pTrigger*/,
++				CARD64 /*newval*/
++				);
++    void	(*TriggerFired)(
++				struct _SyncTrigger * /*pTrigger*/
++				);
++    void	(*CounterDestroyed)(
++				struct _SyncTrigger * /*pTrigger*/
++				    );
++} SyncTrigger;
++
++typedef struct _SyncTriggerList {
++    SyncTrigger *pTrigger;
++    struct _SyncTriggerList *next;
++} SyncTriggerList;
++
++typedef struct _SyncAlarmClientList {
++    ClientPtr	client;
++    XID		delete_id;
++    struct _SyncAlarmClientList *next;
++} SyncAlarmClientList;
++
++typedef struct _SyncAlarm {
++    SyncTrigger trigger;
++    ClientPtr	client;
++    XSyncAlarm 	alarm_id;
++    CARD64	delta;
++    int		events;
++    int		state;
++    SyncAlarmClientList *pEventClients;
++} SyncAlarm;
++
++typedef struct {
++    ClientPtr	client;
++    CARD32 	delete_id;
++    int		num_waitconditions;
++} SyncAwaitHeader;
++
++typedef struct {
++    SyncTrigger trigger;
++    CARD64	event_threshold;
++    SyncAwaitHeader *pHeader;
++} SyncAwait;
++
++typedef union {
++    SyncAwaitHeader header;
++    SyncAwait	    await;
++} SyncAwaitUnion;
++
++
++extern pointer SyncCreateSystemCounter(
++    char *	/* name */,
++    CARD64  	/* inital_value */,
++    CARD64  	/* resolution */,
++    SyncCounterType /* change characterization */,
++    void        (* /*QueryValue*/ ) (
++        pointer /* pCounter */,
++        CARD64 * /* pValue_return */), /* XXX prototype */
++    void        (* /*BracketValues*/) (
++        pointer /* pCounter */, 
++        CARD64 * /* pbracket_less */,
++        CARD64 * /* pbracket_greater */)
++);
++
++extern void SyncChangeCounter(
++    SyncCounter *	/* pCounter*/,
++    CARD64  		/* new_value */
++);
++
++extern void SyncDestroySystemCounter(
++    pointer pCounter
++);
++extern void InitServertime(void);
++
++extern void SyncExtensionInit(void);
++#endif /* _SYNCSRV_H_ */
+diff -urN -x '*.*lo' -x '*.la' -x .deps -x 'Makefile*' xorg-server-1.6.5/Xext/xtest.c xorg-server-1.6.5-proto/Xext/xtest.c
+--- xorg-server-1.6.5/Xext/xtest.c	2009-10-12 04:52:40.000000000 +0200
++++ xorg-server-1.6.5-proto/Xext/xtest.c	2010-04-29 13:18:50.685186679 +0200
+@@ -44,8 +44,7 @@
+ #include "sleepuntil.h"
+ #include "mi.h"
+ #define _XTEST_SERVER_
+-#include <X11/extensions/XTest.h>
+-#include <X11/extensions/xteststr.h>
++#include <X11/extensions/xtestproto.h>
+ #include <X11/extensions/XI.h>
+ #include <X11/extensions/XIproto.h>
+ 
+diff -urN -x '*.*lo' -x '*.la' -x .deps -x 'Makefile*' xorg-server-1.6.5/Xext/xvdisp.c xorg-server-1.6.5-proto/Xext/xvdisp.c
+--- xorg-server-1.6.5/Xext/xvdisp.c	2009-10-12 04:52:40.000000000 +0200
++++ xorg-server-1.6.5-proto/Xext/xvdisp.c	2010-04-29 13:20:03.274124723 +0200
+@@ -43,7 +43,7 @@
+ #include "xvdix.h"
+ #ifdef MITSHM
+ #define _XSHM_SERVER_
+-#include <X11/extensions/shmstr.h>
++#include <X11/extensions/shmproto.h>
+ #endif
+ 
+ #include "xvdisp.h"
