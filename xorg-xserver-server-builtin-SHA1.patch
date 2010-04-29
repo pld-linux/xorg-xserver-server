@@ -1,3 +1,5 @@
+This patch is a backport of the following:
+
 From 3fbec7d4db59bbd24a9a768182000a1d004c5bc5 Mon Sep 17 00:00:00 2001
 From: Tiago Vignatti <tiago.vignatti@nokia.com>
 Date: Wed, 24 Mar 2010 17:27:43 +0200
@@ -35,343 +37,118 @@ I'm not comfortable yet to send this patch around without see if there's any
 regressions on render or eventually get some ack from Carl.
 
 
- configure.ac            |   89 +------------------------
- include/dix-config.h.in |   15 ----
- os/Makefile.am          |    1 -
- os/xsha1.c              |  168 ---------------------------------------------
- render/Makefile.am      |    3 +
- render/glyph.c          |   25 ++-----
- render/sha1.c           |  173 +++++++++++++++++++++++++++++++++++++++++++++++
- render/sha1.h           |   63 +++++++++++++++++
- 8 files changed, 248 insertions(+), 289 deletions(-)
- delete mode 100644 os/xsha1.c
- create mode 100644 render/sha1.c
- create mode 100644 render/sha1.h
-
-diff --git a/configure.ac b/configure.ac
-index 3e8ea10..ef21aa0 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -1305,7 +1305,7 @@ AC_DEFINE(BIGREQS, 1, [Support BigRequests extension])
- 
- if test "x$SPECIAL_DTRACE_OBJECTS" = "xyes" ; then
-   DIX_LIB='$(top_builddir)/dix/dix.O'
--  OS_LIB='$(top_builddir)/os/os.O $(SHA1_LIBS)'
-+  OS_LIB='$(top_builddir)/os/os.O'
- else
-   DIX_LIB='$(top_builddir)/dix/libdix.la'
-   OS_LIB='$(top_builddir)/os/libos.la'
-@@ -1325,93 +1325,6 @@ MIEXT_SHADOW_INC='-I$(top_srcdir)/miext/shadow'
+diff -urN xorg-server-1.6.5/configure.ac xorg-server-1.6.5-sha1/configure.ac
+--- xorg-server-1.6.5/configure.ac	2010-04-29 12:45:59.279129860 +0200
++++ xorg-server-1.6.5-sha1/configure.ac	2010-04-29 12:41:28.611190310 +0200
+@@ -1098,27 +1098,6 @@
  MIEXT_SHADOW_LIB='$(top_builddir)/miext/shadow/libshadow.la'
  CORE_INCS='-I$(top_srcdir)/include -I$(top_builddir)/include'
  
--# SHA1 hashing
--AC_ARG_WITH([sha1],
--            [AS_HELP_STRING([--with-sha1=libc|libmd|libgcrypt|libcrypto|libsha1|CommonCrypto],
--                            [choose SHA1 implementation])])
--AC_CHECK_FUNC([SHA1Init], [HAVE_SHA1_IN_LIBC=yes])
--if test "x$with_sha1" = x && test "x$HAVE_SHA1_IN_LIBC" = xyes; then
--	with_sha1=libc
+-# OpenSSL used for SHA1 hashing in render/glyph.c, but we don't need all of
+-# the OpenSSL libraries, just libcrypto
+-# Some systems have matching functionality in the smaller/simpler libmd
+-# Builders who want to force a choice can set SHA1_LIB and SHA1_CFLAGS
+-if test "x$SHA1_LIB" = "x" ; then
+-  AC_CHECK_LIB([md], [SHA1Init], [SHA1_LIB="-lmd"
+-            AC_DEFINE([HAVE_SHA1_IN_LIBMD], [1],
+-            [Use libmd SHA1 functions instead of OpenSSL libcrypto])])
 -fi
--if test "x$with_sha1" = xlibc && test "x$HAVE_SHA1_IN_LIBC" != xyes; then
--	AC_MSG_ERROR([libc requested but not found])
+-
+-if test "x$SHA1_LIB" = "x" ; then
+-  PKG_CHECK_EXISTS([OPENSSL], [openssl], [HAVE_OPENSSL_PKC=yes],
+-                    [HAVE_OPENSSL_PKC=no])
+-  if test "x$HAVE_OPENSSL_PKC" = xyes; then
+-    REQUIRED_LIBS="$REQUIRED_LIBS openssl"
+-  else
+-    AC_CHECK_LIB([crypto], [SHA1_Init], [SHA1_LIB="-lcrypto"],
+-                 [AC_MSG_ERROR([OpenSSL must be installed in order to build the X server.])])
+-  fi
 -fi
--if test "x$with_sha1" = xlibc; then
--	AC_DEFINE([HAVE_SHA1_IN_LIBC], [1],
--		[Use libc SHA1 functions])
--	SHA1_LIBS=""
--fi
--AC_CHECK_FUNC([CC_SHA1_Init], [HAVE_SHA1_IN_COMMONCRYPTO=yes])
--if test "x$with_sha1" = x && test "x$HAVE_SHA1_IN_COMMONCRYPTO" = xyes; then
--	with_sha1=CommonCrypto
--fi
--if test "x$with_sha1" = xCommonCrypto && test "x$HAVE_SHA1_IN_COMMONCRYPTO" != xyes; then
--	AC_MSG_ERROR([CommonCrypto requested but not found])
--fi
--if test "x$with_sha1" = xCommonCrypto; then
--	AC_DEFINE([HAVE_SHA1_IN_COMMONCRYPTO], [1],
--		[Use CommonCrypto SHA1 functions])
--	SHA1_LIBS=""
--fi
--AC_CHECK_LIB([md], [SHA1Init], [HAVE_LIBMD=yes])
--if test "x$with_sha1" = x && test "x$HAVE_LIBMD" = xyes; then
--	with_sha1=libmd
--fi
--if test "x$with_sha1" = xlibmd && test "x$HAVE_LIBMD" != xyes; then
--	AC_MSG_ERROR([libmd requested but not found])
--fi
--if test "x$with_sha1" = xlibmd; then
--	AC_DEFINE([HAVE_SHA1_IN_LIBMD], [1],
--	          [Use libmd SHA1 functions])
--	SHA1_LIBS=-lmd
--fi
--AC_CHECK_LIB([gcrypt], [gcry_md_open], [HAVE_LIBGCRYPT=yes])
--if test "x$with_sha1" = x && test "x$HAVE_LIBGCRYPT" = xyes; then
--	with_sha1=libgcrypt
--fi
--if test "x$with_sha1" = xlibgcrypt; then
--	AC_DEFINE([HAVE_SHA1_IN_LIBGCRYPT], [1],
--	          [Use libgcrypt SHA1 functions])
--	SHA1_LIBS=-lgcrypt
--fi
--AC_CHECK_LIB([sha1], [sha1_begin], [HAVE_LIBSHA1=yes])
--if test "x$with_sha1" = x && test "x$HAVE_LIBSHA1" = xyes; then
--   with_sha1=libsha1
--fi
--if test "x$with_sha1" = xlibsha1; then
--	AC_DEFINE([HAVE_SHA1_IN_LIBSHA1], [1],
--	          [Use libsha1 for SHA1])
--	SHA1_LIBS=-lsha1
--fi
--# We don't need all of the OpenSSL libraries, just libcrypto
--AC_CHECK_LIB([crypto], [SHA1_Init], [HAVE_LIBCRYPTO=yes])
--PKG_CHECK_MODULES([OPENSSL], [openssl], [HAVE_OPENSSL_PKC=yes],
--                  [HAVE_OPENSSL_PKC=no])
--if test "x$HAVE_LIBCRYPTO" = xyes || test "x$HAVE_OPENSSL_PKC" = xyes; then
--	if test "x$with_sha1" = x; then
--		with_sha1=libcrypto
--	fi
--else
--	if test "x$with_sha1" = xlibcrypto; then
--		AC_MSG_ERROR([OpenSSL libcrypto requested but not found])
--	fi
--fi
--if test "x$with_sha1" = xlibcrypto; then
--	if test "x$HAVE_LIBCRYPTO" = xyes; then
--		SHA1_LIBS=-lcrypto
--	else
--		SHA1_LIBS="$OPENSSL_LIBS"
--		SHA1_CFLAGS="$OPENSSL_CFLAGS"
--	fi
--fi
--AC_MSG_CHECKING([for SHA1 implementation])
--if test "x$with_sha1" = x; then
--	AC_MSG_ERROR([No suitable SHA1 implementation found])
--fi
--AC_MSG_RESULT([$with_sha1])
--AC_SUBST(SHA1_LIBS)
--AC_SUBST(SHA1_CFLAGS)
 -
  PKG_CHECK_MODULES([XSERVERCFLAGS], [$REQUIRED_MODULES $REQUIRED_LIBS])
  PKG_CHECK_MODULES([XSERVERLIBS], [$REQUIRED_LIBS])
  
-diff --git a/include/dix-config.h.in b/include/dix-config.h.in
-index 058c8fd..d6e99a5 100644
---- a/include/dix-config.h.in
-+++ b/include/dix-config.h.in
-@@ -160,21 +160,6 @@
+@@ -1137,9 +1116,9 @@
+ # XSERVER_SYS_LIBS is the set of out-of-tree libraries which all servers
+ # require.
+ #
+-XSERVER_CFLAGS="${XSERVERCFLAGS_CFLAGS} ${SHA1_CFLAGS}"
++XSERVER_CFLAGS="${XSERVERCFLAGS_CFLAGS}"
+ XSERVER_LIBS="$DIX_LIB $CONFIG_LIB $MI_LIB $OS_LIB"
+-XSERVER_SYS_LIBS="${XSERVERLIBS_LIBS} ${SYS_LIBS} ${LIBS} ${SHA1_LIB}"
++XSERVER_SYS_LIBS="${XSERVERLIBS_LIBS} ${SYS_LIBS} ${LIBS}"
+ AC_SUBST([XSERVER_LIBS])
+ AC_SUBST([XSERVER_SYS_LIBS])
+ 
+diff -urN xorg-server-1.6.5/include/dix-config.h.in xorg-server-1.6.5-sha1/include/dix-config.h.in
+--- xorg-server-1.6.5/include/dix-config.h.in	2009-10-12 04:52:40.000000000 +0200
++++ xorg-server-1.6.5-sha1/include/dix-config.h.in	2010-04-29 12:43:23.344249866 +0200
+@@ -154,9 +154,6 @@
  /* Define to 1 if you have the <rpcsvc/dbm.h> header file. */
  #undef HAVE_RPCSVC_DBM_H
  
--/* Define to use libc SHA1 functions */
--#undef HAVE_SHA1_IN_LIBC
--
--/* Define to use CommonCrypto SHA1 functions */
--#undef HAVE_SHA1_IN_COMMONCRYPTO
--
--/* Define to use libmd SHA1 functions */
+-/* Define to use libmd SHA1 functions instead of OpenSSL libcrypto */
 -#undef HAVE_SHA1_IN_LIBMD
--
--/* Define to use libgcrypt SHA1 functions */
--#undef HAVE_SHA1_IN_LIBGCRYPT
--
--/* Define to use libsha1 for SHA1 */
--#undef HAVE_SHA1_IN_LIBSHA1
 -
  /* Define to 1 if you have the `shmctl64' function. */
  #undef HAVE_SHMCTL64
  
-diff --git a/os/Makefile.am b/os/Makefile.am
-index 66a4a0f..b8c1636 100644
---- a/os/Makefile.am
-+++ b/os/Makefile.am
-@@ -22,7 +22,6 @@ libos_la_SOURCES = 	\
- 	strcasecmp.c	\
- 	strcasestr.c	\
- 	xdmauth.c	\
--	xsha1.c		\
- 	xstrans.c	\
- 	xprintf.c	\
- 	$(XORG_SRCS)
-diff --git a/os/xsha1.c b/os/xsha1.c
-deleted file mode 100644
-index 355862f..0000000
---- a/os/xsha1.c
-+++ /dev/null
-@@ -1,168 +0,0 @@
--#ifdef HAVE_DIX_CONFIG_H
--#include <dix-config.h>
--#endif
--
--#include "os.h"
--#include "xsha1.h"
--
--#if defined(HAVE_SHA1_IN_LIBMD)  /* Use libmd for SHA1 */ \
--	|| defined(HAVE_SHA1_IN_LIBC) /* Use libc for SHA1 */
--
+diff -urN xorg-server-1.6.5/render/glyph.c xorg-server-1.6.5-sha1/render/glyph.c
+--- xorg-server-1.6.5/render/glyph.c	2009-10-12 04:52:40.000000000 +0200
++++ xorg-server-1.6.5-sha1/render/glyph.c	2010-04-29 12:45:06.342124084 +0200
+@@ -26,13 +26,7 @@
+ #include <dix-config.h>
+ #endif
+ 
+-#ifdef HAVE_SHA1_IN_LIBMD /* Use libmd for SHA1 */
 -# include <sha1.h>
--
--void *x_sha1_init(void)
--{
--    SHA1_CTX *ctx = xalloc(sizeof(*ctx));
--    if (!ctx)
--        return NULL;
--    SHA1Init(ctx);
--    return ctx;
--}
--
--int x_sha1_update(void *ctx, void *data, int size)
--{
--    SHA1_CTX *sha1_ctx = ctx;
--    SHA1Update(sha1_ctx, data, size);
--    return 1;
--}
--
--int x_sha1_final(void *ctx, unsigned char result[20])
--{
--    SHA1_CTX *sha1_ctx = ctx;
--    SHA1Final(result, sha1_ctx);
--    xfree(sha1_ctx);
--    return 1;
--}
--
--#elif defined(HAVE_SHA1_IN_COMMONCRYPTO) /* Use CommonCrypto for SHA1 */
--
--#include <CommonCrypto/CommonDigest.h>
--
--void *x_sha1_init(void)
--{
--    CC_SHA1_CTX *ctx = xalloc(sizeof(*ctx));
--    if (!ctx)
--        return NULL;
--    CC_SHA1_Init(ctx);
--    return ctx;
--}
--
--int x_sha1_update(void *ctx, void *data, int size)
--{
--    CC_SHA1_CTX *sha1_ctx = ctx;
--    CC_SHA1_Update(sha1_ctx, data, size);
--    return 1;
--}
--
--int x_sha1_final(void *ctx, unsigned char result[20])
--{
--    CC_SHA1_CTX *sha1_ctx = ctx;
--    CC_SHA1_Final(result, sha1_ctx);
--    xfree(sha1_ctx);
--    return 1;
--}
--
--#elif defined(HAVE_SHA1_IN_LIBGCRYPT) /* Use libgcrypt for SHA1 */
--
--# include <gcrypt.h>
--
--void *x_sha1_init(void)
--{
--    static int init;
--    gcry_md_hd_t h;
--    gcry_error_t err;
--
--    if (!init) {
--        if (!gcry_check_version(NULL))
--            return NULL;
--        gcry_control(GCRYCTL_DISABLE_SECMEM, 0);
--        gcry_control(GCRYCTL_INITIALIZATION_FINISHED, 0);
--        init = 1;
--    }
--
--    err = gcry_md_open(&h, GCRY_MD_SHA1, 0);
--    if (err)
--        return NULL;
--    return h;
--}
--
--int x_sha1_update(void *ctx, void *data, int size)
--{
--    gcry_md_hd_t h = ctx;
--    gcry_md_write(h, data, size);
--    return 1;
--}
--
--int x_sha1_final(void *ctx, unsigned char result[20])
--{
--    gcry_md_hd_t h = ctx;
--    memcpy(result, gcry_md_read(h, GCRY_MD_SHA1), 20);
--    gcry_md_close(h);
--    return 1;
--}
--
--#elif defined(HAVE_SHA1_IN_LIBSHA1) /* Use libsha1 */
--
--# include <libsha1.h>
--
--void *x_sha1_init(void)
--{
--    sha1_ctx *ctx = xalloc(sizeof(*ctx));
--    if(!ctx)
--        return NULL;
--    sha1_begin(ctx);
--    return ctx;
--}
--
--int x_sha1_update(void *ctx, void *data, int size)
--{
--    sha1_hash(data, size, ctx);
--    return 1;
--}
--
--int x_sha1_final(void *ctx, unsigned char result[20])
--{
--    sha1_end(result, ctx);
--    xfree(ctx);
--    return 1;
--}
--
 -#else /* Use OpenSSL's libcrypto */
--
 -# include <stddef.h>  /* buggy openssl/sha.h wants size_t */
 -# include <openssl/sha.h>
--
--void *x_sha1_init(void)
--{
--    int ret;
--    SHA_CTX *ctx = xalloc(sizeof(*ctx));
--    if (!ctx)
--        return NULL;
--    ret = SHA1_Init(ctx);
--    if (!ret) {
--        xfree(ctx);
--        return NULL;
--    }
--    return ctx;
--}
--
--int x_sha1_update(void *ctx, void *data, int size)
--{
--    int ret;
--    SHA_CTX *sha_ctx = ctx;
--    ret = SHA1_Update(sha_ctx, data, size);
--    if (!ret)
--        xfree(sha_ctx);
--    return ret;
--}
--
--int x_sha1_final(void *ctx, unsigned char result[20])
--{
--    int ret;
--    SHA_CTX *sha_ctx = ctx;
--    ret = SHA1_Final(result, sha_ctx);
--    xfree(sha_ctx);
--    return ret;
--}
--
 -#endif
-diff --git a/render/Makefile.am b/render/Makefile.am
-index 216c613..bb46702 100644
---- a/render/Makefile.am
-+++ b/render/Makefile.am
-@@ -14,8 +14,11 @@ librender_la_SOURCES =	\
+-
++#include "sha1.h"
+ #include "misc.h"
+ #include "scrnintstr.h"
+ #include "os.h"
+@@ -198,33 +192,12 @@
+ 	   unsigned long size,
+ 	   unsigned char sha1[20])
+ {
+-#ifdef HAVE_SHA1_IN_LIBMD /* Use libmd for SHA1 */
+     SHA1_CTX ctx;
+ 
+     SHA1Init (&ctx);
+     SHA1Update (&ctx, gi, sizeof (xGlyphInfo));
+     SHA1Update (&ctx, bits, size);
+     SHA1Final (sha1, &ctx);
+-#else /* Use OpenSSL's libcrypto */
+-    SHA_CTX ctx;
+-    int success;
+-
+-    success = SHA1_Init (&ctx);
+-    if (! success)
+-	return BadAlloc;
+-
+-    success = SHA1_Update (&ctx, gi, sizeof (xGlyphInfo));
+-    if (! success)
+-	return BadAlloc;
+-
+-    success = SHA1_Update (&ctx, bits, size);
+-    if (! success)
+-	return BadAlloc;
+-
+-    success = SHA1_Final (sha1, &ctx);
+-    if (! success)
+-	return BadAlloc;
+-#endif
+ 
+     return Success;
+ }
+diff -urN xorg-server-1.6.5/render/Makefile.am xorg-server-1.6.5-sha1/render/Makefile.am
+--- xorg-server-1.6.5/render/Makefile.am	2008-11-24 22:24:35.000000000 +0100
++++ xorg-server-1.6.5-sha1/render/Makefile.am	2010-04-29 12:39:49.187124726 +0200
+@@ -14,8 +14,11 @@
  	mitri.c		\
  	picture.c	\
  	render.c	\
@@ -383,54 +160,9 @@ index 216c613..bb46702 100644
  endif
 +
 +EXTRA_DIST = sha1.h
-diff --git a/render/glyph.c b/render/glyph.c
-index 0b864ad..e14530a 100644
---- a/render/glyph.c
-+++ b/render/glyph.c
-@@ -26,8 +26,7 @@
- #include <dix-config.h>
- #endif
- 
--#include "xsha1.h"
--
-+#include "sha1.h"
- #include "misc.h"
- #include "scrnintstr.h"
- #include "os.h"
-@@ -193,21 +192,13 @@ HashGlyph (xGlyphInfo    *gi,
- 	   unsigned long size,
- 	   unsigned char sha1[20])
- {
--    void *ctx = x_sha1_init();
--    int success;
--
--    if (!ctx)
--	return BadAlloc;
--
--    success = x_sha1_update(ctx, gi, sizeof(xGlyphInfo));
--    if (!success)
--	return BadAlloc;
--    success = x_sha1_update(ctx, bits, size);
--    if (!success)
--	return BadAlloc;
--    success = x_sha1_final(ctx, sha1);
--    if (!success)
--	return BadAlloc;
-+    SHA1_CTX ctx;
-+
-+    SHA1Init (&ctx);
-+    SHA1Update (&ctx, gi, sizeof (xGlyphInfo));
-+    SHA1Update (&ctx, bits, size);
-+    SHA1Final (sha1, &ctx);
-+
-     return Success;
- }
- 
-diff --git a/render/sha1.c b/render/sha1.c
-new file mode 100644
-index 0000000..820eb2a
---- /dev/null
-+++ b/render/sha1.c
+diff -urN xorg-server-1.6.5/render/sha1.c xorg-server-1.6.5-sha1/render/sha1.c
+--- xorg-server-1.6.5/render/sha1.c	1970-01-01 01:00:00.000000000 +0100
++++ xorg-server-1.6.5-sha1/render/sha1.c	2010-04-29 12:39:49.191124529 +0200
 @@ -0,0 +1,173 @@
 +/*
 + * SHA-1 in C
@@ -605,11 +337,9 @@ index 0000000..820eb2a
 +	}
 +}
 +
-diff --git a/render/sha1.h b/render/sha1.h
-new file mode 100644
-index 0000000..ace7d97
---- /dev/null
-+++ b/render/sha1.h
+diff -urN xorg-server-1.6.5/render/sha1.h xorg-server-1.6.5-sha1/render/sha1.h
+--- xorg-server-1.6.5/render/sha1.h	1970-01-01 01:00:00.000000000 +0100
++++ xorg-server-1.6.5-sha1/render/sha1.h	2010-04-29 12:39:49.195125150 +0200
 @@ -0,0 +1,63 @@
 +/*
 + * SHA-1 in C
@@ -674,6 +404,3 @@ index 0000000..ace7d97
 +
 +#endif /* _SHA1_H */
 +
--- 
-1.6.0.4
-
