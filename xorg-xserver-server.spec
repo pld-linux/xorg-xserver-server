@@ -35,6 +35,7 @@ Patch7:		%{name}-ac.patch
 # harmless for non-fglrx
 Patch8:		%{name}-backclear.patch
 Patch9:		%{name}-builtin-SHA1.patch
+Patch10:	%{name}-proto.patch
 URL:		http://xorg.freedesktop.org/
 BuildRequires:	Mesa-libGL-devel >= 7.3
 # for glx headers
@@ -333,6 +334,7 @@ Biblioteka rozszerzenia GLX dla serwera X.org.
 %patch7 -p0
 %patch8 -p1
 %patch9 -p1
+%patch10 -p1
 
 # xserver uses pixman-1 API/ABI so put that explictly here
 sed -i -e 's#<pixman\.h#<pixman-1/pixman.h#g' ./fb/fb.h ./include/miscstruct.h ./render/picture.h
