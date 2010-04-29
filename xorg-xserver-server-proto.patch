@@ -1,6 +1,6 @@
 diff -urN -x '*.*lo' -x '*.la' -x .deps -x 'Makefile*' xorg-server-1.6.5/dbe/dbestruct.h xorg-server-1.6.5-proto/dbe/dbestruct.h
 --- xorg-server-1.6.5/dbe/dbestruct.h	2009-10-12 04:52:40.000000000 +0200
-+++ xorg-server-1.6.5-proto/dbe/dbestruct.h	2009-10-28 07:56:19.000000000 +0100
++++ xorg-server-1.6.5-proto/dbe/dbestruct.h	2009-10-28 07:56:20.000000000 +0100
 @@ -37,10 +37,24 @@
  /* INCLUDES */
  
