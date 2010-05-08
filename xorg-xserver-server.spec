@@ -6,7 +6,7 @@
 %bcond_with	hal	# HAL support
 %bcond_without	udev	# UDEV support
 %bcond_without	dmx	# DMX support
-%bcond_with	record	# RECORD extension
+%bcond_without	record	# RECORD extension
 #
 # ABI versions, see hw/xfree86/common/xf86Module.h
 %define	xorg_xserver_server_ansic_abi		0.4
@@ -19,20 +19,19 @@
 Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
-Version:	1.8.0.901
+Version:	1.8.0.902
 Release:	%{rel}%{?with_multigl:.mgl}
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
-# Source0-md5:	5326bc5e84f2e3455321ab2baed26362
+# Source0-md5:	1d77850a2258f9ee797bc00d12cc4b3e
 Source1:	10-quirks.conf                
 Source2:	xserver.pamd
 Patch0:		%{name}-xwrapper.patch
 Patch1:		%{name}-pic-libxf86config.patch
 Patch2:		%{name}-fb-size.patch
 Patch3:		%{name}-less-acpi-brokenness.patch
-Patch4:		%{name}-git.patch
-Patch5:		%{name}-builtin-SHA1.patch
+Patch4:		%{name}-builtin-SHA1.patch
 URL:		http://xorg.freedesktop.org/
 BuildRequires:	Mesa-libGL-devel >= 7.8.1
 # for glx headers
@@ -333,7 +332,6 @@ Biblioteka rozszerzenia GLX dla serwera X.org.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
-%patch5 -p1
 
 # xserver uses pixman-1 API/ABI so put that explictly here
 sed -i -e 's#<pixman\.h#<pixman-1/pixman.h#g' ./fb/fb.h ./include/miscstruct.h ./render/picture.h
