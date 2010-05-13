@@ -15,7 +15,7 @@
 %define	xorg_xserver_server_videodrv_abi	7.0
 %define	xorg_xserver_server_xinput_abi		9.0
 
-%define		rel	1
+%define		rel	2
 Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
@@ -113,9 +113,9 @@ Requires:	xkeyboard-config
 # for rgb.txt
 Requires:	xorg-app-rgb >= 0.99.3
 Requires:	xorg-app-xkbcomp
-# xserver default config expects evdev+dbus+hald
 %{?with_hal:Suggests:	dbus}
-Suggests:	hal
+%{?with_hal:Suggests:	hal}
+%{?with_udev:Suggests:	udev-core}
 Suggests:	udev-acl
 Suggests:	xorg-driver-input-evdev
 # xserver requires fixed and cursor fonts
