@@ -15,16 +15,16 @@
 %define	xorg_xserver_server_videodrv_abi	6.0
 %define	xorg_xserver_server_xinput_abi		7.0
 
-%define		rel		2
+%define		rel		1
 Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
-Version:	1.7.6
+Version:	1.7.7
 Release:	%{rel}%{?with_multigl:.mgl}
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
-# Source0-md5:	178225f499ec10fa9d312d1c339e6a39
+# Source0-md5:	8c0146330fb155c23d947ac37d431d4b
 Source2:	xserver.pamd
 Patch0:		%{name}-xwrapper.patch
 Patch1:		%{name}-pic-libxf86config.patch
