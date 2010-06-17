@@ -10,21 +10,21 @@
 #
 # ABI versions, see hw/xfree86/common/xf86Module.h
 %define	xorg_xserver_server_ansic_abi		0.4
-%define	xorg_xserver_server_extension_abi	3.0
+%define	xorg_xserver_server_extension_abi	4.0
 %define	xorg_xserver_server_font_abi		0.6
-%define	xorg_xserver_server_videodrv_abi	7.0
-%define	xorg_xserver_server_xinput_abi		9.0
+%define	xorg_xserver_server_videodrv_abi	8.0
+%define	xorg_xserver_server_xinput_abi		11.0
 
 %define		rel	1
 Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
-Version:	1.8.1.901
+Version:	1.8.99.901
 Release:	%{rel}%{?with_multigl:.mgl}
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
-# Source0-md5:	fb5fa2229a4dee151f4525b2f5747c8c
+# Source0-md5:	ebc580fcf4ad9fb03ab9119525467f4a
 Source1:	10-quirks.conf                
 Source2:	xserver.pamd
 Patch0:		%{name}-xwrapper.patch
@@ -460,8 +460,6 @@ fi
 %attr(755,root,root) %{_libdir}/xorg/modules/extensions/libextmod.so
 %{?with_record:%attr(755,root,root) %{_libdir}/xorg/modules/extensions/librecord.so}
 %dir %{_libdir}/xorg/modules/input
-%dir %{_libdir}/xorg/modules/linux
-%attr(755,root,root) %{_libdir}/xorg/modules/linux/libfbdevhw.so
 %dir %{_libdir}/xorg/modules/multimedia
 %attr(755,root,root) %{_libdir}/xorg/modules/multimedia/*.so
 %attr(755,root,root) %{_libdir}/xorg/modules/lib*.so
