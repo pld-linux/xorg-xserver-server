@@ -19,12 +19,12 @@
 Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
-Version:	1.8.99.903
+Version:	1.8.99.904
 Release:	%{rel}%{?with_multigl:.mgl}
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
-# Source0-md5:	d49305baa79772ca965407b0fd2dcb84
+# Source0-md5:	5e987ddbd3796718b52ee0b7c06b3c68
 Source1:	10-quirks.conf                
 Source2:	xserver.pamd
 Patch0:		%{name}-xwrapper.patch
