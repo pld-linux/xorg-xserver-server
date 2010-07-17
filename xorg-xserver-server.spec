@@ -293,7 +293,7 @@ Group:		X11/Servers
 Requires:	%{name} = %{version}-%{release}
 Provides:	xorg-xserver-module(dri)
 %if %{without multigl}
-Conflicts:	xorg-driver-video-fglrx-libdri
+Conflicts:	xorg-driver-video-fglrx
 Conflicts:	xorg-driver-video-nvidia
 %endif
 
@@ -315,7 +315,7 @@ Provides:	xorg-xserver-module(glx)
 Obsoletes:	X11-OpenGL-core < 1:7.0.0
 Obsoletes:	XFree86-OpenGL-core < 1:7.0.0
 %if %{without multigl}
-Conflicts:	xorg-driver-video-fglrx-libglx
+Conflicts:	xorg-driver-video-fglrx
 Conflicts:	xorg-driver-video-nvidia
 %endif
 
