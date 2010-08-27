@@ -527,6 +527,7 @@ fi
 
 %files devel
 %defattr(644,root,root,755)
+%doc doc/xml/{Xserver-spec.html,xorg.css}
 %{_includedir}/xorg
 %{_libdir}/libxf86config.a
 %{_aclocaldir}/xorg-server.m4
