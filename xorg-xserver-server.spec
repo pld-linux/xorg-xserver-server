@@ -39,8 +39,9 @@ BuildRequires:	OpenGL-GLX-devel
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake
 BuildRequires:	cpp
+#BuildRequires:	doxygen >= 1.6.1
 %if %{with hal} || %{with dbus}
-BuildRequires:	dbus-devel
+BuildRequires:	dbus-devel >= 1.0
 %endif
 %{?with_hal:BuildRequires:	hal-devel}
 BuildRequires:	libdrm-devel >= 2.4.5
@@ -50,17 +51,19 @@ BuildRequires:	pam-devel
 BuildRequires:	perl-base
 BuildRequires:	pixman-devel >= 0.16.0
 BuildRequires:	pkgconfig >= 1:0.19
-BuildRequires:	udev-devel
+BuildRequires:	udev-devel >= 1:143
+BuildRequires:	xmlto >= 0.0.20
 BuildRequires:	xorg-app-mkfontscale
+BuildRequires:	xorg-sgml-doctools >= 1.5
 BuildRequires:	xorg-font-font-util >= 1.1
 BuildRequires:	xorg-lib-libX11-devel
 BuildRequires:	xorg-lib-libXau-devel
 BuildRequires:	xorg-lib-libXaw-devel
 BuildRequires:	xorg-lib-libXdamage-devel
 BuildRequires:	xorg-lib-libXdmcp-devel
-BuildRequires:	xorg-lib-libXext-devel
-BuildRequires:	xorg-lib-libXfont-devel
-BuildRequires:	xorg-lib-libXi-devel >= 1.2
+BuildRequires:	xorg-lib-libXext-devel >= 1.0.99.4
+BuildRequires:	xorg-lib-libXfont-devel >= 1.4.2
+BuildRequires:	xorg-lib-libXi-devel >= 1.2.99.1
 BuildRequires:	xorg-lib-libXmu-devel
 BuildRequires:	xorg-lib-libXpm-devel
 BuildRequires:	xorg-lib-libXrender-devel
@@ -73,38 +76,38 @@ BuildRequires:	xorg-lib-libXxf86misc-devel
 BuildRequires:	xorg-lib-libXxf86vm-devel
 %{?with_dmx:BuildRequires:	xorg-lib-libdmx-devel >= 1.0.99.1}
 BuildRequires:	xorg-lib-libfontenc-devel
-BuildRequires:	xorg-lib-libpciaccess-devel
+BuildRequires:	xorg-lib-libpciaccess-devel >= 0.8.0
 BuildRequires:	xorg-lib-libxkbfile-devel
 BuildRequires:	xorg-lib-libxkbui-devel >= 1.0.2
 BuildRequires:	xorg-lib-xtrans-devel >= 1.2.2
 BuildRequires:	xorg-proto-bigreqsproto-devel >= 1.1.0
 BuildRequires:	xorg-proto-compositeproto-devel >= 0.4
 BuildRequires:	xorg-proto-damageproto-devel >= 1.1
-%{?with_dmx:BuildRequires:	xorg-proto-dmxproto-devel}
-%{?with_dri2:BuildRequires:	xorg-proto-dri2proto-devel >= 2.1}
+%{?with_dmx:BuildRequires:	xorg-proto-dmxproto-devel >= 2.2.99.1}
+%{?with_dri2:BuildRequires:	xorg-proto-dri2proto-devel >= 2.3}
 BuildRequires:	xorg-proto-fixesproto-devel >= 4.1
 BuildRequires:	xorg-proto-fontcacheproto-devel
 BuildRequires:	xorg-proto-fontsproto-devel
-BuildRequires:	xorg-proto-glproto-devel >= 1.4.8
+BuildRequires:	xorg-proto-glproto-devel >= 1.4.10
 BuildRequires:	xorg-proto-inputproto-devel >= 1.9.99.902
 BuildRequires:	xorg-proto-kbproto-devel >= 1.0.3
 BuildRequires:	xorg-proto-printproto-devel
 BuildRequires:	xorg-proto-randrproto-devel >= 1.2.99.3
-%{?with_record:BuildRequires:	xorg-proto-recordproto-devel}
+%{?with_record:BuildRequires:	xorg-proto-recordproto-devel >= 1.13.99.1}
 BuildRequires:	xorg-proto-renderproto-devel >= 0.11
 BuildRequires:	xorg-proto-resourceproto-devel
 BuildRequires:	xorg-proto-scrnsaverproto-devel >= 1.1.0
 BuildRequires:	xorg-proto-videoproto-devel
 BuildRequires:	xorg-proto-xcmiscproto-devel >= 1.2.0
 BuildRequires:	xorg-proto-xextproto-devel >= 1:7.0.99.3
-BuildRequires:	xorg-proto-xf86bigfontproto-devel
-BuildRequires:	xorg-proto-xf86dgaproto-devel
-BuildRequires:	xorg-proto-xf86driproto-devel >= 2.0.4
+BuildRequires:	xorg-proto-xf86bigfontproto-devel >= 1.2.0
+BuildRequires:	xorg-proto-xf86dgaproto-devel >= 2.0.99.1
+BuildRequires:	xorg-proto-xf86driproto-devel >= 2.1.0
 BuildRequires:	xorg-proto-xf86miscproto-devel
-BuildRequires:	xorg-proto-xf86vidmodeproto-devel
+BuildRequires:	xorg-proto-xf86vidmodeproto-devel >= 2.2.99.1
 BuildRequires:	xorg-proto-xineramaproto-devel
-BuildRequires:	xorg-proto-xproto-devel >= 7.0.13
-BuildRequires:	xorg-util-util-macros >= 1.5
+BuildRequires:	xorg-proto-xproto-devel >= 7.0.17
+BuildRequires:	xorg-util-util-macros >= 1.10
 #BR: xcalibrateproto, tslib (for KDRIVE only)
 #BR: glitz-devel >= 0.4.3 (for XGL and EGL only)
 Requires(triggerpostun):	sed >= 4.0
@@ -113,9 +116,9 @@ Requires:	xkeyboard-config
 # for rgb.txt
 Requires:	xorg-app-rgb >= 0.99.3
 Requires:	xorg-app-xkbcomp
-%{?with_hal:Suggests:	dbus}
+%{?with_hal:Suggests:	dbus >= 1.0}
 %{?with_hal:Suggests:	hal}
-%{?with_udev:Suggests:	udev-core}
+%{?with_udev:Suggests:	udev-core >= 1:143}
 Suggests:	udev-acl
 Suggests:	xorg-driver-input-evdev
 # xserver requires fixed and cursor fonts
@@ -267,16 +270,17 @@ Summary(pl.UTF-8):	Pliki nagłówkowe dla serwera X.org
 Group:		X11/Development/Libraries
 Requires:	libdrm-devel >= 2.4.5
 Requires:	pixman-devel >= 0.16.0
-Requires:	xorg-lib-libpciaccess-devel
+Requires:	xorg-lib-libpciaccess-devel >= 0.8.0
 Requires:	xorg-lib-libxkbfile-devel
-Requires:	xorg-proto-dri2proto-devel >= 2.1
+Requires:	xorg-proto-dri2proto-devel >= 2.3
 Requires:	xorg-proto-fontsproto-devel
 Requires:	xorg-proto-inputproto-devel >= 1.9.99.902
+Requires:	xorg-proto-kbproto-devel >= 1.0.3
 Requires:	xorg-proto-randrproto-devel >= 1.2.99.3
-Requires:	xorg-proto-renderproto-devel >= 0.9.3
+Requires:	xorg-proto-renderproto-devel >= 0.11
 Requires:	xorg-proto-videoproto-devel
 Requires:	xorg-proto-xextproto-devel >= 1:7.0.99.3
-Requires:	xorg-proto-xproto-devel >= 7.0.13
+Requires:	xorg-proto-xproto-devel >= 7.0.17
 Obsoletes:	X11-Xserver-devel < 1:7.0.0
 Obsoletes:	XFree86-Xserver-devel < 1:7.0.0
 
@@ -443,7 +447,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc COPYING ChangeLog
+%doc COPYING ChangeLog README
 %attr(755,root,root) %{_bindir}/X
 %attr(755,root,root) %{_bindir}/Xorg
 %attr(4755,root,root) %{_bindir}/Xwrapper
