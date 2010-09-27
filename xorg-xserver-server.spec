@@ -25,7 +25,7 @@ License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
 # Source0-md5:	ba1173998a5a4216fd7b40eded96697e
-Source1:	10-quirks.conf                
+Source1:	10-quirks.conf
 Source2:	xserver.pamd
 Patch0:		%{name}-xwrapper.patch
 Patch1:		%{name}-pic-libxf86config.patch
@@ -54,7 +54,6 @@ BuildRequires:	pkgconfig >= 1:0.19
 BuildRequires:	udev-devel >= 1:143
 BuildRequires:	xmlto >= 0.0.20
 BuildRequires:	xorg-app-mkfontscale
-BuildRequires:	xorg-sgml-doctools >= 1.5
 BuildRequires:	xorg-font-font-util >= 1.1
 BuildRequires:	xorg-lib-libX11-devel
 BuildRequires:	xorg-lib-libXau-devel
@@ -107,9 +106,10 @@ BuildRequires:	xorg-proto-xf86miscproto-devel
 BuildRequires:	xorg-proto-xf86vidmodeproto-devel >= 2.2.99.1
 BuildRequires:	xorg-proto-xineramaproto-devel
 BuildRequires:	xorg-proto-xproto-devel >= 7.0.17
+BuildRequires:	xorg-sgml-doctools >= 1.5
 BuildRequires:	xorg-util-util-macros >= 1.10
-#BR: xcalibrateproto, tslib (for KDRIVE only)
 #BR: glitz-devel >= 0.4.3 (for XGL and EGL only)
+#BR: xcalibrateproto, tslib (for KDRIVE only)
 Requires(triggerpostun):	sed >= 4.0
 Requires:	pixman >= 0.16.0
 Requires:	xkeyboard-config
@@ -118,8 +118,8 @@ Requires:	xorg-app-rgb >= 0.99.3
 Requires:	xorg-app-xkbcomp
 %{?with_hal:Suggests:	dbus >= 1.0}
 %{?with_hal:Suggests:	hal}
-%{?with_udev:Suggests:	udev-core >= 1:143}
 Suggests:	udev-acl
+%{?with_udev:Suggests:	udev-core >= 1:143}
 Suggests:	xorg-driver-input-evdev
 # xserver requires fixed and cursor fonts
 Requires:	xorg-font-font-alias
