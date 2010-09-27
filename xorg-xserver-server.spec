@@ -27,6 +27,8 @@ Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{v
 # Source0-md5:	ba1173998a5a4216fd7b40eded96697e
 Source1:	10-quirks.conf
 Source2:	xserver.pamd
+Source10:	%{name}-Xvfb.init
+Source11:	%{name}-Xvfb.sysconfig
 Patch0:		%{name}-xwrapper.patch
 Patch1:		%{name}-pic-libxf86config.patch
 Patch2:		%{name}-fb-size.patch
@@ -268,6 +270,20 @@ klientów X w rzadko używanych konfiguracjach ekranu. Można też użyć
 Xvfb do uruchomienia aplikacji, które w rzeczywistości nie wymagają
 serwera X, ale odmawiają uruchomienia bez niego.
 
+%package -n xorg-xserver-Xvfb-init
+Summary:	Init scripts for Xvfb
+Summary(pl.UTF-8):	Skrypty startowe dla Xvfb
+Group:		X11/Servers
+Requires:	xorg-xserver-Xvfb
+
+%description -n xorg-xserver-Xvfb-init
+This package contains init scripts for Xvfb and registers Xvfb as
+system service.
+
+%description -n xorg-xserver-Xvfb-init -l pl.UTF-8
+Ten pakiet zawiera skrypty startowe dla Xvfb oraz rejestruje Xvfb jako
+usługę systemową.
+
 %package devel
 Summary:	Header files for X.org server
 Summary(pl.UTF-8):	Pliki nagłówkowe dla serwera X.org
@@ -423,6 +439,11 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/xorg/modules/{*,*/*}.{la,a}
 
 install %{SOURCE1} $RPM_BUILD_ROOT%{_datadir}/X11/xorg.conf.d/10-quirks.conf
 
+install -d $RPM_BUILD_ROOT/etc/rc.d/init.d
+install -d $RPM_BUILD_ROOT/etc/sysconfig
+install %{SOURCE10} $RPM_BUILD_ROOT/etc/rc.d/init.d/Xvfb
+install %{SOURCE11} $RPM_BUILD_ROOT/etc/sysconfig/Xvfb
+
 %if %{with multigl}
 cd $RPM_BUILD_ROOT%{_libdir}/xorg/modules/extensions
 mv -f libglx.so libglx.so.%{version}
@@ -447,6 +468,16 @@ if [ -f /etc/X11/xorg.conf ]; then
 	sed -i -e 's/^\s*Load\s*"record".*$/#& # module disabled in this build/' /etc/X11/xorg.conf
 %endif
 	sed -i -e 's/^\s*Load\s*"xtrap".*$/#& # obsolete module/' /etc/X11/xorg.conf
+fi
+
+%post -n xorg-xserver-Xvfb-init
+/sbin/chkconfig --add Xvfb
+%service Xvfb restart
+
+%preun -n xorg-xserver-Xvfb-init
+if [ "$1" = "0" ]; then
+	%service -q Xvfb stop
+	/sbin/chkconfig --del Xvfb
 fi
 
 %files
@@ -528,6 +559,11 @@ fi
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/Xvfb
 %{_mandir}/man1/Xvfb.1x*
+
+%files -n xorg-xserver-Xvfb-init
+%defattr(644,root,root,755)
+%attr(754,root,root) /etc/rc.d/init.d/Xvfb
+%config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/Xvfb
 
 %files devel
 %defattr(644,root,root,755)
