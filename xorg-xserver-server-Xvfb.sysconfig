@@ -1,0 +1,11 @@
+# Set to "-ac" if you want to disable authentication. See Xvfb -help for more
+# options.
+# OPTIONS=""
+
+# Possible values: "inet", "inet6", "tcp", "unix", "". Use space as separator.
+# "tcp" is default, so it won't listen on any TCP socket unless you change
+# this value.
+# NOLISTEN="tcp"
+
+# It uses 20th display by default.
+# DISPLAY_NUMBER=":20"
