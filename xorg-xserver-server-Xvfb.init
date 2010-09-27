@@ -7,8 +7,8 @@
 # description:	Xvfb long service description
 #
 # processname:	Xvfb
-# config:		/etc/X11/xorg.conf
-# pidfile:		/var/run/Xvfb.pid
+# config:	/etc/X11/xorg.conf
+# pidfile:	/var/run/Xvfb.pid
 #
 # $Id$
 
@@ -28,8 +28,16 @@ else
 	exit 0
 fi
 
+NOLISTEN="tcp"
+DISPLAY_NUMBER=":20"
+OPTIONS=""
+
 # Get service config - may override defaults
 [ -f /etc/sysconfig/Xvfb ] && . /etc/sysconfig/Xvfb
+
+for I in "$NOLISTEN"; do
+	OPTIONS=$OPTIONS" -nolisten $I"
+done
 
 start() {
 	# Check if the service is already running?
@@ -38,9 +46,10 @@ start() {
 		return
 	fi
 
-	checkconfig
 	msg_starting "Xvfb"
-	daemon /usr/bin/Xvfb --makepid
+
+	# Beware the jabberwock!
+	daemon sh -c "\"exec sh -c 'echo \$\$ > /var/run/Xvfb.pid; exec /usr/bin/Xvfb $OPTIONS $DISPLAY_NUMBER' &\""
 	RETVAL=$?
 	[ $RETVAL -eq 0 ] && touch /var/lock/subsys/Xvfb
 }
@@ -54,7 +63,6 @@ stop() {
 	# Stop daemons.
 	msg_stopping "Xvfb"
 	killproc Xvfb
-	killproc --pidfile /var/run/Xvfb.pid Xvfb -TERM
 	rm -f /var/lock/subsys/Xvfb
 }
 
@@ -93,7 +101,7 @@ case "$1" in
 	RETVAL=$?
 	;;
   *)
-	msg_usage "$0 {start|stop|restart|try-restart|force-reload|checkconfig|status}"
+	msg_usage "$0 {start|stop|restart|try-restart|force-reload|status}"
 	exit 3
 esac
 
