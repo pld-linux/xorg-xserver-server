@@ -15,7 +15,7 @@
 %define	xorg_xserver_server_videodrv_abi	8.0
 %define	xorg_xserver_server_xinput_abi		11.0
 
-%define		rel	2
+%define		rel	3
 Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
@@ -591,7 +591,7 @@ fi
 %{_pkgconfigdir}/xorg-server.pc
 
 %files source
-%defattr(644,root,root,755)
+%defattr(-,root,root,755)
 %{_usrsrc}/%{name}-%{version}
 
 %files -n xorg-xserver-libdri
