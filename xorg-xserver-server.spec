@@ -15,7 +15,7 @@
 %define	xorg_xserver_server_videodrv_abi	8.0
 %define	xorg_xserver_server_xinput_abi		11.0
 
-%define		rel	1
+%define		rel	2
 Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
@@ -310,6 +310,17 @@ Header files for X.org server.
 %description devel -l pl.UTF-8
 Pliki nagłówkowe dla serwera X.org.
 
+%package source
+Summary:	X.org server source code
+Summary(pl.UTF-8):	Pliki źródłowe dla serwera X.org
+Group:		X11/Development/Libraries
+
+%description source
+X.org server source code.
+
+%description source -l pl.UTF-8
+Pliki źródłowe dla serwera X.org.
+
 %package -n xorg-xserver-libdri
 Summary:	DRI extension library for X.org server
 Summary(pl.UTF-8):	Biblioteka rozszerzenia DRI dla serwera X.org
@@ -450,6 +461,12 @@ mv -f libglx.so libglx.so.%{version}
 ln -sf libglx.so.%{version} libglx.so
 %endif
 
+install -d $RPM_BUILD_ROOT%{_usrsrc}/%{name}-%{version}
+cp -a * $RPM_BUILD_ROOT%{_usrsrc}/%{name}-%{version}
+cd $RPM_BUILD_ROOT%{_usrsrc}/%{name}-%{version}
+%{__make} distclean
+find '(' -name '*~' -o -name '*.orig' ')' -print0 | xargs -0 -r -l512 rm -f
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -572,6 +589,10 @@ fi
 %{_libdir}/libxf86config.a
 %{_aclocaldir}/xorg-server.m4
 %{_pkgconfigdir}/xorg-server.pc
+
+%files source
+%defattr(644,root,root,755)
+%{_usrsrc}/%{name}-%{version}
 
 %files -n xorg-xserver-libdri
 %defattr(644,root,root,755)
