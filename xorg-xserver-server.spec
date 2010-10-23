@@ -459,6 +459,7 @@ install %{SOURCE11} $RPM_BUILD_ROOT/etc/sysconfig/Xvfb
 cd $RPM_BUILD_ROOT%{_libdir}/xorg/modules/extensions
 mv -f libglx.so libglx.so.%{version}
 ln -sf libglx.so.%{version} libglx.so
+cd -
 %endif
 
 install -d $RPM_BUILD_ROOT%{_usrsrc}/%{name}-%{version}
