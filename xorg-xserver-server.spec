@@ -45,10 +45,6 @@ BuildRequires:	cpp
 %if %{with hal} || %{with dbus}
 BuildRequires:	dbus-devel >= 1.0
 %endif
-# Note: fop is invoked by xmlto. It is not a dependency of xmlto, because it is
-# quite rare usecase, and it is very "havy" dependency (requires Java, %post
-# scripts execytes long time). So we need to add it here.
-BuildRequires:  fop
 %{?with_hal:BuildRequires:	hal-devel}
 BuildRequires:	libdrm-devel >= 2.4.5
 BuildRequires:	libtool
@@ -408,6 +404,7 @@ fi
 %configure \
 	--with-os-name="PLD/Linux" \
 	--with-os-vendor="PLD/Team" \
+	--without-fop \
 	--%{?with_dbus:en}%{!?with_dbus:dis}able-config-dbus \
 	%{!?with_hal:--disable-config-hal} \
 	--%{?with_udev:en}%{!?with_udev:dis}able-config-udev \
