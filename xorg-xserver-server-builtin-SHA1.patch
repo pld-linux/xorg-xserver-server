@@ -48,119 +48,6 @@ regressions on render or eventually get some ack from Carl.
  create mode 100644 render/sha1.c
  create mode 100644 render/sha1.h
 
-diff --git a/configure.ac b/configure.ac
-index 3e8ea10..ef21aa0 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -1305,7 +1305,7 @@ AC_DEFINE(BIGREQS, 1, [Support BigRequests extension])
- 
- if test "x$SPECIAL_DTRACE_OBJECTS" = "xyes" ; then
-   DIX_LIB='$(top_builddir)/dix/dix.O'
--  OS_LIB='$(top_builddir)/os/os.O $(SHA1_LIBS)'
-+  OS_LIB='$(top_builddir)/os/os.O'
- else
-   DIX_LIB='$(top_builddir)/dix/libdix.la'
-   OS_LIB='$(top_builddir)/os/libos.la'
-@@ -1349,99 +1349,6 @@
- MIEXT_SHADOW_LIB='$(top_builddir)/miext/shadow/libshadow.la'
- CORE_INCS='-I$(top_srcdir)/include -I$(top_builddir)/include'
- 
--# SHA1 hashing
--AC_ARG_WITH([sha1],
--            [AS_HELP_STRING([--with-sha1=libc|libmd|libgcrypt|libcrypto|libsha1|CommonCrypto],
--                            [choose SHA1 implementation])])
--AC_CHECK_FUNC([SHA1Init], [HAVE_SHA1_IN_LIBC=yes])
--if test "x$with_sha1" = x && test "x$HAVE_SHA1_IN_LIBC" = xyes; then
--	with_sha1=libc
--fi
--if test "x$with_sha1" = xlibc && test "x$HAVE_SHA1_IN_LIBC" != xyes; then
--	AC_MSG_ERROR([libc requested but not found])
--fi
--if test "x$with_sha1" = xlibc; then
--	AC_DEFINE([HAVE_SHA1_IN_LIBC], [1],
--		[Use libc SHA1 functions])
--	SHA1_LIBS=""
--fi
--AC_CHECK_FUNC([CC_SHA1_Init], [HAVE_SHA1_IN_COMMONCRYPTO=yes])
--if test "x$with_sha1" = x && test "x$HAVE_SHA1_IN_COMMONCRYPTO" = xyes; then
--	with_sha1=CommonCrypto
--fi
--if test "x$with_sha1" = xCommonCrypto && test "x$HAVE_SHA1_IN_COMMONCRYPTO" != xyes; then
--	AC_MSG_ERROR([CommonCrypto requested but not found])
--fi
--if test "x$with_sha1" = xCommonCrypto; then
--	AC_DEFINE([HAVE_SHA1_IN_COMMONCRYPTO], [1],
--		[Use CommonCrypto SHA1 functions])
--	SHA1_LIBS=""
--fi
--AC_CHECK_LIB([md], [SHA1Init], [HAVE_LIBMD=yes])
--if test "x$with_sha1" = x && test "x$HAVE_LIBMD" = xyes; then
--	with_sha1=libmd
--fi
--if test "x$with_sha1" = xlibmd && test "x$HAVE_LIBMD" != xyes; then
--	AC_MSG_ERROR([libmd requested but not found])
--fi
--if test "x$with_sha1" = xlibmd; then
--	AC_DEFINE([HAVE_SHA1_IN_LIBMD], [1],
--	          [Use libmd SHA1 functions])
--	SHA1_LIBS=-lmd
--fi
--PKG_CHECK_MODULES([LIBSHA1], [libsha1], [HAVE_LIBSHA1=yes], [HAVE_LIBSHA1=no])
--if test "x$with_sha1" = x && test "x$HAVE_LIBSHA1" = xyes; then
--   with_sha1=libsha1
--fi
--if test "x$with_sha1" = xlibsha1 && test "x$HAVE_LIBSHA1" != xyes; then
--	AC_MSG_ERROR([libsha1 requested but not found])
--fi
--if test "x$with_sha1" = xlibsha1; then
--	AC_DEFINE([HAVE_SHA1_IN_LIBSHA1], [1],
--	          [Use libsha1 for SHA1])
--	SHA1_LIBS=-lsha1
--fi
--AC_CHECK_LIB([gcrypt], [gcry_md_open], [HAVE_LIBGCRYPT=yes])
--if test "x$with_sha1" = x && test "x$HAVE_LIBGCRYPT" = xyes; then
--	with_sha1=libgcrypt
--fi
--if test "x$with_sha1" = xlibgcrypt && test "x$HAVE_LIBGCRYPT" != xyes; then
--	AC_MSG_ERROR([libgcrypt requested but not found])
--fi
--if test "x$with_sha1" = xlibgcrypt; then
--	AC_DEFINE([HAVE_SHA1_IN_LIBGCRYPT], [1],
--	          [Use libgcrypt SHA1 functions])
--	SHA1_LIBS=-lgcrypt
--fi
--# We don't need all of the OpenSSL libraries, just libcrypto
--AC_CHECK_LIB([crypto], [SHA1_Init], [HAVE_LIBCRYPTO=yes])
--PKG_CHECK_MODULES([OPENSSL], [openssl], [HAVE_OPENSSL_PKC=yes],
--                  [HAVE_OPENSSL_PKC=no])
--if test "x$HAVE_LIBCRYPTO" = xyes || test "x$HAVE_OPENSSL_PKC" = xyes; then
--	if test "x$with_sha1" = x; then
--		with_sha1=libcrypto
--	fi
--else
--	if test "x$with_sha1" = xlibcrypto; then
--		AC_MSG_ERROR([OpenSSL libcrypto requested but not found])
--	fi
--fi
--if test "x$with_sha1" = xlibcrypto; then
--	if test "x$HAVE_LIBCRYPTO" = xyes; then
--		SHA1_LIBS=-lcrypto
--	else
--		SHA1_LIBS="$OPENSSL_LIBS"
--		SHA1_CFLAGS="$OPENSSL_CFLAGS"
--	fi
--fi
--AC_MSG_CHECKING([for SHA1 implementation])
--if test "x$with_sha1" = x; then
--	AC_MSG_ERROR([No suitable SHA1 implementation found])
--fi
--AC_MSG_RESULT([$with_sha1])
--AC_SUBST(SHA1_LIBS)
--AC_SUBST(SHA1_CFLAGS)
--
- PKG_CHECK_MODULES([XSERVERCFLAGS], [$REQUIRED_MODULES $REQUIRED_LIBS])
- PKG_CHECK_MODULES([XSERVERLIBS], [$REQUIRED_LIBS])
- 
 diff --git a/include/dix-config.h.in b/include/dix-config.h.in
 index 058c8fd..d6e99a5 100644
 --- a/include/dix-config.h.in
@@ -683,3 +570,113 @@ index 0000000..ace7d97
 -- 
 1.6.0.4
 
+--- xorg-server-1.9.2.902/configure.ac.orig	2010-12-04 06:56:52.000000000 +0100
++++ xorg-server-1.9.2.902/configure.ac	2010-12-07 19:16:06.420296250 +0100
+@@ -1338,7 +1338,7 @@
+ 
+ if test "x$SPECIAL_DTRACE_OBJECTS" = "xyes" ; then
+   DIX_LIB='$(top_builddir)/dix/dix.O'
+-  OS_LIB='$(top_builddir)/os/os.O $(SHA1_LIBS) $(DLOPEN_LIBS)'
++  OS_LIB='$(top_builddir)/os/os.O $(DLOPEN_LIBS)'
+ else
+   DIX_LIB='$(top_builddir)/dix/libdix.la'
+   OS_LIB='$(top_builddir)/os/libos.la'
+@@ -1358,99 +1358,6 @@
+ MIEXT_SHADOW_LIB='$(top_builddir)/miext/shadow/libshadow.la'
+ CORE_INCS='-I$(top_srcdir)/include -I$(top_builddir)/include'
+ 
+-# SHA1 hashing
+-AC_ARG_WITH([sha1],
+-            [AS_HELP_STRING([--with-sha1=libc|libmd|libgcrypt|libcrypto|libsha1|CommonCrypto],
+-                            [choose SHA1 implementation])])
+-AC_CHECK_FUNC([SHA1Init], [HAVE_SHA1_IN_LIBC=yes])
+-if test "x$with_sha1" = x && test "x$HAVE_SHA1_IN_LIBC" = xyes; then
+-	with_sha1=libc
+-fi
+-if test "x$with_sha1" = xlibc && test "x$HAVE_SHA1_IN_LIBC" != xyes; then
+-	AC_MSG_ERROR([libc requested but not found])
+-fi
+-if test "x$with_sha1" = xlibc; then
+-	AC_DEFINE([HAVE_SHA1_IN_LIBC], [1],
+-		[Use libc SHA1 functions])
+-	SHA1_LIBS=""
+-fi
+-AC_CHECK_FUNC([CC_SHA1_Init], [HAVE_SHA1_IN_COMMONCRYPTO=yes])
+-if test "x$with_sha1" = x && test "x$HAVE_SHA1_IN_COMMONCRYPTO" = xyes; then
+-	with_sha1=CommonCrypto
+-fi
+-if test "x$with_sha1" = xCommonCrypto && test "x$HAVE_SHA1_IN_COMMONCRYPTO" != xyes; then
+-	AC_MSG_ERROR([CommonCrypto requested but not found])
+-fi
+-if test "x$with_sha1" = xCommonCrypto; then
+-	AC_DEFINE([HAVE_SHA1_IN_COMMONCRYPTO], [1],
+-		[Use CommonCrypto SHA1 functions])
+-	SHA1_LIBS=""
+-fi
+-AC_CHECK_LIB([md], [SHA1Init], [HAVE_LIBMD=yes])
+-if test "x$with_sha1" = x && test "x$HAVE_LIBMD" = xyes; then
+-	with_sha1=libmd
+-fi
+-if test "x$with_sha1" = xlibmd && test "x$HAVE_LIBMD" != xyes; then
+-	AC_MSG_ERROR([libmd requested but not found])
+-fi
+-if test "x$with_sha1" = xlibmd; then
+-	AC_DEFINE([HAVE_SHA1_IN_LIBMD], [1],
+-	          [Use libmd SHA1 functions])
+-	SHA1_LIBS=-lmd
+-fi
+-PKG_CHECK_MODULES([LIBSHA1], [libsha1], [HAVE_LIBSHA1=yes], [HAVE_LIBSHA1=no])
+-if test "x$with_sha1" = x && test "x$HAVE_LIBSHA1" = xyes; then
+-   with_sha1=libsha1
+-fi
+-if test "x$with_sha1" = xlibsha1 && test "x$HAVE_LIBSHA1" != xyes; then
+-	AC_MSG_ERROR([libsha1 requested but not found])
+-fi
+-if test "x$with_sha1" = xlibsha1; then
+-	AC_DEFINE([HAVE_SHA1_IN_LIBSHA1], [1],
+-	          [Use libsha1 for SHA1])
+-	SHA1_LIBS=-lsha1
+-fi
+-AC_CHECK_LIB([gcrypt], [gcry_md_open], [HAVE_LIBGCRYPT=yes])
+-if test "x$with_sha1" = x && test "x$HAVE_LIBGCRYPT" = xyes; then
+-	with_sha1=libgcrypt
+-fi
+-if test "x$with_sha1" = xlibgcrypt && test "x$HAVE_LIBGCRYPT" != xyes; then
+-	AC_MSG_ERROR([libgcrypt requested but not found])
+-fi
+-if test "x$with_sha1" = xlibgcrypt; then
+-	AC_DEFINE([HAVE_SHA1_IN_LIBGCRYPT], [1],
+-	          [Use libgcrypt SHA1 functions])
+-	SHA1_LIBS=-lgcrypt
+-fi
+-# We don't need all of the OpenSSL libraries, just libcrypto
+-AC_CHECK_LIB([crypto], [SHA1_Init], [HAVE_LIBCRYPTO=yes])
+-PKG_CHECK_MODULES([OPENSSL], [openssl], [HAVE_OPENSSL_PKC=yes],
+-                  [HAVE_OPENSSL_PKC=no])
+-if test "x$HAVE_LIBCRYPTO" = xyes || test "x$HAVE_OPENSSL_PKC" = xyes; then
+-	if test "x$with_sha1" = x; then
+-		with_sha1=libcrypto
+-	fi
+-else
+-	if test "x$with_sha1" = xlibcrypto; then
+-		AC_MSG_ERROR([OpenSSL libcrypto requested but not found])
+-	fi
+-fi
+-if test "x$with_sha1" = xlibcrypto; then
+-	if test "x$HAVE_LIBCRYPTO" = xyes; then
+-		SHA1_LIBS=-lcrypto
+-	else
+-		SHA1_LIBS="$OPENSSL_LIBS"
+-		SHA1_CFLAGS="$OPENSSL_CFLAGS"
+-	fi
+-fi
+-AC_MSG_CHECKING([for SHA1 implementation])
+-if test "x$with_sha1" = x; then
+-	AC_MSG_ERROR([No suitable SHA1 implementation found])
+-fi
+-AC_MSG_RESULT([$with_sha1])
+-AC_SUBST(SHA1_LIBS)
+-AC_SUBST(SHA1_CFLAGS)
+-
+ PKG_CHECK_MODULES([XSERVERCFLAGS], [$REQUIRED_MODULES $REQUIRED_LIBS])
+ PKG_CHECK_MODULES([XSERVERLIBS], [$REQUIRED_LIBS])
