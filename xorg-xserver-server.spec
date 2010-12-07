@@ -10,21 +10,21 @@
 #
 # ABI versions, see hw/xfree86/common/xf86Module.h
 %define	xorg_xserver_server_ansic_abi		0.4
-%define	xorg_xserver_server_extension_abi	4.0
+%define	xorg_xserver_server_extension_abi	5.0
 %define	xorg_xserver_server_font_abi		0.6
-%define	xorg_xserver_server_videodrv_abi	8.0
-%define	xorg_xserver_server_xinput_abi		11.0
+%define	xorg_xserver_server_videodrv_abi	9.0
+%define	xorg_xserver_server_xinput_abi		12.0
 
-%define		rel	1
+%define		rel	0.1
 Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
-Version:	1.9.2.902
+Version:	1.9.99.901
 Release:	%{rel}%{?with_multigl:.mgl}
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
-# Source0-md5:	4152bea87a40672355e9a6d525e64225
+# Source0-md5:	73ce57401de4a50e0abdb8e820fb2fd7
 Source1:	10-quirks.conf
 Source2:	xserver.pamd
 Source10:	%{name}-Xvfb.init
@@ -93,14 +93,14 @@ BuildRequires:	xorg-proto-glproto-devel >= 1.4.10
 BuildRequires:	xorg-proto-inputproto-devel >= 1.9.99.902
 BuildRequires:	xorg-proto-kbproto-devel >= 1.0.3
 BuildRequires:	xorg-proto-printproto-devel
-BuildRequires:	xorg-proto-randrproto-devel >= 1.2.99.3
+BuildRequires:	xorg-proto-randrproto-devel >= 1.4
 %{?with_record:BuildRequires:	xorg-proto-recordproto-devel >= 1.13.99.1}
 BuildRequires:	xorg-proto-renderproto-devel >= 0.11
 BuildRequires:	xorg-proto-resourceproto-devel
 BuildRequires:	xorg-proto-scrnsaverproto-devel >= 1.1.0
 BuildRequires:	xorg-proto-videoproto-devel
 BuildRequires:	xorg-proto-xcmiscproto-devel >= 1.2.0
-BuildRequires:	xorg-proto-xextproto-devel >= 1:7.0.99.3
+BuildRequires:	xorg-proto-xextproto-devel >= 1:7.1.99
 BuildRequires:	xorg-proto-xf86bigfontproto-devel >= 1.2.0
 BuildRequires:	xorg-proto-xf86dgaproto-devel >= 2.0.99.1
 BuildRequires:	xorg-proto-xf86driproto-devel >= 2.1.0
@@ -419,11 +419,9 @@ fi
 	--enable-xephyr \
 	--enable-xfbdev \
 	--enable-glx-tls \
-	--disable-xsdl \
 	--disable-xfake \
 	--enable-secure-rpc \
 	--%{?with_dri2:en}%{!?with_dri2:dis}able-dri2 \
-	--with-dri-driver-path=%{_libdir}/xorg/modules/dri \
 	--with-default-font-path="%{_fontsdir}/misc,%{_fontsdir}/TTF,%{_fontsdir}/OTF,%{_fontsdir}/Type1,%{_fontsdir}/100dpi,%{_fontsdir}/75dpi" \
 	--with-xkb-output=/var/lib/xkb
 

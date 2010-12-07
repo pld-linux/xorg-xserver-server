@@ -264,15 +264,15 @@ diff --git a/render/Makefile.am b/render/Makefile.am
 index 216c613..bb46702 100644
 --- a/render/Makefile.am
 +++ b/render/Makefile.am
-@@ -14,8 +14,11 @@ librender_la_SOURCES =	\
+@@ -13,8 +13,11 @@ librender_la_SOURCES =	\
+ 	mitrap.c	\
  	mitri.c		\
  	picture.c	\
- 	render.c	\
 +	sha1.c		\
- 	renderedge.c
+ 	render.c
  
  if XORG
- sdk_HEADERS = picture.h mipict.h glyphstr.h picturestr.h renderedge.h
+ sdk_HEADERS = picture.h mipict.h glyphstr.h picturestr.h
  endif
 +
 +EXTRA_DIST = sha1.h
