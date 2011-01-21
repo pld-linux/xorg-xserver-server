@@ -296,6 +296,7 @@ Requires:	xorg-proto-randrproto-devel >= 1.2.99.3
 Requires:	xorg-proto-renderproto-devel >= 0.11
 Requires:	xorg-proto-videoproto-devel
 Requires:	xorg-proto-xextproto-devel >= 1:7.0.99.3
+Requires:	xorg-proto-xineramaproto-devel
 Requires:	xorg-proto-xproto-devel >= 7.0.17
 Obsoletes:	X11-Xserver-devel < 1:7.0.0
 Obsoletes:	XFree86-Xserver-devel < 1:7.0.0
