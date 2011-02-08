@@ -1,0 +1,39 @@
+From d77ffa918b2aaa3ca1deb17ed0145199d0f863da Mon Sep 17 00:00:00 2001
+From: Julien Cristau <jcristau@debian.org>
+Date: Mon, 31 Jan 2011 13:14:47 +0000
+Subject: Revert "randr: check for virtual size limits before set crtc"
+
+Apparently these checks break rotation with the nvidia drivers:
+https://bbs.archlinux.org/viewtopic.php?pid=877761
+http://bugs.debian.org/611619
+Let's not do that in a stable branch.
+
+This reverts commit 6a6d907e77777057cadbd80572119c09732385cd.
+
+Signed-off-by: Julien Cristau <jcristau@debian.org>
+---
+diff --git a/randr/rrscreen.c b/randr/rrscreen.c
+index 0fee1f5..630ff57 100644
+--- a/randr/rrscreen.c
++++ b/randr/rrscreen.c
+@@ -921,18 +921,6 @@ ProcRRSetScreenConfig (ClientPtr client)
+ 	width = mode->mode.height;
+ 	height = mode->mode.width;
+     }
+-
+-    if (width < pScrPriv->minWidth || pScrPriv->maxWidth < width) {
+-	client->errorValue = width;
+-	free(pData);
+-	return BadValue;
+-    }
+-    if (height < pScrPriv->minHeight || pScrPriv->maxHeight < height) {
+-	client->errorValue = height;
+-	free(pData);
+-	return BadValue;
+-    }
+-
+     if (width != pScreen->width || height != pScreen->height)
+     {
+ 	int	c;
+--
+cgit v0.8.3-6-g21f6
