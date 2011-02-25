@@ -12,19 +12,19 @@
 %define	xorg_xserver_server_ansic_abi		0.4
 %define	xorg_xserver_server_extension_abi	5.0
 %define	xorg_xserver_server_font_abi		0.6
-%define	xorg_xserver_server_videodrv_abi	9.0
+%define	xorg_xserver_server_videodrv_abi	10.0
 %define	xorg_xserver_server_xinput_abi		12.2
 
 %define		rel	0.1
 Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
-Version:	1.9.99.902
+Version:	1.9.99.903
 Release:	%{rel}%{?with_multigl:.mgl}
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
-# Source0-md5:	40f8976981c2d644d5ea3160ece78a24
+# Source0-md5:	a8bece548794b96b9d480c7d891231c7
 Source1:	10-quirks.conf
 Source2:	xserver.pamd
 Source10:	%{name}-Xvfb.init
@@ -93,7 +93,7 @@ BuildRequires:	xorg-proto-glproto-devel >= 1.4.10
 BuildRequires:	xorg-proto-inputproto-devel >= 1.9.99.902
 BuildRequires:	xorg-proto-kbproto-devel >= 1.0.3
 BuildRequires:	xorg-proto-printproto-devel
-BuildRequires:	xorg-proto-randrproto-devel >= 1.4
+BuildRequires:	xorg-proto-randrproto-devel >= 1.3
 %{?with_record:BuildRequires:	xorg-proto-recordproto-devel >= 1.13.99.1}
 BuildRequires:	xorg-proto-renderproto-devel >= 0.11
 BuildRequires:	xorg-proto-resourceproto-devel
@@ -292,7 +292,7 @@ Requires:	xorg-proto-dri2proto-devel >= 2.3
 Requires:	xorg-proto-fontsproto-devel
 Requires:	xorg-proto-inputproto-devel >= 1.9.99.902
 Requires:	xorg-proto-kbproto-devel >= 1.0.3
-Requires:	xorg-proto-randrproto-devel >= 1.2.99.3
+Requires:	xorg-proto-randrproto-devel >= 1.3
 Requires:	xorg-proto-renderproto-devel >= 0.11
 Requires:	xorg-proto-videoproto-devel
 Requires:	xorg-proto-xextproto-devel >= 1:7.0.99.3
