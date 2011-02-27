@@ -15,16 +15,16 @@
 %define	xorg_xserver_server_videodrv_abi	10.0
 %define	xorg_xserver_server_xinput_abi		12.2
 
-%define		rel	0.1
+%define		rel	1
 Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
-Version:	1.9.99.903
+Version:	1.10.0
 Release:	%{rel}%{?with_multigl:.mgl}
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
-# Source0-md5:	a8bece548794b96b9d480c7d891231c7
+# Source0-md5:	57c143c5cfa507680933b6c4904f829c
 Source1:	10-quirks.conf
 Source2:	xserver.pamd
 Source10:	%{name}-Xvfb.init
@@ -100,7 +100,7 @@ BuildRequires:	xorg-proto-resourceproto-devel
 BuildRequires:	xorg-proto-scrnsaverproto-devel >= 1.1.0
 BuildRequires:	xorg-proto-videoproto-devel
 BuildRequires:	xorg-proto-xcmiscproto-devel >= 1.2.0
-BuildRequires:	xorg-proto-xextproto-devel >= 1:7.1.99
+BuildRequires:	xorg-proto-xextproto-devel >= 1:7.2.0
 BuildRequires:	xorg-proto-xf86bigfontproto-devel >= 1.2.0
 BuildRequires:	xorg-proto-xf86dgaproto-devel >= 2.0.99.1
 BuildRequires:	xorg-proto-xf86driproto-devel >= 2.1.0
@@ -533,6 +533,7 @@ fi
 %{_mandir}/man4/exa.4*
 %{_mandir}/man4/fbdevhw.4*
 %{_mandir}/man5/xorg.conf.5x*
+%{_mandir}/man5/xorg.conf.d.5x
 
 %if %{with dmx}
 %files -n xorg-xserver-Xdmx
@@ -581,7 +582,7 @@ fi
 
 %files devel
 %defattr(644,root,root,755)
-%doc doc/xml/{Xserver-spec.html,xorg.css}
+%doc doc/xml/Xserver-spec.html
 %{_includedir}/xorg
 %{_libdir}/libxf86config.a
 %{_aclocaldir}/xorg-server.m4
