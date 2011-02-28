@@ -463,6 +463,7 @@ cp -a * $RPM_BUILD_ROOT%{_usrsrc}/%{name}-%{version}
 cd $RPM_BUILD_ROOT%{_usrsrc}/%{name}-%{version}
 %{__make} distclean
 find '(' -name '*~' -o -name '*.orig' ')' -print0 | xargs -0 -r -l512 rm -f
+find -name '*.h' | xargs chmod a-x
 
 %clean
 rm -rf $RPM_BUILD_ROOT
