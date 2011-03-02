@@ -586,6 +586,7 @@ fi
 %doc doc/xml/Xserver-spec.html
 %{_includedir}/xorg
 %{_libdir}/libxf86config.a
+%{_libdir}/libxf86config.la
 %{_aclocaldir}/xorg-server.m4
 %{_pkgconfigdir}/xorg-server.pc
 
