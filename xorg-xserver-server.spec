@@ -97,7 +97,7 @@ BuildRequires:	xorg-proto-randrproto-devel >= 1.3
 %{?with_record:BuildRequires:	xorg-proto-recordproto-devel >= 1.13.99.1}
 BuildRequires:	xorg-proto-renderproto-devel >= 0.11
 BuildRequires:	xorg-proto-resourceproto-devel
-BuildRequires:	xorg-proto-scrnsaverproto-devel >= 1.1.0
+BuildRequires:	xorg-proto-scrnsaverproto-devel >= 1.1
 BuildRequires:	xorg-proto-videoproto-devel
 BuildRequires:	xorg-proto-xcmiscproto-devel >= 1.2.0
 BuildRequires:	xorg-proto-xextproto-devel >= 1:7.2.0
@@ -201,7 +201,7 @@ Xnest - це сервер X Window System, який працює у вікні X
 Summary:	Xephyr - nested X server
 Summary(pl.UTF-8):	Xephyr - zagnieżdżony serwer X
 Group:		X11/Servers
-Requires:	pixman >= 0.15.0
+Requires:	pixman >= 0.16.0
 
 %description -n xorg-xserver-Xephyr
 Xephyr is a a kdrive server that outputs to a window on a pre-existing
@@ -295,7 +295,7 @@ Requires:	xorg-proto-kbproto-devel >= 1.0.3
 Requires:	xorg-proto-randrproto-devel >= 1.3
 Requires:	xorg-proto-renderproto-devel >= 0.11
 Requires:	xorg-proto-videoproto-devel
-Requires:	xorg-proto-xextproto-devel >= 1:7.0.99.3
+Requires:	xorg-proto-xextproto-devel >= 1:7.2.0
 Requires:	xorg-proto-xineramaproto-devel
 Requires:	xorg-proto-xproto-devel >= 7.0.17
 Obsoletes:	X11-Xserver-devel < 1:7.0.0
