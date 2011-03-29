@@ -15,16 +15,16 @@
 %define	xorg_xserver_server_videodrv_abi	10.0
 %define	xorg_xserver_server_xinput_abi		12.2
 
-%define		rel	2
+%define		rel	1
 Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
-Version:	1.10.0
+Version:	1.10.0.901
 Release:	%{rel}%{?with_multigl:.mgl}
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
-# Source0-md5:	57c143c5cfa507680933b6c4904f829c
+# Source0-md5:	d750cf5f6342b548b7ac2be56e9d1841
 Source1:	10-quirks.conf
 Source2:	xserver.pamd
 Source10:	%{name}-Xvfb.init
