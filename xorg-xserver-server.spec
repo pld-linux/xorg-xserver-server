@@ -43,6 +43,7 @@ BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake
 BuildRequires:	cpp
 #BuildRequires:	doxygen >= 1.6.1
+BuildRequires:	docbook-dtd43-xml
 %if %{with hal} || %{with dbus}
 BuildRequires:	dbus-devel >= 1.0
 %endif
