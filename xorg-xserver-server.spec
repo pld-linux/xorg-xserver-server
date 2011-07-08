@@ -15,16 +15,16 @@
 %define	xorg_xserver_server_videodrv_abi	10.0
 %define	xorg_xserver_server_xinput_abi		12.2
 
-%define		rel	2
+%define		rel	1
 Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
-Version:	1.10.2
+Version:	1.10.3
 Release:	%{rel}%{?with_multigl:.mgl}
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
-# Source0-md5:	c9ba50bd44ea70da51f13100336a5484
+# Source0-md5:	fc1bb18a09244cd43a998625a6a1b071
 Source1:	10-quirks.conf
 Source2:	xserver.pamd
 Source10:	%{name}-Xvfb.init
@@ -34,7 +34,6 @@ Patch1:		%{name}-pic-libxf86config.patch
 Patch2:		%{name}-fb-size.patch
 Patch3:		%{name}-less-acpi-brokenness.patch
 Patch4:		%{name}-builtin-SHA1.patch
-Patch5:		%{name}-nvidia-randr.patch
 URL:		http://xorg.freedesktop.org/
 BuildRequires:	Mesa-libGL-devel >= 7.8.1
 # for glx headers
@@ -367,7 +366,6 @@ Biblioteka rozszerzenia GLX dla serwera X.org.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
-%patch5 -p1
 
 # xserver uses pixman-1 API/ABI so put that explictly here
 sed -i -e 's#<pixman\.h#<pixman-1/pixman.h#g' ./fb/fb.h ./include/miscstruct.h ./render/picture.h
