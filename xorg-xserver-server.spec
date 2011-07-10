@@ -148,6 +148,11 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 # avoid self-dependencies on included modules
 %define		_noautoreq	libscanpci.so libxf1bpp.so
 
+%if %{with multigl}
+# executable Xorg provides symbols this library:
+%define		skip_post_check_so	libglx.so.*
+%endif
+
 %description
 Xorg server is a generally used X server which uses display hardware.
 It requires proper driver for your display hardware.
