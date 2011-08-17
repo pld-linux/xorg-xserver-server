@@ -15,7 +15,7 @@
 %define	xorg_xserver_server_videodrv_abi	10.0
 %define	xorg_xserver_server_xinput_abi		12.2
 
-%define		rel	1
+%define		rel	2
 Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
@@ -41,8 +41,8 @@ BuildRequires:	OpenGL-GLX-devel
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake
 BuildRequires:	cpp
-#BuildRequires:	doxygen >= 1.6.1
 BuildRequires:	docbook-dtd43-xml
+#BuildRequires:	doxygen >= 1.6.1
 %if %{with hal} || %{with dbus}
 BuildRequires:	dbus-devel >= 1.0
 %endif
@@ -117,9 +117,9 @@ Requires(triggerpostun):	sed >= 4.0
 Requires:	pixman >= 0.16.0
 Requires:	xkeyboard-config
 # for rgb.txt
+Requires:	dbus-x11
 Requires:	xorg-app-rgb >= 0.99.3
 Requires:	xorg-app-xkbcomp
-%{?with_hal:Suggests:	dbus >= 1.0}
 %{?with_hal:Suggests:	hal}
 Suggests:	udev-acl
 %{?with_udev:Suggests:	udev-core >= 1:143}
