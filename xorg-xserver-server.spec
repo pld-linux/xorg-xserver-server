@@ -1,12 +1,16 @@
+# TODO: consider XSELINUX
 #
 # Conditional build:
-%bcond_with	multigl	# package libglx.so in a way allowing concurrent install with nvidia/fglrx drivers
-%bcond_without	dri2	# DRI2 support
-%bcond_with	dbus	# D-BUS support
-%bcond_with	hal	# HAL support
-%bcond_without	udev	# UDEV support
-%bcond_without	dmx	# DMX support
-%bcond_without	record	# RECORD extension
+%bcond_with	multigl		# package libglx.so in a way allowing concurrent install with nvidia/fglrx drivers
+%bcond_with	dbus		# D-BUS support for configuration (if no udev)
+%bcond_with	hal		# HAL support for configuration (if no udev)
+%bcond_without	udev		# UDEV support for configuration
+%bcond_without	dri2		# DRI2 extension
+%bcond_without	dmx		# DMX support
+%bcond_without	record		# RECORD extension
+%bcond_with	xcsecurity	# XC-SECURITY extension (deprecated)
+%bcond_with	xf86bigfont	# XF86BigFont extension
+%bcond_with	xselinux	# SELinux extension
 #
 # ABI versions, see hw/xfree86/common/xf86Module.h
 %define	xorg_xserver_server_ansic_abi		0.4
@@ -38,6 +42,7 @@ URL:		http://xorg.freedesktop.org/
 BuildRequires:	Mesa-libGL-devel >= 7.8.1
 # for glx headers
 BuildRequires:	OpenGL-GLX-devel
+%{?with_xselinux:BuildRequires:	audit-libs-devel}
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake
 BuildRequires:	cpp
@@ -48,6 +53,7 @@ BuildRequires:	dbus-devel >= 1.0
 %endif
 %{?with_hal:BuildRequires:	hal-devel}
 BuildRequires:	libdrm-devel >= 2.4.5
+%{?with_xselinux:BuildRequires:	libselinux-devel >= 2.0.86}
 BuildRequires:	libtool
 BuildRequires:	ncurses-devel
 BuildRequires:	pam-devel
@@ -102,7 +108,7 @@ BuildRequires:	xorg-proto-scrnsaverproto-devel >= 1.1
 BuildRequires:	xorg-proto-videoproto-devel
 BuildRequires:	xorg-proto-xcmiscproto-devel >= 1.2.0
 BuildRequires:	xorg-proto-xextproto-devel >= 1:7.2.0
-BuildRequires:	xorg-proto-xf86bigfontproto-devel >= 1.2.0
+%{?with_xf86bigfont:BuildRequires:	xorg-proto-xf86bigfontproto-devel >= 1.2.0}
 BuildRequires:	xorg-proto-xf86dgaproto-devel >= 2.0.99.1
 BuildRequires:	xorg-proto-xf86driproto-devel >= 2.1.0
 BuildRequires:	xorg-proto-xf86miscproto-devel
@@ -117,7 +123,6 @@ Requires(triggerpostun):	sed >= 4.0
 Requires:	pixman >= 0.16.0
 Requires:	xkeyboard-config
 # for rgb.txt
-Requires:	dbus-x11
 Requires:	xorg-app-rgb >= 0.99.3
 Requires:	xorg-app-xkbcomp
 %{?with_hal:Suggests:	hal}
@@ -128,6 +133,7 @@ Suggests:	xorg-driver-input-evdev
 Requires:	xorg-font-font-alias
 Requires:	xorg-font-font-cursor-misc
 Requires:	xorg-font-font-misc-misc-base >= 1.0.0-0.3
+Suggests:	dbus-x11 >= 1.0
 Suggests:	xkeyboard-config
 Provides:	xorg-xserver-server(ansic-abi) = %{xorg_xserver_server_ansic_abi}
 Provides:	xorg-xserver-server(extension-abi) = %{xorg_xserver_server_extension_abi}
@@ -294,7 +300,7 @@ Requires:	libdrm-devel >= 2.4.5
 Requires:	pixman-devel >= 0.16.0
 Requires:	xorg-lib-libpciaccess-devel >= 0.8.0
 Requires:	xorg-lib-libxkbfile-devel
-Requires:	xorg-proto-dri2proto-devel >= 2.3
+%{?with_dri2:Requires:	xorg-proto-dri2proto-devel >= 2.3}
 Requires:	xorg-proto-fontsproto-devel
 Requires:	xorg-proto-inputproto-devel >= 1.9.99.902
 Requires:	xorg-proto-kbproto-devel >= 1.0.3
@@ -413,9 +419,9 @@ fi
 	--with-os-name="PLD/Linux" \
 	--with-os-vendor="PLD/Team" \
 	--without-fop \
-	--%{?with_dbus:en}%{!?with_dbus:dis}able-config-dbus \
-	%{!?with_hal:--disable-config-hal} \
-	--%{?with_udev:en}%{!?with_udev:dis}able-config-udev \
+	%{?with_dbus:--enable-config-dbus} \
+	--enable-config-hal%{!?with_hal:=no} \
+	--enable-config-udev%{!?with_udev:=no} \
 	--enable-aiglx \
 	--enable-builddocs \
 	--enable-dga \
@@ -424,8 +430,11 @@ fi
 	--enable-install-libxf86config \
 	%{?with_record:--enable-record} \
 	--enable-kdrive \
+	%{?with_xcsecurity:--enable-xcsecurity} \
 	--enable-xephyr \
+	%{?with_xf86bigfont:--enable-xf86bigfont} \
 	--enable-xfbdev \
+	%{?with_xselinux:--enable-xselinux} \
 	--enable-glx-tls \
 	--disable-xfake \
 	--enable-secure-rpc \
