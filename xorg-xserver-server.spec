@@ -19,7 +19,7 @@
 %define	xorg_xserver_server_videodrv_abi	10.0
 %define	xorg_xserver_server_xinput_abi		12.2
 
-%define		rel	1
+%define		rel	2
 Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
@@ -133,10 +133,10 @@ Suggests:	xorg-driver-input-evdev
 Requires:	xorg-font-font-alias
 Requires:	xorg-font-font-cursor-misc
 Requires:	xorg-font-font-misc-misc-base >= 1.0.0-0.3
-# Requires at least one video driver to run, see xorg.log which one exactly
-Requires	 xorg-driver-video
 Suggests:	dbus-x11 >= 1.0
 Suggests:	xkeyboard-config
+# Usual desktop setups need least one video driver to run, see xorg.log which one exactly
+Suggests:	xorg-driver-video
 Provides:	xorg-xserver-server(ansic-abi) = %{xorg_xserver_server_ansic_abi}
 Provides:	xorg-xserver-server(extension-abi) = %{xorg_xserver_server_extension_abi}
 Provides:	xorg-xserver-server(font-abi) = %{xorg_xserver_server_font_abi}
@@ -609,6 +609,8 @@ fi
 %{_pkgconfigdir}/xorg-server.pc
 
 %files source
+%defattr(644,root,root,755)
+# keep file perms from install time, but have default defattr to keep adapter happy
 %defattr(-,root,root,755)
 %{_usrsrc}/%{name}-%{version}
 
