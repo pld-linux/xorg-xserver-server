@@ -133,6 +133,8 @@ Suggests:	xorg-driver-input-evdev
 Requires:	xorg-font-font-alias
 Requires:	xorg-font-font-cursor-misc
 Requires:	xorg-font-font-misc-misc-base >= 1.0.0-0.3
+# Requires at least one video driver to run, see xorg.log which one exactly
+Requires	 xorg-driver-video
 Suggests:	dbus-x11 >= 1.0
 Suggests:	xkeyboard-config
 Provides:	xorg-xserver-server(ansic-abi) = %{xorg_xserver_server_ansic_abi}
@@ -450,7 +452,7 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-install -D %{SOURCE2} $RPM_BUILD_ROOT/etc/pam.d/xserver
+install -Dp %{SOURCE2} $RPM_BUILD_ROOT/etc/pam.d/xserver
 install -d $RPM_BUILD_ROOT/etc/{security/console.apps,X11/xorg.conf.d}
 install -d $RPM_BUILD_ROOT%{_libdir}/xorg/modules/{dri,drivers,input}
 install -d $RPM_BUILD_ROOT%{_datadir}/X11/xorg.conf.d
@@ -460,12 +462,12 @@ install -d $RPM_BUILD_ROOT%{_datadir}/X11/xorg.conf.d
 
 rm -f $RPM_BUILD_ROOT%{_libdir}/xorg/modules/{*,*/*}.{la,a}
 
-install %{SOURCE1} $RPM_BUILD_ROOT%{_datadir}/X11/xorg.conf.d/10-quirks.conf
+cp -p %{SOURCE1} $RPM_BUILD_ROOT%{_datadir}/X11/xorg.conf.d/10-quirks.conf
 
 install -d $RPM_BUILD_ROOT/etc/rc.d/init.d
 install -d $RPM_BUILD_ROOT/etc/sysconfig
-install %{SOURCE10} $RPM_BUILD_ROOT/etc/rc.d/init.d/Xvfb
-install %{SOURCE11} $RPM_BUILD_ROOT/etc/sysconfig/Xvfb
+install -p %{SOURCE10} $RPM_BUILD_ROOT/etc/rc.d/init.d/Xvfb
+cp -p %{SOURCE11} $RPM_BUILD_ROOT/etc/sysconfig/Xvfb
 
 %if %{with multigl}
 cd $RPM_BUILD_ROOT%{_libdir}/xorg/modules/extensions
