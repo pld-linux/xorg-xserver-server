@@ -16,19 +16,19 @@
 %define	xorg_xserver_server_ansic_abi		0.4
 %define	xorg_xserver_server_extension_abi	5.0
 %define	xorg_xserver_server_font_abi		0.6
-%define	xorg_xserver_server_videodrv_abi	10.0
-%define	xorg_xserver_server_xinput_abi		12.2
+%define	xorg_xserver_server_videodrv_abi	11.0
+%define	xorg_xserver_server_xinput_abi		13.0
 
-%define		rel	2
+%define		rel	1
 Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
-Version:	1.10.4
+Version:	1.11.0
 Release:	%{rel}%{?with_multigl:.mgl}
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
-# Source0-md5:	94f23d30a77d63e27dd209a57fccfebf
+# Source0-md5:	948e665bddc31c34be79b59db67c986e
 Source1:	10-quirks.conf
 Source2:	xserver.pamd
 Source10:	%{name}-Xvfb.init
@@ -114,7 +114,7 @@ BuildRequires:	xorg-proto-xf86driproto-devel >= 2.1.0
 BuildRequires:	xorg-proto-xf86miscproto-devel
 BuildRequires:	xorg-proto-xf86vidmodeproto-devel >= 2.2.99.1
 BuildRequires:	xorg-proto-xineramaproto-devel
-BuildRequires:	xorg-proto-xproto-devel >= 7.0.17
+BuildRequires:	xorg-proto-xproto-devel >= 7.0.22
 BuildRequires:	xorg-sgml-doctools >= 1.5
 BuildRequires:	xorg-util-util-macros >= 1.10
 #BR: glitz-devel >= 0.4.3 (for XGL and EGL only)
@@ -601,7 +601,8 @@ fi
 
 %files devel
 %defattr(644,root,root,755)
-%doc doc/xml/Xserver-spec.html
+%doc doc/Xserver-spec.xml
+%doc doc/Xinput.xml
 %{_includedir}/xorg
 %{_libdir}/libxf86config.a
 %{_libdir}/libxf86config.la
