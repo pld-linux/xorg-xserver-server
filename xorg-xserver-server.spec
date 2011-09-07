@@ -58,7 +58,7 @@ BuildRequires:	libtool
 BuildRequires:	ncurses-devel
 BuildRequires:	pam-devel
 BuildRequires:	perl-base
-BuildRequires:	pixman-devel >= 0.16.0
+BuildRequires:	pixman-devel >= 0.22.0
 BuildRequires:	pkgconfig >= 1:0.19
 BuildRequires:	udev-devel >= 1:143
 BuildRequires:	xmlto >= 0.0.20
@@ -92,11 +92,11 @@ BuildRequires:	xorg-proto-bigreqsproto-devel >= 1.1.0
 BuildRequires:	xorg-proto-compositeproto-devel >= 0.4
 BuildRequires:	xorg-proto-damageproto-devel >= 1.1
 %{?with_dmx:BuildRequires:	xorg-proto-dmxproto-devel >= 2.2.99.1}
-%{?with_dri2:BuildRequires:	xorg-proto-dri2proto-devel >= 2.3}
-BuildRequires:	xorg-proto-fixesproto-devel >= 4.1
+%{?with_dri2:BuildRequires:	xorg-proto-dri2proto-devel >= 2.6}
+BuildRequires:	xorg-proto-fixesproto-devel >= 5.0
 BuildRequires:	xorg-proto-fontcacheproto-devel
 BuildRequires:	xorg-proto-fontsproto-devel
-BuildRequires:	xorg-proto-glproto-devel >= 1.4.10
+BuildRequires:	xorg-proto-glproto-devel >= 1.4.14
 BuildRequires:	xorg-proto-inputproto-devel >= 1.9.99.902
 BuildRequires:	xorg-proto-kbproto-devel >= 1.0.3
 BuildRequires:	xorg-proto-printproto-devel
@@ -115,18 +115,17 @@ BuildRequires:	xorg-proto-xf86miscproto-devel
 BuildRequires:	xorg-proto-xf86vidmodeproto-devel >= 2.2.99.1
 BuildRequires:	xorg-proto-xineramaproto-devel
 BuildRequires:	xorg-proto-xproto-devel >= 7.0.22
-BuildRequires:	xorg-sgml-doctools >= 1.5
-BuildRequires:	xorg-util-util-macros >= 1.10
-#BR: glitz-devel >= 0.4.3 (for XGL and EGL only)
+BuildRequires:	xorg-sgml-doctools >= 1.8
+BuildRequires:	xorg-util-util-macros >= 1.14
 #BR: xcalibrateproto, tslib (for KDRIVE only)
 Requires(triggerpostun):	sed >= 4.0
-Requires:	pixman >= 0.16.0
+Requires:	pixman >= 0.22.0
 Requires:	xkeyboard-config
 # for rgb.txt
 Requires:	xorg-app-rgb >= 0.99.3
 Requires:	xorg-app-xkbcomp
 %{?with_hal:Suggests:	hal}
-Suggests:	udev-acl
+Suggests:	udev-acl >= 1:143
 %{?with_udev:Suggests:	udev-core >= 1:143}
 Suggests:	xorg-driver-input-evdev
 # xserver requires fixed and cursor fonts
@@ -215,7 +214,7 @@ Xnest - це сервер X Window System, який працює у вікні X
 Summary:	Xephyr - nested X server
 Summary(pl.UTF-8):	Xephyr - zagnieżdżony serwer X
 Group:		X11/Servers
-Requires:	pixman >= 0.16.0
+Requires:	pixman >= 0.22.0
 
 %description -n xorg-xserver-Xephyr
 Xephyr is a a kdrive server that outputs to a window on a pre-existing
@@ -299,10 +298,10 @@ Summary:	Header files for X.org server
 Summary(pl.UTF-8):	Pliki nagłówkowe dla serwera X.org
 Group:		X11/Development/Libraries
 Requires:	libdrm-devel >= 2.4.5
-Requires:	pixman-devel >= 0.16.0
+Requires:	pixman-devel >= 0.22.0
 Requires:	xorg-lib-libpciaccess-devel >= 0.8.0
 Requires:	xorg-lib-libxkbfile-devel
-%{?with_dri2:Requires:	xorg-proto-dri2proto-devel >= 2.3}
+%{?with_dri2:Requires:	xorg-proto-dri2proto-devel >= 2.6}
 Requires:	xorg-proto-fontsproto-devel
 Requires:	xorg-proto-inputproto-devel >= 1.9.99.902
 Requires:	xorg-proto-kbproto-devel >= 1.0.3
@@ -312,7 +311,7 @@ Requires:	xorg-proto-videoproto-devel
 Requires:	xorg-proto-xextproto-devel >= 1:7.2.0
 Requires:	xorg-proto-xf86driproto-devel >= 2.1.0
 Requires:	xorg-proto-xineramaproto-devel
-Requires:	xorg-proto-xproto-devel >= 7.0.17
+Requires:	xorg-proto-xproto-devel >= 7.0.22
 Obsoletes:	X11-Xserver-devel < 1:7.0.0
 Obsoletes:	XFree86-Xserver-devel < 1:7.0.0
 
@@ -601,8 +600,7 @@ fi
 
 %files devel
 %defattr(644,root,root,755)
-%doc doc/Xserver-spec.xml
-%doc doc/Xinput.xml
+%doc doc/{Xinput,Xserver-spec}.html
 %{_includedir}/xorg
 %{_libdir}/libxf86config.a
 %{_libdir}/libxf86config.la
