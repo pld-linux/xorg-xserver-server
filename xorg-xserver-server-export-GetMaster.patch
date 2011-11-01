@@ -1,0 +1,13 @@
+diff --git a/include/input.h b/include/input.h
+index 6ba1ab2..7c117b6 100644
+--- a/include/input.h
++++ b/include/input.h
+@@ -501,7 +501,7 @@ extern int AttachDevice(ClientPtr client,
+                         DeviceIntPtr master);
+ 
+ extern _X_EXPORT DeviceIntPtr GetPairedDevice(DeviceIntPtr kbd);
+-extern DeviceIntPtr GetMaster(DeviceIntPtr dev, int type);
++extern _X_EXPORT DeviceIntPtr GetMaster(DeviceIntPtr dev, int type);
+ 
+ extern _X_EXPORT int AllocDevicePair(ClientPtr client,
+                              char* name,
