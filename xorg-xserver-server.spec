@@ -18,6 +18,8 @@
 %define	xorg_xserver_server_font_abi		0.6
 %define	xorg_xserver_server_videodrv_abi	11.0
 %define	xorg_xserver_server_xinput_abi		13.0
+#
+%define	pixman_ver	0.24.0
 
 %define		rel	1
 Summary:	X.org server
@@ -60,7 +62,7 @@ BuildRequires:	libtool
 BuildRequires:	ncurses-devel
 BuildRequires:	pam-devel
 BuildRequires:	perl-base
-BuildRequires:	pixman-devel >= 0.22.0
+BuildRequires:	pixman-devel >= %{pixman_ver}
 BuildRequires:	pkgconfig >= 1:0.19
 BuildRequires:	udev-devel >= 1:143
 BuildRequires:	xmlto >= 0.0.20
@@ -121,7 +123,7 @@ BuildRequires:	xorg-sgml-doctools >= 1.8
 BuildRequires:	xorg-util-util-macros >= 1.14
 #BR: xcalibrateproto, tslib (for KDRIVE only)
 Requires(triggerpostun):	sed >= 4.0
-Requires:	pixman >= 0.22.0
+Requires:	pixman >= %{pixman_ver}
 Requires:	xkeyboard-config
 # for rgb.txt
 Requires:	xorg-app-rgb >= 0.99.3
@@ -216,7 +218,7 @@ Xnest - це сервер X Window System, який працює у вікні X
 Summary:	Xephyr - nested X server
 Summary(pl.UTF-8):	Xephyr - zagnieżdżony serwer X
 Group:		X11/Servers
-Requires:	pixman >= 0.22.0
+Requires:	pixman >= %{pixman_ver}
 
 %description -n xorg-xserver-Xephyr
 Xephyr is a a kdrive server that outputs to a window on a pre-existing
@@ -300,7 +302,7 @@ Summary:	Header files for X.org server
 Summary(pl.UTF-8):	Pliki nagłówkowe dla serwera X.org
 Group:		X11/Development/Libraries
 Requires:	libdrm-devel >= 2.4.5
-Requires:	pixman-devel >= 0.22.0
+Requires:	pixman-devel >= %{pixman_ver}
 Requires:	xorg-lib-libpciaccess-devel >= 0.8.0
 Requires:	xorg-lib-libxkbfile-devel
 %{?with_dri2:Requires:	xorg-proto-dri2proto-devel >= 2.6}
