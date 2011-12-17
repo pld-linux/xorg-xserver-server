@@ -5,7 +5,7 @@
  
      fd = LinuxConsoleFd;
 -    ki->driverPrivate = (void *) fd;
-+    ki->driverPrivate = (void *) (uintptr_t) fd;
++    ki->driverPrivate = (void *) (intptr_t) fd;
  
      ioctl (fd, KDGKBMODE, &LinuxKbdTrans);
      tcgetattr (fd, &LinuxTermios);
@@ -14,7 +14,7 @@
          return;
  
 -    fd = (int) ki->driverPrivate;
-+    fd = (int) (uintptr_t) ki->driverPrivate;
++    fd = (int) (intptr_t) ki->driverPrivate;
  
      KdUnregisterFd(ki, fd, FALSE);
      ioctl(fd, KDSKBMODE, LinuxKbdTrans);
@@ -23,7 +23,7 @@
          return;
  
 -    ioctl ((int)ki->driverPrivate, KDSETLED, leds & 7);
-+    ioctl ((int) (uintptr_t)ki->driverPrivate, KDSETLED, leds & 7);
++    ioctl ((int) (intptr_t)ki->driverPrivate, KDSETLED, leds & 7);
  }
  
  KdKeyboardDriver LinuxKeyboardDriver = {
@@ -34,7 +34,7 @@
      if (KdRegisterFd (port, MsRead, pi))
  	return TRUE;
 -    pi->driverPrivate = (void *)port;
-+    pi->driverPrivate = (void *) (uintptr_t)port;
++    pi->driverPrivate = (void *) (intptr_t)port;
  
      return Success;
  
@@ -43,7 +43,7 @@
  MsDisable (KdPointerInfo *pi)
  {
 -    KdUnregisterFd (pi, (int)pi->driverPrivate, TRUE);
-+    KdUnregisterFd (pi, (int)(uintptr_t)pi->driverPrivate, TRUE);
++    KdUnregisterFd (pi, (int)(intptr_t)pi->driverPrivate, TRUE);
  }
  
  static void
@@ -54,7 +54,7 @@
      }
  
 -    pi->driverPrivate = (void *)fd;
-+    pi->driverPrivate = (void *)(uintptr_t)fd;
++    pi->driverPrivate = (void *)(intptr_t)fd;
  
      return Success;
  }
@@ -63,7 +63,7 @@
  Ps2Disable (KdPointerInfo *pi)
  {
 -    KdUnregisterFd (pi, (int)pi->driverPrivate, TRUE);
-+    KdUnregisterFd (pi, (int)(uintptr_t)pi->driverPrivate, TRUE);
++    KdUnregisterFd (pi, (int)(intptr_t)pi->driverPrivate, TRUE);
  }
  
  static void
