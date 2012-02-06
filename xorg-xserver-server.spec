@@ -1,7 +1,6 @@
 # TODO: consider XSELINUX
 #
 # Conditional build:
-%bcond_with	multigl		# package libglx.so in a way allowing concurrent install with nvidia/fglrx drivers
 %bcond_with	dbus		# D-BUS support for configuration (if no udev)
 %bcond_with	hal		# HAL support for configuration (if no udev)
 %bcond_without	udev		# UDEV support for configuration
@@ -21,12 +20,11 @@
 #
 %define	pixman_ver	0.24.0
 
-%define		rel	1
 Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
 Version:	1.11.4
-Release:	%{rel}%{?with_multigl:.mgl}
+Release:	1
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
@@ -158,11 +156,6 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 # avoid self-dependencies on included modules
 %define		_noautoreq	libscanpci.so libxf1bpp.so
-
-%if %{with multigl}
-# executable Xorg provides symbols this library:
-%define		skip_post_check_so	libglx.so.*
-%endif
 
 %description
 Xorg server is a generally used X server which uses display hardware.
@@ -342,10 +335,6 @@ Summary(pl.UTF-8):	Biblioteka rozszerzenia DRI dla serwera X.org
 Group:		X11/Servers
 Requires:	%{name} = %{version}-%{release}
 Provides:	xorg-xserver-module(dri)
-%if %{without multigl}
-Conflicts:	xorg-driver-video-fglrx
-Conflicts:	xorg-driver-video-nvidia
-%endif
 
 %description -n xorg-xserver-libdri
 DRI extension library for X.org server.
@@ -364,10 +353,6 @@ Provides:	xorg-xserver-libglx(glapi) = 7.1.0
 Provides:	xorg-xserver-module(glx)
 Obsoletes:	X11-OpenGL-core < 1:7.0.0
 Obsoletes:	XFree86-OpenGL-core < 1:7.0.0
-%if %{without multigl}
-Conflicts:	xorg-driver-video-fglrx
-Conflicts:	xorg-driver-video-nvidia
-%endif
 
 %description -n xorg-xserver-libglx
 GLX extension library for X.org server.
@@ -473,13 +458,6 @@ install -d $RPM_BUILD_ROOT/etc/sysconfig
 install -p %{SOURCE10} $RPM_BUILD_ROOT/etc/rc.d/init.d/Xvfb
 cp -p %{SOURCE11} $RPM_BUILD_ROOT/etc/sysconfig/Xvfb
 
-%if %{with multigl}
-cd $RPM_BUILD_ROOT%{_libdir}/xorg/modules/extensions
-mv -f libglx.so libglx.so.%{version}
-ln -sf libglx.so.%{version} libglx.so
-cd -
-%endif
-
 install -d $RPM_BUILD_ROOT%{_usrsrc}/%{name}-%{version}
 cp -a * $RPM_BUILD_ROOT%{_usrsrc}/%{name}-%{version}
 cd $RPM_BUILD_ROOT%{_usrsrc}/%{name}-%{version}
@@ -489,13 +467,6 @@ find -name '*.h' | xargs chmod a-x
 
 %clean
 rm -rf $RPM_BUILD_ROOT
-
-%if %{with multigl}
-%post -n xorg-xserver-libglx
-if [ ! -e %{_libdir}/xorg/modules/extensions/libglx.so ]; then
-	ln -sf libglx.so.%{version} %{_libdir}/xorg/modules/extensions/libglx.so
-fi
-%endif
 
 %triggerpostun -- xorg-xserver-server < 1.5.0
 if [ -f /etc/X11/xorg.conf ]; then
@@ -624,9 +595,4 @@ fi
 
 %files -n xorg-xserver-libglx
 %defattr(644,root,root,755)
-%if %{with multigl}
-%ghost %{_libdir}/xorg/modules/extensions/libglx.so
-%attr(755,root,root) %{_libdir}/xorg/modules/extensions/libglx.so.%{version}
-%else
 %attr(755,root,root) %{_libdir}/xorg/modules/extensions/libglx.so
-%endif
