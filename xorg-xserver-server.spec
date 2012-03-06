@@ -86,7 +86,7 @@ BuildRequires:	xorg-lib-libXxf86misc-devel
 BuildRequires:	xorg-lib-libXxf86vm-devel
 %{?with_dmx:BuildRequires:	xorg-lib-libdmx-devel >= 1.0.99.1}
 BuildRequires:	xorg-lib-libfontenc-devel
-BuildRequires:	xorg-lib-libpciaccess-devel >= 0.8.0
+BuildRequires:	xorg-lib-libpciaccess-devel >= 0.12.901
 BuildRequires:	xorg-lib-libxkbfile-devel
 BuildRequires:	xorg-lib-libxkbui-devel >= 1.0.2
 BuildRequires:	xorg-lib-xtrans-devel >= 1.2.2
@@ -119,7 +119,7 @@ BuildRequires:	xorg-proto-xineramaproto-devel
 BuildRequires:	xorg-proto-xproto-devel >= 7.0.22
 BuildRequires:	xorg-sgml-doctools >= 1.8
 BuildRequires:	xorg-util-util-macros >= 1.14
-#BR: xcalibrateproto, tslib (for KDRIVE only)
+#BR: tslib (for KDRIVE only)
 Requires(triggerpostun):	sed >= 4.0
 Requires:	pixman >= %{pixman_ver}
 Requires:	xkeyboard-config
@@ -296,7 +296,7 @@ Summary(pl.UTF-8):	Pliki nagłówkowe dla serwera X.org
 Group:		X11/Development/Libraries
 Requires:	libdrm-devel >= 2.4.5
 Requires:	pixman-devel >= %{pixman_ver}
-Requires:	xorg-lib-libpciaccess-devel >= 0.8.0
+Requires:	xorg-lib-libpciaccess-devel >= 0.12.901
 Requires:	xorg-lib-libxkbfile-devel
 %{?with_dri2:Requires:	xorg-proto-dri2proto-devel >= 2.6}
 Requires:	xorg-proto-fontsproto-devel
