@@ -370,6 +370,7 @@ Biblioteka rozszerzenia GLX dla serwera X.org.
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
+#unfortunately breaks build
 #patch7 -p1
 
 # xserver uses pixman-1 API/ABI so put that explictly here
