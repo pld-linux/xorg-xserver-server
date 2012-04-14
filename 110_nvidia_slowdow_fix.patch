@@ -81,15 +81,15 @@ diff -ru a/render/mipict.c b/render/mipict.c
  Bool
  miPictureInit (ScreenPtr pScreen, PictFormatPtr formats, int nformats)
  {
-@@ -599,7 +660,7 @@
-     ps->Composite	= 0;			/* requires DDX support */
-     ps->Glyphs		= miGlyphs;
-     ps->CompositeRects	= miCompositeRects;
--    ps->Trapezoids	= 0;
-+    ps->Trapezoids	= miTrapezoids;
-     ps->Triangles	= 0;
-     
-     ps->RasterizeTrapezoid = 0;			/* requires DDX support */
+@@ -656,7 +656,7 @@
+     ps->Composite = 0;          /* requires DDX support */
+     ps->Glyphs = miGlyphs;
+     ps->CompositeRects = miCompositeRects;
+-    ps->Trapezoids = 0;
++    ps->Trapezoids = miTrapezoids;
+     ps->Triangles = 0;
+ 
+     ps->RasterizeTrapezoid = 0; /* requires DDX support */
 diff -ru a/render/mipict.h b/render/mipict.h
 --- a/render/mipict.h	2011-04-04 05:19:50.000000000 +0200
 +++ b/render/mipict.h	2011-10-05 22:06:19.000000000 +0200

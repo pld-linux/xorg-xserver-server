@@ -23,12 +23,12 @@
 Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
-Version:	1.12.0.902
+Version:	1.12.1
 Release:	1
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
-# Source0-md5:	edefadc81ab0af5116740bbf2504f850
+# Source0-md5:	20e73b422bda6f0d1405af676983cc70
 Source1:	10-quirks.conf
 Source2:	xserver.pamd
 Source10:	%{name}-Xvfb.init
@@ -369,9 +369,7 @@ Biblioteka rozszerzenia GLX dla serwera X.org.
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
-
-# is this finnaly solved in nvidia drivers?
-# %patch6 -p1
+%patch6 -p1
 
 #unfortunately breaks build
 #patch7 -p1
