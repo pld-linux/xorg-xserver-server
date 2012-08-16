@@ -15,20 +15,20 @@
 %define	xorg_xserver_server_ansic_abi		0.4
 %define	xorg_xserver_server_extension_abi	6.0
 %define	xorg_xserver_server_font_abi		0.6
-%define	xorg_xserver_server_videodrv_abi	12.0
-%define	xorg_xserver_server_xinput_abi		16.0
+%define	xorg_xserver_server_videodrv_abi	13.0
+%define	xorg_xserver_server_xinput_abi		18.0
 #
 %define	pixman_ver	0.26.0
 
 Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
-Version:	1.12.3
+Version:	1.12.99.904
 Release:	1
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
-# Source0-md5:	65a53b11bc01dcc97ee9b201dc620c32
+# Source0-md5:	22478ae3d0fadbf3374e030d5650774a
 Source1:	10-quirks.conf
 Source2:	xserver.pamd
 Source10:	%{name}-Xvfb.init
@@ -144,6 +144,8 @@ Provides:	xorg-xserver-server(extension-abi) = %{xorg_xserver_server_extension_a
 Provides:	xorg-xserver-server(font-abi) = %{xorg_xserver_server_font_abi}
 Provides:	xorg-xserver-server(videodrv-abi) = %{xorg_xserver_server_videodrv_abi}
 Provides:	xorg-xserver-server(xinput-abi) = %{xorg_xserver_server_xinput_abi}
+Provides:	xorg-xserver-module(dri)
+Provides:	xorg-xserver-libdri = %{version}-%{release}
 Obsoletes:	X11-Xserver < 1:7.0.0
 Obsoletes:	X11-driver-i2c < 1:7.0.0
 Obsoletes:	X11-modules < 1:7.0.0
@@ -153,6 +155,7 @@ Obsoletes:	XFree86-modules < 1:7.0.0
 Obsoletes:	XFree86-setup < 1:7.0.0
 Obsoletes:	Xserver
 Obsoletes:	xorg-xserver-server-xorgcfg
+Obsoletes:	xorg-xserver-libdri
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 # avoid self-dependencies on included modules
@@ -330,25 +333,11 @@ X.org server source code.
 %description source -l pl.UTF-8
 Pliki źródłowe dla serwera X.org.
 
-%package -n xorg-xserver-libdri
-Summary:	DRI extension library for X.org server
-Summary(pl.UTF-8):	Biblioteka rozszerzenia DRI dla serwera X.org
-Group:		X11/Servers
-Requires:	%{name} = %{version}-%{release}
-Provides:	xorg-xserver-module(dri)
-
-%description -n xorg-xserver-libdri
-DRI extension library for X.org server.
-
-%description -n xorg-xserver-libdri -l pl.UTF-8
-Biblioteka rozszerzenia DRI dla serwera X.org.
-
 %package -n xorg-xserver-libglx
 Summary:	GLX extension library for X.org server
 Summary(pl.UTF-8):	Biblioteka rozszerzenia GLX dla serwera X.org
 Group:		X11/Servers
 Requires:	%{name} = %{version}-%{release}
-Requires:	xorg-xserver-libdri = %{version}-%{release}
 # Mesa version glapi tables in glx/ dir come from
 Provides:	xorg-xserver-libglx(glapi) = 7.1.0
 Provides:	xorg-xserver-module(glx)
@@ -506,10 +495,6 @@ fi
 %dir %{_libdir}/xorg/modules/dri
 %dir %{_libdir}/xorg/modules/drivers
 %dir %{_libdir}/xorg/modules/extensions
-%attr(755,root,root) %{_libdir}/xorg/modules/extensions/libdbe.so
-%{?with_dri2:%attr(755,root,root) %{_libdir}/xorg/modules/extensions/libdri2.so}
-%attr(755,root,root) %{_libdir}/xorg/modules/extensions/libextmod.so
-%{?with_record:%attr(755,root,root) %{_libdir}/xorg/modules/extensions/librecord.so}
 %dir %{_libdir}/xorg/modules/input
 %dir %{_libdir}/xorg/modules/multimedia
 %attr(755,root,root) %{_libdir}/xorg/modules/multimedia/*.so
@@ -592,10 +577,6 @@ fi
 # keep file perms from install time, but have default defattr to keep adapter happy
 %defattr(-,root,root,755)
 %{_usrsrc}/%{name}-%{version}
-
-%files -n xorg-xserver-libdri
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/xorg/modules/extensions/libdri.so
 
 %files -n xorg-xserver-libglx
 %defattr(644,root,root,755)
