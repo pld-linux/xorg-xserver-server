@@ -308,6 +308,8 @@ Requires:	xorg-proto-inputproto-devel >= 2.2
 Requires:	xorg-proto-kbproto-devel >= 1.0.3
 Requires:	xorg-proto-randrproto-devel >= 1.3
 Requires:	xorg-proto-renderproto-devel >= 0.11
+Requires:	xorg-proto-resourceproto-devel
+Requires:	xorg-proto-scrnsaverproto-devel
 Requires:	xorg-proto-videoproto-devel
 Requires:	xorg-proto-xextproto-devel >= 1:7.2.0
 Requires:	xorg-proto-xf86driproto-devel >= 2.1.0
