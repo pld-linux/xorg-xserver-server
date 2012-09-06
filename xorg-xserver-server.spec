@@ -23,12 +23,12 @@
 Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
-Version:	1.12.99.905
+Version:	1.13.0
 Release:	1
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
-# Source0-md5:	7e7bdd9a6721ba3eb0ae518c7f0a7229
+# Source0-md5:	bde3d178b756597d2ec2a19ef60d2e1f
 Source1:	10-quirks.conf
 Source2:	xserver.pamd
 Source10:	%{name}-Xvfb.init
@@ -55,7 +55,7 @@ BuildRequires:	docbook-dtd43-xml
 BuildRequires:	dbus-devel >= 1.0
 %endif
 %{?with_hal:BuildRequires:	hal-devel}
-BuildRequires:	libdrm-devel >= 2.4.5
+BuildRequires:	libdrm-devel >= 2.4.39
 %{?with_xselinux:BuildRequires:	libselinux-devel >= 2.0.86}
 BuildRequires:	libtool
 BuildRequires:	ncurses-devel
@@ -298,7 +298,7 @@ usługę systemową.
 Summary:	Header files for X.org server
 Summary(pl.UTF-8):	Pliki nagłówkowe dla serwera X.org
 Group:		X11/Development/Libraries
-Requires:	libdrm-devel >= 2.4.5
+Requires:	libdrm-devel >= 2.4.39
 Requires:	pixman-devel >= %{pixman_ver}
 Requires:	xorg-lib-libpciaccess-devel >= 0.12.901
 Requires:	xorg-lib-libxkbfile-devel
