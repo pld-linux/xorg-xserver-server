@@ -95,18 +95,18 @@ BuildRequires:	xorg-proto-bigreqsproto-devel >= 1.1.0
 BuildRequires:	xorg-proto-compositeproto-devel >= 0.4
 BuildRequires:	xorg-proto-damageproto-devel >= 1.1
 %{?with_dmx:BuildRequires:	xorg-proto-dmxproto-devel >= 2.2.99.1}
-%{?with_dri2:BuildRequires:	xorg-proto-dri2proto-devel >= 2.6}
+%{?with_dri2:BuildRequires:	xorg-proto-dri2proto-devel >= 2.8}
 BuildRequires:	xorg-proto-fixesproto-devel >= 5.0
 BuildRequires:	xorg-proto-fontcacheproto-devel
 BuildRequires:	xorg-proto-fontsproto-devel
-BuildRequires:	xorg-proto-glproto-devel >= 1.4.14
+BuildRequires:	xorg-proto-glproto-devel >= 1.4.16
 BuildRequires:	xorg-proto-inputproto-devel >= 2.2
 BuildRequires:	xorg-proto-kbproto-devel >= 1.0.3
 BuildRequires:	xorg-proto-printproto-devel
-BuildRequires:	xorg-proto-randrproto-devel >= 1.3
+BuildRequires:	xorg-proto-randrproto-devel >= 1.4
 %{?with_record:BuildRequires:	xorg-proto-recordproto-devel >= 1.13.99.1}
 BuildRequires:	xorg-proto-renderproto-devel >= 0.11
-BuildRequires:	xorg-proto-resourceproto-devel
+BuildRequires:	xorg-proto-resourceproto-devel >= 1.2
 BuildRequires:	xorg-proto-scrnsaverproto-devel >= 1.1
 BuildRequires:	xorg-proto-videoproto-devel
 BuildRequires:	xorg-proto-xcmiscproto-devel >= 1.2.0
