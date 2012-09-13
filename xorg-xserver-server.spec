@@ -103,10 +103,10 @@ BuildRequires:	xorg-proto-glproto-devel >= 1.4.16
 BuildRequires:	xorg-proto-inputproto-devel >= 2.2
 BuildRequires:	xorg-proto-kbproto-devel >= 1.0.3
 BuildRequires:	xorg-proto-printproto-devel
-BuildRequires:	xorg-proto-randrproto-devel >= 1.4
+BuildRequires:	xorg-proto-randrproto-devel >= 1.4.0
 %{?with_record:BuildRequires:	xorg-proto-recordproto-devel >= 1.13.99.1}
 BuildRequires:	xorg-proto-renderproto-devel >= 0.11
-BuildRequires:	xorg-proto-resourceproto-devel >= 1.2
+BuildRequires:	xorg-proto-resourceproto-devel >= 1.2.0
 BuildRequires:	xorg-proto-scrnsaverproto-devel >= 1.1
 BuildRequires:	xorg-proto-videoproto-devel
 BuildRequires:	xorg-proto-xcmiscproto-devel >= 1.2.0
@@ -302,14 +302,14 @@ Requires:	libdrm-devel >= 2.4.39
 Requires:	pixman-devel >= %{pixman_ver}
 Requires:	xorg-lib-libpciaccess-devel >= 0.12.901
 Requires:	xorg-lib-libxkbfile-devel
-%{?with_dri2:Requires:	xorg-proto-dri2proto-devel >= 2.6}
+%{?with_dri2:Requires:	xorg-proto-dri2proto-devel >= 2.8}
 Requires:	xorg-proto-fontsproto-devel
 Requires:	xorg-proto-inputproto-devel >= 2.2
 Requires:	xorg-proto-kbproto-devel >= 1.0.3
-Requires:	xorg-proto-randrproto-devel >= 1.3
+Requires:	xorg-proto-randrproto-devel >= 1.4.0
 Requires:	xorg-proto-renderproto-devel >= 0.11
-Requires:	xorg-proto-resourceproto-devel
-Requires:	xorg-proto-scrnsaverproto-devel
+Requires:	xorg-proto-resourceproto-devel >= 1.2.0
+Requires:	xorg-proto-scrnsaverproto-devel >= 1.1
 Requires:	xorg-proto-videoproto-devel
 Requires:	xorg-proto-xextproto-devel >= 1:7.2.0
 Requires:	xorg-proto-xf86driproto-devel >= 2.1.0
