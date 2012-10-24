@@ -13,22 +13,22 @@
 #
 # ABI versions, see hw/xfree86/common/xf86Module.h
 %define	xorg_xserver_server_ansic_abi		0.4
-%define	xorg_xserver_server_extension_abi	6.0
+%define	xorg_xserver_server_extension_abi	7.0
 %define	xorg_xserver_server_font_abi		0.6
-%define	xorg_xserver_server_videodrv_abi	12.1
-%define	xorg_xserver_server_xinput_abi		16.0
+%define	xorg_xserver_server_videodrv_abi	13.0
+%define	xorg_xserver_server_xinput_abi		18.0
 #
 %define	pixman_ver	0.26.0
 
 Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
-Version:	1.12.4
+Version:	1.13.0
 Release:	1
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
-# Source0-md5:	f87d830aa69885275e26dd6327d76a44
+# Source0-md5:	bde3d178b756597d2ec2a19ef60d2e1f
 Source1:	10-quirks.conf
 Source2:	xserver.pamd
 Source10:	%{name}-Xvfb.init
@@ -55,7 +55,7 @@ BuildRequires:	docbook-dtd43-xml
 BuildRequires:	dbus-devel >= 1.0
 %endif
 %{?with_hal:BuildRequires:	hal-devel}
-BuildRequires:	libdrm-devel >= 2.4.5
+BuildRequires:	libdrm-devel >= 2.4.39
 %{?with_xselinux:BuildRequires:	libselinux-devel >= 2.0.86}
 BuildRequires:	libtool
 BuildRequires:	ncurses-devel
@@ -95,18 +95,18 @@ BuildRequires:	xorg-proto-bigreqsproto-devel >= 1.1.0
 BuildRequires:	xorg-proto-compositeproto-devel >= 0.4
 BuildRequires:	xorg-proto-damageproto-devel >= 1.1
 %{?with_dmx:BuildRequires:	xorg-proto-dmxproto-devel >= 2.2.99.1}
-%{?with_dri2:BuildRequires:	xorg-proto-dri2proto-devel >= 2.6}
+%{?with_dri2:BuildRequires:	xorg-proto-dri2proto-devel >= 2.8}
 BuildRequires:	xorg-proto-fixesproto-devel >= 5.0
 BuildRequires:	xorg-proto-fontcacheproto-devel
 BuildRequires:	xorg-proto-fontsproto-devel
-BuildRequires:	xorg-proto-glproto-devel >= 1.4.14
+BuildRequires:	xorg-proto-glproto-devel >= 1.4.16
 BuildRequires:	xorg-proto-inputproto-devel >= 2.2
 BuildRequires:	xorg-proto-kbproto-devel >= 1.0.3
 BuildRequires:	xorg-proto-printproto-devel
-BuildRequires:	xorg-proto-randrproto-devel >= 1.3
+BuildRequires:	xorg-proto-randrproto-devel >= 1.4.0
 %{?with_record:BuildRequires:	xorg-proto-recordproto-devel >= 1.13.99.1}
 BuildRequires:	xorg-proto-renderproto-devel >= 0.11
-BuildRequires:	xorg-proto-resourceproto-devel
+BuildRequires:	xorg-proto-resourceproto-devel >= 1.2.0
 BuildRequires:	xorg-proto-scrnsaverproto-devel >= 1.1
 BuildRequires:	xorg-proto-videoproto-devel
 BuildRequires:	xorg-proto-xcmiscproto-devel >= 1.2.0
@@ -144,6 +144,8 @@ Provides:	xorg-xserver-server(extension-abi) = %{xorg_xserver_server_extension_a
 Provides:	xorg-xserver-server(font-abi) = %{xorg_xserver_server_font_abi}
 Provides:	xorg-xserver-server(videodrv-abi) = %{xorg_xserver_server_videodrv_abi}
 Provides:	xorg-xserver-server(xinput-abi) = %{xorg_xserver_server_xinput_abi}
+Provides:	xorg-xserver-module(dri)
+Provides:	xorg-xserver-libdri = %{version}-%{release}
 Obsoletes:	X11-Xserver < 1:7.0.0
 Obsoletes:	X11-driver-i2c < 1:7.0.0
 Obsoletes:	X11-modules < 1:7.0.0
@@ -153,6 +155,7 @@ Obsoletes:	XFree86-modules < 1:7.0.0
 Obsoletes:	XFree86-setup < 1:7.0.0
 Obsoletes:	Xserver
 Obsoletes:	xorg-xserver-server-xorgcfg
+Obsoletes:	xorg-xserver-libdri
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 # avoid self-dependencies on included modules
@@ -295,16 +298,18 @@ usługę systemową.
 Summary:	Header files for X.org server
 Summary(pl.UTF-8):	Pliki nagłówkowe dla serwera X.org
 Group:		X11/Development/Libraries
-Requires:	libdrm-devel >= 2.4.5
+Requires:	libdrm-devel >= 2.4.39
 Requires:	pixman-devel >= %{pixman_ver}
 Requires:	xorg-lib-libpciaccess-devel >= 0.12.901
 Requires:	xorg-lib-libxkbfile-devel
-%{?with_dri2:Requires:	xorg-proto-dri2proto-devel >= 2.6}
+%{?with_dri2:Requires:	xorg-proto-dri2proto-devel >= 2.8}
 Requires:	xorg-proto-fontsproto-devel
 Requires:	xorg-proto-inputproto-devel >= 2.2
 Requires:	xorg-proto-kbproto-devel >= 1.0.3
-Requires:	xorg-proto-randrproto-devel >= 1.3
+Requires:	xorg-proto-randrproto-devel >= 1.4.0
 Requires:	xorg-proto-renderproto-devel >= 0.11
+Requires:	xorg-proto-resourceproto-devel >= 1.2.0
+Requires:	xorg-proto-scrnsaverproto-devel >= 1.1
 Requires:	xorg-proto-videoproto-devel
 Requires:	xorg-proto-xextproto-devel >= 1:7.2.0
 Requires:	xorg-proto-xf86driproto-devel >= 2.1.0
@@ -330,25 +335,11 @@ X.org server source code.
 %description source -l pl.UTF-8
 Pliki źródłowe dla serwera X.org.
 
-%package -n xorg-xserver-libdri
-Summary:	DRI extension library for X.org server
-Summary(pl.UTF-8):	Biblioteka rozszerzenia DRI dla serwera X.org
-Group:		X11/Servers
-Requires:	%{name} = %{version}-%{release}
-Provides:	xorg-xserver-module(dri)
-
-%description -n xorg-xserver-libdri
-DRI extension library for X.org server.
-
-%description -n xorg-xserver-libdri -l pl.UTF-8
-Biblioteka rozszerzenia DRI dla serwera X.org.
-
 %package -n xorg-xserver-libglx
 Summary:	GLX extension library for X.org server
 Summary(pl.UTF-8):	Biblioteka rozszerzenia GLX dla serwera X.org
 Group:		X11/Servers
 Requires:	%{name} = %{version}-%{release}
-Requires:	xorg-xserver-libdri = %{version}-%{release}
 # Mesa version glapi tables in glx/ dir come from
 Provides:	xorg-xserver-libglx(glapi) = 7.1.0
 Provides:	xorg-xserver-module(glx)
@@ -506,10 +497,6 @@ fi
 %dir %{_libdir}/xorg/modules/dri
 %dir %{_libdir}/xorg/modules/drivers
 %dir %{_libdir}/xorg/modules/extensions
-%attr(755,root,root) %{_libdir}/xorg/modules/extensions/libdbe.so
-%{?with_dri2:%attr(755,root,root) %{_libdir}/xorg/modules/extensions/libdri2.so}
-%attr(755,root,root) %{_libdir}/xorg/modules/extensions/libextmod.so
-%{?with_record:%attr(755,root,root) %{_libdir}/xorg/modules/extensions/librecord.so}
 %dir %{_libdir}/xorg/modules/input
 %dir %{_libdir}/xorg/modules/multimedia
 %attr(755,root,root) %{_libdir}/xorg/modules/multimedia/*.so
@@ -592,10 +579,6 @@ fi
 # keep file perms from install time, but have default defattr to keep adapter happy
 %defattr(-,root,root,755)
 %{_usrsrc}/%{name}-%{version}
-
-%files -n xorg-xserver-libdri
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/xorg/modules/extensions/libdri.so
 
 %files -n xorg-xserver-libglx
 %defattr(644,root,root,755)
