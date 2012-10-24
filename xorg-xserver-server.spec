@@ -24,7 +24,7 @@ Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
 Version:	1.13.0
-Release:	1
+Release:	2
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
@@ -41,6 +41,8 @@ Patch4:		%{name}-builtin-SHA1.patch
 Patch5:		%{name}-export-GetMaster.patch
 Patch6:		110_nvidia_slowdow_fix.patch
 Patch7:		%{name}-include-defs.patch
+# https://bugs.freedesktop.org/show_bug.cgi?id=54654
+Patch8:		0001-dix-fix-zaphod-screen-scrossing-54654.patch
 URL:		http://xorg.freedesktop.org/
 BuildRequires:	Mesa-libGL-devel >= 7.8.1
 # for glx headers
@@ -364,6 +366,8 @@ Biblioteka rozszerzenia GLX dla serwera X.org.
 
 #unfortunately breaks build
 #patch7 -p1
+
+%patch8 -p1
 
 # xserver uses pixman-1 API/ABI so put that explictly here
 sed -i -e 's#<pixman\.h#<pixman-1/pixman.h#g' ./fb/fb.h ./include/miscstruct.h ./render/picture.h
