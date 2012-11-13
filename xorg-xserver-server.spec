@@ -24,7 +24,7 @@ Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
 Version:	1.13.0
-Release:	3
+Release:	4
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
@@ -35,7 +35,7 @@ Source10:	%{name}-Xvfb.init
 Source11:	%{name}-Xvfb.sysconfig
 Patch0:		%{name}-xwrapper.patch
 Patch1:		%{name}-pic-libxf86config.patch
-Patch2:		pixman-cache.patch
+
 Patch3:		%{name}-less-acpi-brokenness.patch
 Patch4:		%{name}-builtin-SHA1.patch
 Patch5:		%{name}-export-GetMaster.patch
@@ -358,7 +358,7 @@ Biblioteka rozszerzenia GLX dla serwera X.org.
 %setup -q -n xorg-server-%{version}
 %patch0 -p0
 %patch1 -p1
-%patch2 -p1
+
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
