@@ -46,7 +46,7 @@ BuildRequires:	Mesa-libGL-devel >= 7.8.1
 # for glx headers
 BuildRequires:	OpenGL-GLX-devel
 %{?with_xselinux:BuildRequires:	audit-libs-devel}
-BuildRequires:	autoconf >= 2.57
+BuildRequires:	autoconf >= 2.60
 BuildRequires:	automake
 BuildRequires:	cpp
 BuildRequires:	docbook-dtd43-xml
