@@ -52,7 +52,7 @@ diff --git a/include/dix-config.h.in b/include/dix-config.h.in
 index 058c8fd..d6e99a5 100644
 --- a/include/dix-config.h.in
 +++ b/include/dix-config.h.in
-@@ -142,24 +142,6 @@
+@@ -142,27 +142,6 @@
  /* Define to 1 if you have the <rpcsvc/dbm.h> header file. */
  #undef HAVE_RPCSVC_DBM_H
  
@@ -70,6 +70,9 @@ index 058c8fd..d6e99a5 100644
 -
 -/* Define to use libgcrypt SHA1 functions */
 -#undef HAVE_SHA1_IN_LIBGCRYPT
+-
+-/* Define to use libnettle SHA1 functions */
+-#undef HAVE_SHA1_IN_LIBNETTLE
 -
 -/* Define to use libsha1 for SHA1 */
 -#undef HAVE_SHA1_IN_LIBSHA1
@@ -91,7 +94,7 @@ index 66a4a0f..b8c1636 100644
  	$(XORG_SRCS)
 --- a/os/xsha1.c	2012-03-30 04:57:28.000000000 +0200
 +++ /dev/null	2011-06-01 08:46:43.490033582 +0200
-@@ -1,237 +0,0 @@
+@@ -1,267 +0,0 @@
 -#ifdef HAVE_DIX_CONFIG_H
 -#include <dix-config.h>
 -#endif
@@ -206,6 +209,36 @@ index 66a4a0f..b8c1636 100644
 -    CryptGetHashParam(*hHash, HP_HASHVAL, result, &len, 0);
 -    CryptDestroyHash(*hHash);
 -    CryptReleaseContext(hProv, 0);
+-    free(ctx);
+-    return 1;
+-}
+-
+-#elif defined(HAVE_SHA1_IN_LIBNETTLE)   /* Use libnettle for SHA1 */
+-
+-#include <nettle/sha.h>
+-
+-void *
+-x_sha1_init(void)
+-{
+-    struct sha1_ctx *ctx = malloc(sizeof(*ctx));
+-
+-    if (!ctx)
+-        return NULL;
+-    sha1_init(ctx);
+-    return ctx;
+-}
+-
+-int
+-x_sha1_update(void *ctx, void *data, int size)
+-{
+-    sha1_update(ctx, size, data);
+-    return 1;
+-}
+-
+-int
+-x_sha1_final(void *ctx, unsigned char result[20])
+-{
+-    sha1_digest(ctx, 20, result);
 -    free(ctx);
 -    return 1;
 -}
@@ -648,13 +681,13 @@ index 0000000..ace7d97
  else
    DIX_LIB='$(top_builddir)/dix/libdix.la'
    OS_LIB='$(top_builddir)/os/libos.la'
-@@ -1358,112 +1358,6 @@
+@@ -1358,124 +1358,6 @@
  MIEXT_SYNC_LIB='$(top_builddir)/miext/sync/libsync.la'
  CORE_INCS='-I$(top_srcdir)/include -I$(top_builddir)/include'
  
 -# SHA1 hashing
 -AC_ARG_WITH([sha1],
--            [AS_HELP_STRING([--with-sha1=libc|libmd|libgcrypt|libcrypto|libsha1|CommonCrypto|CryptoAPI],
+-            [AS_HELP_STRING([--with-sha1=libc|libmd|libnettle|libgcrypt|libcrypto|libsha1|CommonCrypto|CryptoAPI],
 -                            [choose SHA1 implementation])])
 -AC_CHECK_FUNC([SHA1Init], [HAVE_SHA1_IN_LIBC=yes])
 -if test "x$with_sha1" = x && test "x$HAVE_SHA1_IN_LIBC" = xyes; then
@@ -716,6 +749,18 @@ index 0000000..ace7d97
 -	AC_DEFINE([HAVE_SHA1_IN_LIBSHA1], [1],
 -	          [Use libsha1 for SHA1])
 -	SHA1_LIBS=-lsha1
+-fi
+-AC_CHECK_LIB([nettle], [nettle_sha1_init], [HAVE_LIBNETTLE=yes])
+-if test "x$with_sha1" = x && test "x$HAVE_LIBNETTLE" = xyes; then
+-	with_sha1=libnettle
+-fi
+-if test "x$with_sha1" = xlibnettle && test "x$HAVE_LIBNETTLE" != xyes; then
+-	AC_MSG_ERROR([libnettle requested but not found])
+-fi
+-if test "x$with_sha1" = xlibnettle; then
+-	AC_DEFINE([HAVE_SHA1_IN_LIBNETTLE], [1],
+-	          [Use libnettle SHA1 functions])
+-	SHA1_LIBS=-lnettle
 -fi
 -AC_CHECK_LIB([gcrypt], [gcry_md_open], [HAVE_LIBGCRYPT=yes])
 -if test "x$with_sha1" = x && test "x$HAVE_LIBGCRYPT" = xyes; then
