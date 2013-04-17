@@ -100,7 +100,7 @@ BuildRequires:	xorg-proto-fixesproto-devel >= 5.0
 BuildRequires:	xorg-proto-fontcacheproto-devel
 BuildRequires:	xorg-proto-fontsproto-devel
 BuildRequires:	xorg-proto-glproto-devel >= 1.4.16
-BuildRequires:	xorg-proto-inputproto-devel >= 2.2.99.1
+BuildRequires:	xorg-proto-inputproto-devel >= 2.3
 BuildRequires:	xorg-proto-kbproto-devel >= 1.0.3
 BuildRequires:	xorg-proto-printproto-devel
 BuildRequires:	xorg-proto-randrproto-devel >= 1.4.0
@@ -304,7 +304,7 @@ Requires:	xorg-lib-libpciaccess-devel >= 0.12.901
 Requires:	xorg-lib-libxkbfile-devel
 %{?with_dri2:Requires:	xorg-proto-dri2proto-devel >= 2.8}
 Requires:	xorg-proto-fontsproto-devel
-Requires:	xorg-proto-inputproto-devel >= 2.2.99.1
+Requires:	xorg-proto-inputproto-devel >= 2.3
 Requires:	xorg-proto-kbproto-devel >= 1.0.3
 Requires:	xorg-proto-randrproto-devel >= 1.4.0
 Requires:	xorg-proto-renderproto-devel >= 0.11
