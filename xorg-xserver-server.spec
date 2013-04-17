@@ -23,12 +23,12 @@
 Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
-Version:	1.14.0
+Version:	1.14.1
 Release:	1
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
-# Source0-md5:	86110278b784e279381b7f6f2295c508
+# Source0-md5:	6a0f1a1639ada4b9da7e9582bc79252a
 Source1:	10-quirks.conf
 Source2:	xserver.pamd
 Source10:	%{name}-Xvfb.init
@@ -435,6 +435,11 @@ rm -rf $RPM_BUILD_ROOT
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
+
+
+[ -e $RPM_BUILD_ROOT%{_mandir}/man5/xorg.conf.d.5x ] && \
+	echo ".so man5/xorg.conf.5x" > $RPM_BUILD_ROOT%{_mandir}/man5/xorg.conf.d.5x || \
+	exit 1
 
 install -Dp %{SOURCE2} $RPM_BUILD_ROOT/etc/pam.d/xserver
 install -d $RPM_BUILD_ROOT/etc/{security/console.apps,X11/xorg.conf.d}
