@@ -23,12 +23,12 @@
 Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
-Version:	1.14.1
+Version:	1.14.1.901
 Release:	1
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
-# Source0-md5:	6a0f1a1639ada4b9da7e9582bc79252a
+# Source0-md5:	4f231ad29ce44f3718cc1bf3b357dbb4
 Source1:	10-quirks.conf
 Source2:	xserver.pamd
 Source10:	%{name}-Xvfb.init
@@ -436,11 +436,6 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-
-[ -e $RPM_BUILD_ROOT%{_mandir}/man5/xorg.conf.d.5x ] && \
-	echo ".so man5/xorg.conf.5x" > $RPM_BUILD_ROOT%{_mandir}/man5/xorg.conf.d.5x || \
-	exit 1
-
 install -Dp %{SOURCE2} $RPM_BUILD_ROOT/etc/pam.d/xserver
 install -d $RPM_BUILD_ROOT/etc/{security/console.apps,X11/xorg.conf.d}
 install -d $RPM_BUILD_ROOT%{_libdir}/xorg/modules/{dri,drivers,input}
@@ -516,14 +511,14 @@ fi
 %dir %{_datadir}/X11/xorg.conf.d
 # overwrite these settings with local configs in /etc/X11/xorg.conf.d
 %verify(not md5 mtime size) %{_datadir}/X11/xorg.conf.d/*.conf
-%{_mandir}/man1/Xorg.1x*
-%{_mandir}/man1/Xserver.1x*
+%{_mandir}/man1/Xorg.1*
+%{_mandir}/man1/Xserver.1*
 %{_mandir}/man1/cvt.1*
-%{_mandir}/man1/gtf.1x*
+%{_mandir}/man1/gtf.1*
 %{_mandir}/man4/exa.4*
 %{_mandir}/man4/fbdevhw.4*
-%{_mandir}/man5/xorg.conf.5x*
-%{_mandir}/man5/xorg.conf.d.5x
+%{_mandir}/man5/xorg.conf.5*
+%{_mandir}/man5/xorg.conf.d.5
 
 %if %{with dmx}
 %files -n xorg-xserver-Xdmx
@@ -540,21 +535,21 @@ fi
 %attr(755,root,root) %{_bindir}/dmxwininfo
 %attr(755,root,root) %{_bindir}/vdltodmx
 %attr(755,root,root) %{_bindir}/xdmxconfig
-%{_mandir}/man1/Xdmx.1x*
-%{_mandir}/man1/dmxtodmx.1x*
-%{_mandir}/man1/vdltodmx.1x*
-%{_mandir}/man1/xdmxconfig.1x*
+%{_mandir}/man1/Xdmx.1*
+%{_mandir}/man1/dmxtodmx.1*
+%{_mandir}/man1/vdltodmx.1*
+%{_mandir}/man1/xdmxconfig.1*
 %endif
 
 %files -n xorg-xserver-Xnest
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/Xnest
-%{_mandir}/man1/Xnest.1x*
+%{_mandir}/man1/Xnest.1*
 
 %files -n xorg-xserver-Xephyr
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/Xephyr
-%{_mandir}/man1/Xephyr.1x*
+%{_mandir}/man1/Xephyr.1*
 
 %files -n xorg-xserver-Xfbdev
 %defattr(644,root,root,755)
@@ -563,7 +558,7 @@ fi
 %files -n xorg-xserver-Xvfb
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/Xvfb
-%{_mandir}/man1/Xvfb.1x*
+%{_mandir}/man1/Xvfb.1*
 
 %files -n xorg-xserver-Xvfb-init
 %defattr(644,root,root,755)
