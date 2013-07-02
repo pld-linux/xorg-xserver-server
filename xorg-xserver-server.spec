@@ -368,6 +368,9 @@ Biblioteka rozszerzenia GLX dla serwera X.org.
 # xserver uses pixman-1 API/ABI so put that explictly here
 sed -i -e 's#<pixman\.h#<pixman-1/pixman.h#g' ./fb/fb.h ./include/miscstruct.h ./render/picture.h
 
+# support __filemansuffix__ with "x" suffix (per FHS 2.3)
+%{__sed} -i -e 's,\.so man__filemansuffix__/,.so man5/,' hw/xfree86/man/*.man
+
 %build
 API=$(awk '/#define ABI_ANSIC_VERSION/ { split($0,A,/[(,)]/); printf("%d.%d",A[2], A[3]); }' hw/xfree86/common/xf86Module.h)
 if [ $API != %{xorg_xserver_server_ansic_abi} ]; then
@@ -405,28 +408,27 @@ fi
 %configure \
 	--with-os-name="PLD/Linux" \
 	--with-os-vendor="PLD/Team" \
+	--with-default-font-path="%{_fontsdir}/misc,%{_fontsdir}/TTF,%{_fontsdir}/OTF,%{_fontsdir}/Type1,%{_fontsdir}/100dpi,%{_fontsdir}/75dpi" \
+	--with-xkb-output=/var/lib/xkb \
 	--without-fop \
+	--enable-aiglx \
 	%{?with_dbus:--enable-config-dbus} \
 	--enable-config-hal%{!?with_hal:=no} \
 	--enable-config-udev%{!?with_udev:=no} \
-	--enable-aiglx \
 	--enable-dga \
 	%{?with_dmx:--enable-dmx} \
+	--enable-dri2%{!?with_dri2:=no} \
 	--enable-glx-tls \
 	--enable-install-libxf86config \
-	%{?with_record:--enable-record} \
 	--enable-kdrive \
+	%{?with_record:--enable-record} \
+	--enable-secure-rpc \
 	%{?with_xcsecurity:--enable-xcsecurity} \
 	--enable-xephyr \
 	%{?with_xf86bigfont:--enable-xf86bigfont} \
-	--enable-xfbdev \
-	%{?with_xselinux:--enable-xselinux} \
-	--enable-glx-tls \
 	--disable-xfake \
-	--enable-secure-rpc \
-	--%{?with_dri2:en}%{!?with_dri2:dis}able-dri2 \
-	--with-default-font-path="%{_fontsdir}/misc,%{_fontsdir}/TTF,%{_fontsdir}/OTF,%{_fontsdir}/Type1,%{_fontsdir}/100dpi,%{_fontsdir}/75dpi" \
-	--with-xkb-output=/var/lib/xkb
+	--enable-xfbdev \
+	%{?with_xselinux:--enable-xselinux}
 
 %{__make}
 
@@ -444,7 +446,7 @@ install -d $RPM_BUILD_ROOT%{_datadir}/X11/xorg.conf.d
 :> $RPM_BUILD_ROOT/etc/security/console.apps/xserver
 :> $RPM_BUILD_ROOT/etc/security/blacklist.xserver
 
-rm -f $RPM_BUILD_ROOT%{_libdir}/xorg/modules/{*,*/*}.{la,a}
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/xorg/modules/{*,*/*}.la
 
 cp -p %{SOURCE1} $RPM_BUILD_ROOT%{_datadir}/X11/xorg.conf.d/10-quirks.conf
 
@@ -518,7 +520,7 @@ fi
 %{_mandir}/man4/exa.4*
 %{_mandir}/man4/fbdevhw.4*
 %{_mandir}/man5/xorg.conf.5*
-%{_mandir}/man5/xorg.conf.d.5
+%{_mandir}/man5/xorg.conf.d.5*
 
 %if %{with dmx}
 %files -n xorg-xserver-Xdmx
