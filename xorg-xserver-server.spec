@@ -252,6 +252,10 @@ Xfbdev jest serwerem X dla framebuffera opartym na kdrive.
 Summary:	Xvfb - virtual framebuffer X server
 Summary(pl.UTF-8):	Xvfb - serwer X z wirtualnym framebufferem
 Group:		X11/Servers
+Requires:	mktemp
+Requires:	util-linux
+Requires:	which
+Requires:	xorg-app-xauth
 # requires fixed and cursor fonts
 Requires:	xorg-font-font-alias
 Requires:	xorg-font-font-cursor-misc
