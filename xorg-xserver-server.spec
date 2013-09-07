@@ -139,13 +139,13 @@ Suggests:	dbus-x11 >= 1.0
 Suggests:	xkeyboard-config
 # Usual desktop setups need least one video driver to run, see xorg.log which one exactly
 Suggests:	xorg-driver-video
+Provides:	xorg-xserver-libdri = %{version}-%{release}
+Provides:	xorg-xserver-module(dri)
 Provides:	xorg-xserver-server(ansic-abi) = %{xorg_xserver_server_ansic_abi}
 Provides:	xorg-xserver-server(extension-abi) = %{xorg_xserver_server_extension_abi}
 Provides:	xorg-xserver-server(font-abi) = %{xorg_xserver_server_font_abi}
 Provides:	xorg-xserver-server(videodrv-abi) = %{xorg_xserver_server_videodrv_abi}
 Provides:	xorg-xserver-server(xinput-abi) = %{xorg_xserver_server_xinput_abi}
-Provides:	xorg-xserver-module(dri)
-Provides:	xorg-xserver-libdri = %{version}-%{release}
 Obsoletes:	X11-Xserver < 1:7.0.0
 Obsoletes:	X11-driver-i2c < 1:7.0.0
 Obsoletes:	X11-modules < 1:7.0.0
@@ -154,8 +154,8 @@ Obsoletes:	XFree86-Xserver < 1:7.0.0
 Obsoletes:	XFree86-modules < 1:7.0.0
 Obsoletes:	XFree86-setup < 1:7.0.0
 Obsoletes:	Xserver
-Obsoletes:	xorg-xserver-server-xorgcfg
 Obsoletes:	xorg-xserver-libdri
+Obsoletes:	xorg-xserver-server-xorgcfg
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 # avoid self-dependencies on included modules
