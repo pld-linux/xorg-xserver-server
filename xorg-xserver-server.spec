@@ -24,7 +24,7 @@ Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
 Version:	1.14.2
-Release:	1
+Release:	2
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
@@ -33,6 +33,8 @@ Source1:	10-quirks.conf
 Source2:	xserver.pamd
 Source10:	%{name}-Xvfb.init
 Source11:	%{name}-Xvfb.sysconfig
+Source12:	xvfb-run.sh
+
 Patch0:		%{name}-xwrapper.patch
 Patch1:		%{name}-pic-libxf86config.patch
 
@@ -442,6 +444,7 @@ install -Dp %{SOURCE2} $RPM_BUILD_ROOT/etc/pam.d/xserver
 install -d $RPM_BUILD_ROOT/etc/{security/console.apps,X11/xorg.conf.d}
 install -d $RPM_BUILD_ROOT%{_libdir}/xorg/modules/{dri,drivers,input}
 install -d $RPM_BUILD_ROOT%{_datadir}/X11/xorg.conf.d
+install -p %{SOURCE12} $RPM_BUILD_ROOT%{_bindir}/xvfb-run
 
 :> $RPM_BUILD_ROOT/etc/security/console.apps/xserver
 :> $RPM_BUILD_ROOT/etc/security/blacklist.xserver
@@ -560,6 +563,7 @@ fi
 %files -n xorg-xserver-Xvfb
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/Xvfb
+%attr(755,root,root) %{_bindir}/xvfb-run
 %{_mandir}/man1/Xvfb.1*
 
 %files -n xorg-xserver-Xvfb-init
