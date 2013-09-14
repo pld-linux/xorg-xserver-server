@@ -4,9 +4,10 @@
 %bcond_with	dbus		# D-BUS support for configuration (if no udev)
 %bcond_with	hal		# HAL support for configuration (if no udev)
 %bcond_without	udev		# UDEV support for configuration
-%bcond_without	dri2		# DRI2 extension
 %bcond_without	dmx		# DMX support
+%bcond_without	dri2		# DRI2 extension
 %bcond_without	record		# RECORD extension
+%bcond_without	systemtap	# systemtap/dtrace probes
 %bcond_with	xcsecurity	# XC-SECURITY extension (deprecated)
 %bcond_with	xf86bigfont	# XF86BigFont extension
 %bcond_with	xselinux	# SELinux extension
@@ -65,6 +66,7 @@ BuildRequires:	pam-devel
 BuildRequires:	perl-base
 BuildRequires:	pixman-devel >= %{pixman_ver}
 BuildRequires:	pkgconfig >= 1:0.19
+%{?with_systemtap:BuildRequires:	systemtap-sdt-devel}
 BuildRequires:	udev-devel >= 1:143
 BuildRequires:	xmlto >= 0.0.20
 BuildRequires:	xorg-app-mkfontscale
@@ -416,6 +418,7 @@ fi
 	--with-os-vendor="PLD/Team" \
 	--with-default-font-path="%{_fontsdir}/misc,%{_fontsdir}/TTF,%{_fontsdir}/OTF,%{_fontsdir}/Type1,%{_fontsdir}/100dpi,%{_fontsdir}/75dpi" \
 	--with-xkb-output=/var/lib/xkb \
+	%{!?with_systemtap:--without-dtrace} \
 	--without-fop \
 	--enable-aiglx \
 	%{?with_dbus:--enable-config-dbus} \
@@ -577,7 +580,7 @@ fi
 
 %files devel
 %defattr(644,root,root,755)
-%doc doc/{Xinput,Xserver-spec}.html
+%doc doc/{Xinput,Xserver-spec}.html %{?with_systemtap:doc/dtrace/Xserver-DTrace.html}
 %{_includedir}/xorg
 %{_libdir}/libxf86config.a
 %{_libdir}/libxf86config.la
