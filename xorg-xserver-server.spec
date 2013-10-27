@@ -25,7 +25,7 @@ Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
 Version:	1.14.3
-Release:	1
+Release:	2
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
@@ -444,6 +444,10 @@ fi
 %install
 rm -rf $RPM_BUILD_ROOT
 
+%if "%{_libdir}" != "%{_exec_prefix}/lib"
+install -d $RPM_BUILD_ROOT%{_exec_prefix}/lib/xorg/modules/dri
+%endif
+
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
@@ -513,6 +517,11 @@ fi
 %dir %{_libdir}/xorg/modules/multimedia
 %attr(755,root,root) %{_libdir}/xorg/modules/multimedia/*.so
 %attr(755,root,root) %{_libdir}/xorg/modules/lib*.so
+%if "%{_libdir}" != "%{_exec_prefix}/lib"
+%dir %{_exec_prefix}/lib/xorg
+%dir %{_exec_prefix}/lib/xorg/modules
+%dir %{_exec_prefix}/lib/xorg/modules/dri
+%endif
 %dir /var/lib/xkb
 /var/lib/xkb/README.compiled
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/pam.d/xserver
