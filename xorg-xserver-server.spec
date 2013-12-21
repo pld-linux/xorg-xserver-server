@@ -469,12 +469,17 @@ install -d $RPM_BUILD_ROOT/etc/sysconfig
 install -p %{SOURCE10} $RPM_BUILD_ROOT/etc/rc.d/init.d/Xvfb
 cp -p %{SOURCE11} $RPM_BUILD_ROOT/etc/sysconfig/Xvfb
 
+# prepare source package
 install -d $RPM_BUILD_ROOT%{_usrsrc}/%{name}-%{version}
 cp -a * $RPM_BUILD_ROOT%{_usrsrc}/%{name}-%{version}
 cd $RPM_BUILD_ROOT%{_usrsrc}/%{name}-%{version}
 %{__make} distclean
 find '(' -name '*~' -o -name '*.orig' ')' -print0 | xargs -0 -r -l512 rm -f
 find -name '*.h' | xargs chmod a-x
+
+%if %{with systemtap}
+%{__rm} $RPM_BUILD_ROOT%{_docdir}/xorg-server/Xserver-DTrace.*
+%endif
 
 %clean
 rm -rf $RPM_BUILD_ROOT
