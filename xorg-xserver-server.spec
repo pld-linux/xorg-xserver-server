@@ -14,22 +14,22 @@
 #
 # ABI versions, see hw/xfree86/common/xf86Module.h
 %define	xorg_xserver_server_ansic_abi		0.4
-%define	xorg_xserver_server_extension_abi	7.0
+%define	xorg_xserver_server_extension_abi	8.0
 %define	xorg_xserver_server_font_abi		0.6
-%define	xorg_xserver_server_videodrv_abi	14.1
-%define	xorg_xserver_server_xinput_abi		19.1
+%define	xorg_xserver_server_videodrv_abi	15.0
+%define	xorg_xserver_server_xinput_abi		20.0
 #
 %define	pixman_ver	0.30.0
 
 Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
-Version:	1.14.5
+Version:	1.15.0
 Release:	1
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
-# Source0-md5:	89a9e2cbcf2be3bfe3da96f19100c978
+# Source0-md5:	c2ace3697b32414094cf8c597c39d7d9
 Source1:	10-quirks.conf
 Source2:	xserver.pamd
 Source10:	%{name}-Xvfb.init
@@ -39,7 +39,6 @@ Source12:	xvfb-run.sh
 Patch0:		%{name}-xwrapper.patch
 Patch1:		%{name}-pic-libxf86config.patch
 
-Patch3:		%{name}-less-acpi-brokenness.patch
 Patch4:		%{name}-builtin-SHA1.patch
 Patch5:		%{name}-export-GetMaster.patch
 Patch6:		110_nvidia_slowdow_fix.patch
@@ -61,6 +60,7 @@ BuildRequires:	dbus-devel >= 1.0
 BuildRequires:	libdrm-devel >= 2.4.39
 %{?with_xselinux:BuildRequires:	libselinux-devel >= 2.0.86}
 BuildRequires:	libtool
+BuildRequires:	libunwind-devel
 BuildRequires:	ncurses-devel
 BuildRequires:	pam-devel
 BuildRequires:	perl-base
@@ -68,6 +68,7 @@ BuildRequires:	pixman-devel >= %{pixman_ver}
 BuildRequires:	pkgconfig >= 1:0.19
 %{?with_systemtap:BuildRequires:	systemtap-sdt-devel}
 BuildRequires:	udev-devel >= 1:143
+BuildRequires:	xcb-util-wm-devel
 BuildRequires:	xmlto >= 0.0.20
 BuildRequires:	xorg-app-mkfontscale
 BuildRequires:	xorg-font-font-util >= 1.1
@@ -94,18 +95,21 @@ BuildRequires:	xorg-lib-libfontenc-devel
 BuildRequires:	xorg-lib-libpciaccess-devel >= 0.12.901
 BuildRequires:	xorg-lib-libxkbfile-devel
 BuildRequires:	xorg-lib-libxkbui-devel >= 1.0.2
+BuildRequires:	xorg-lib-libxshmfence-devel
 BuildRequires:	xorg-lib-xtrans-devel >= 1.2.2
 BuildRequires:	xorg-proto-bigreqsproto-devel >= 1.1.0
 BuildRequires:	xorg-proto-compositeproto-devel >= 0.4
 BuildRequires:	xorg-proto-damageproto-devel >= 1.1
 %{?with_dmx:BuildRequires:	xorg-proto-dmxproto-devel >= 2.2.99.1}
 %{?with_dri2:BuildRequires:	xorg-proto-dri2proto-devel >= 2.8}
+BuildRequires:	xorg-proto-dri3proto-devel
 BuildRequires:	xorg-proto-fixesproto-devel >= 5.0
 BuildRequires:	xorg-proto-fontcacheproto-devel
 BuildRequires:	xorg-proto-fontsproto-devel
 BuildRequires:	xorg-proto-glproto-devel >= 1.4.16
 BuildRequires:	xorg-proto-inputproto-devel >= 2.3
 BuildRequires:	xorg-proto-kbproto-devel >= 1.0.3
+BuildRequires:	xorg-proto-presentproto-devel >= 1.0
 BuildRequires:	xorg-proto-printproto-devel
 BuildRequires:	xorg-proto-randrproto-devel >= 1.4.0
 %{?with_record:BuildRequires:	xorg-proto-recordproto-devel >= 1.13.99.1}
@@ -114,7 +118,7 @@ BuildRequires:	xorg-proto-resourceproto-devel >= 1.2.0
 BuildRequires:	xorg-proto-scrnsaverproto-devel >= 1.1
 BuildRequires:	xorg-proto-videoproto-devel
 BuildRequires:	xorg-proto-xcmiscproto-devel >= 1.2.0
-BuildRequires:	xorg-proto-xextproto-devel >= 1:7.2.0
+BuildRequires:	xorg-proto-xextproto-devel >= 1:7.3.0
 %{?with_xf86bigfont:BuildRequires:	xorg-proto-xf86bigfontproto-devel >= 1.2.0}
 BuildRequires:	xorg-proto-xf86dgaproto-devel >= 2.0.99.1
 BuildRequires:	xorg-proto-xf86driproto-devel >= 2.1.0
@@ -311,6 +315,7 @@ Requires:	pixman-devel >= %{pixman_ver}
 Requires:	xorg-lib-libpciaccess-devel >= 0.12.901
 Requires:	xorg-lib-libxkbfile-devel
 %{?with_dri2:Requires:	xorg-proto-dri2proto-devel >= 2.8}
+BuildRequires:	xorg-proto-dri3proto-devel
 Requires:	xorg-proto-fontsproto-devel
 Requires:	xorg-proto-inputproto-devel >= 2.3
 Requires:	xorg-proto-kbproto-devel >= 1.0.3
@@ -365,7 +370,6 @@ Biblioteka rozszerzenia GLX dla serwera X.org.
 %patch0 -p0
 %patch1 -p1
 
-%patch3 -p1
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
@@ -420,6 +424,8 @@ fi
 	--with-xkb-output=/var/lib/xkb \
 	%{!?with_systemtap:--without-dtrace} \
 	--without-fop \
+	--disable-linux-acpi \
+	--disable-linux-apm \
 	--enable-aiglx \
 	%{?with_dbus:--enable-config-dbus} \
 	--enable-config-hal%{!?with_hal:=no} \
@@ -430,6 +436,7 @@ fi
 	--enable-glx-tls \
 	--enable-install-libxf86config \
 	--enable-kdrive \
+	--enable-libunwind \
 	%{?with_record:--enable-record} \
 	--enable-secure-rpc \
 	%{?with_xcsecurity:--enable-xcsecurity} \
