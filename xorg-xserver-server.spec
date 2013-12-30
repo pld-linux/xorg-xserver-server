@@ -61,6 +61,7 @@ BuildRequires:	libdrm-devel >= 2.4.39
 %{?with_xselinux:BuildRequires:	libselinux-devel >= 2.0.86}
 BuildRequires:	libtool
 BuildRequires:	libunwind-devel
+BuildRequires:	libxcb-devel >= 1.6
 BuildRequires:	ncurses-devel
 BuildRequires:	pam-devel
 BuildRequires:	perl-base
@@ -68,16 +69,20 @@ BuildRequires:	pixman-devel >= %{pixman_ver}
 BuildRequires:	pkgconfig >= 1:0.19
 %{?with_systemtap:BuildRequires:	systemtap-sdt-devel}
 BuildRequires:	udev-devel >= 1:143
+BuildRequires:	xcb-util-devel
+BuildRequires:	xcb-util-image-devel
+BuildRequires:	xcb-util-keysyms-devel
 BuildRequires:	xcb-util-wm-devel
 BuildRequires:	xmlto >= 0.0.20
 BuildRequires:	xorg-app-mkfontscale
 BuildRequires:	xorg-font-font-util >= 1.1
-BuildRequires:	xorg-lib-libX11-devel
+BuildRequires:	xorg-lib-libX11-devel >= 1.6
 BuildRequires:	xorg-lib-libXau-devel
 BuildRequires:	xorg-lib-libXaw-devel
 BuildRequires:	xorg-lib-libXdamage-devel
 BuildRequires:	xorg-lib-libXdmcp-devel
 BuildRequires:	xorg-lib-libXext-devel >= 1.0.99.4
+BuildRequires:	xorg-lib-libXfixes-devel
 BuildRequires:	xorg-lib-libXfont-devel >= 1.4.2
 BuildRequires:	xorg-lib-libXi-devel >= 1.2.99.1
 BuildRequires:	xorg-lib-libXmu-devel
@@ -94,19 +99,18 @@ BuildRequires:	xorg-lib-libXxf86vm-devel
 BuildRequires:	xorg-lib-libfontenc-devel
 BuildRequires:	xorg-lib-libpciaccess-devel >= 0.12.901
 BuildRequires:	xorg-lib-libxkbfile-devel
-BuildRequires:	xorg-lib-libxkbui-devel >= 1.0.2
-BuildRequires:	xorg-lib-libxshmfence-devel
-BuildRequires:	xorg-lib-xtrans-devel >= 1.2.2
+BuildRequires:	xorg-lib-libxshmfence-devel >= 1.1
+BuildRequires:	xorg-lib-xtrans-devel >= 1.3.2
 BuildRequires:	xorg-proto-bigreqsproto-devel >= 1.1.0
 BuildRequires:	xorg-proto-compositeproto-devel >= 0.4
 BuildRequires:	xorg-proto-damageproto-devel >= 1.1
 %{?with_dmx:BuildRequires:	xorg-proto-dmxproto-devel >= 2.2.99.1}
 %{?with_dri2:BuildRequires:	xorg-proto-dri2proto-devel >= 2.8}
-BuildRequires:	xorg-proto-dri3proto-devel
+BuildRequires:	xorg-proto-dri3proto-devel >= 1.0
 BuildRequires:	xorg-proto-fixesproto-devel >= 5.0
 BuildRequires:	xorg-proto-fontcacheproto-devel
 BuildRequires:	xorg-proto-fontsproto-devel
-BuildRequires:	xorg-proto-glproto-devel >= 1.4.16
+BuildRequires:	xorg-proto-glproto-devel >= 1.4.17
 BuildRequires:	xorg-proto-inputproto-devel >= 2.3
 BuildRequires:	xorg-proto-kbproto-devel >= 1.0.3
 BuildRequires:	xorg-proto-presentproto-devel >= 1.0
@@ -130,21 +134,26 @@ BuildRequires:	xorg-sgml-doctools >= 1.8
 BuildRequires:	xorg-util-util-macros >= 1.14
 #BR: tslib (for KDRIVE only)
 Requires(triggerpostun):	sed >= 4.0
+Requires:	libdrm >= 2.4.39
 Requires:	pixman >= %{pixman_ver}
+Requires:	udev-libs >= 1:143
 Requires:	xkeyboard-config
 # for rgb.txt
 Requires:	xorg-app-rgb >= 0.99.3
 Requires:	xorg-app-xkbcomp
-%{?with_hal:Suggests:	hal}
-Suggests:	udev-acl >= 1:143
-%{?with_udev:Suggests:	udev-core >= 1:143}
-Suggests:	xorg-driver-input-evdev
 # xserver requires fixed and cursor fonts
 Requires:	xorg-font-font-alias
 Requires:	xorg-font-font-cursor-misc
 Requires:	xorg-font-font-misc-misc-base >= 1.0.0-0.3
+Requires:	xorg-lib-libXfont >= 1.4.2
+Requires:	xorg-lib-libpciaccess >= 0.12.901
+Requires:	xorg-lib-libxshmfence >= 1.1
 Suggests:	dbus-x11 >= 1.0
+%{?with_hal:Suggests:	hal}
+Suggests:	udev-acl >= 1:143
+%{?with_udev:Suggests:	udev-core >= 1:143}
 Suggests:	xkeyboard-config
+Suggests:	xorg-driver-input-evdev
 # Usual desktop setups need least one video driver to run, see xorg.log which one exactly
 Suggests:	xorg-driver-video
 Provides:	xorg-xserver-libdri = %{version}-%{release}
@@ -181,6 +190,12 @@ graficznej. Do działania wymaga odpowiedniego sterownika.
 Summary:	Xdmx - distributed multi-head X server
 Summary(pl.UTF-8):	Xdmx - rozproszony, wielomonitorowy serwer X
 Group:		X11/Servers
+Requires:	pixman >= %{pixman_ver}
+Requires:	xorg-lib-libX11 >= 1.6
+Requires:	xorg-lib-libXext >= 1.0.99.4
+Requires:	xorg-lib-libXfont >= 1.4.2
+Requires:	xorg-lib-libXi >= 1.2.99.1
+Requires:	xorg-lib-libdmx >= 1.0.99.1
 
 %description -n xorg-xserver-Xdmx
 Xdmx - distributed multi-head X server.
@@ -192,6 +207,9 @@ Xdmx - rozproszony, wielomonitorowy serwer X.
 Summary:	Xnest - nested X server
 Summary(pl.UTF-8):	Xnest - zagnieżdżony serwer X
 Group:		X11/Servers
+Requires:	pixman >= %{pixman_ver}
+Requires:	xorg-lib-libXext >= 1.0.99.4
+Requires:	xorg-lib-libXfont >= 1.4.2
 Obsoletes:	X11-Xnest < 1:7.0.0
 Obsoletes:	XFree86-Xnest < 1:7.0.0
 Obsoletes:	Xserver-Xnest
@@ -223,7 +241,10 @@ Xnest - це сервер X Window System, який працює у вікні X
 Summary:	Xephyr - nested X server
 Summary(pl.UTF-8):	Xephyr - zagnieżdżony serwer X
 Group:		X11/Servers
+Requires:	Mesa-libGL >= 7.1.0
+Requires:	libxcb >= 1.6
 Requires:	pixman >= %{pixman_ver}
+Requires:	xorg-lib-libXfont >= 1.4.2
 
 %description -n xorg-xserver-Xephyr
 Xephyr is a a kdrive server that outputs to a window on a pre-existing
@@ -246,6 +267,8 @@ wspólczesnych rozszerzeń jak composite, damage i randr.
 Summary:	Xfbdev - Linux framebuffer device X server
 Summary(pl.UTF-8):	Xfbdev - serwer X dla framebuffera
 Group:		X11/Servers
+Requires:	pixman >= %{pixman_ver}
+Requires:	xorg-lib-libXfont >= 1.4.2
 
 %description -n xorg-xserver-Xfbdev
 Xfbdev is a Linux framebuffer device X server based on the kdrive X
@@ -258,7 +281,9 @@ Xfbdev jest serwerem X dla framebuffera opartym na kdrive.
 Summary:	Xvfb - virtual framebuffer X server
 Summary(pl.UTF-8):	Xvfb - serwer X z wirtualnym framebufferem
 Group:		X11/Servers
+Requires:	Mesa-libGL >= 7.1.0
 Requires:	mktemp
+Requires:	pixman >= %{pixman_ver}
 Requires:	util-linux
 Requires:	which
 Requires:	xorg-app-xauth
@@ -266,6 +291,7 @@ Requires:	xorg-app-xauth
 Requires:	xorg-font-font-alias
 Requires:	xorg-font-font-cursor-misc
 Requires:	xorg-font-font-misc-misc-base >= 1.0.0-0.3
+Requires:	xorg-lib-libXfont >= 1.4.2
 Obsoletes:	X11-Xvfb < 1:7.0.0
 Obsoletes:	XFree86-Xvfb < 1:7.0.0
 
@@ -310,21 +336,24 @@ usługę systemową.
 Summary:	Header files for X.org server
 Summary(pl.UTF-8):	Pliki nagłówkowe dla serwera X.org
 Group:		X11/Development/Libraries
+Requires:	Mesa-libGL-devel >= 7.8.0
 Requires:	libdrm-devel >= 2.4.39
 Requires:	pixman-devel >= %{pixman_ver}
 Requires:	xorg-lib-libpciaccess-devel >= 0.12.901
 Requires:	xorg-lib-libxkbfile-devel
 %{?with_dri2:Requires:	xorg-proto-dri2proto-devel >= 2.8}
-BuildRequires:	xorg-proto-dri3proto-devel
+Requires:	xorg-proto-dri3proto-devel >= 1.0
 Requires:	xorg-proto-fontsproto-devel
+Requires:	xorg-proto-glproto-devel >= 1.4.17
 Requires:	xorg-proto-inputproto-devel >= 2.3
 Requires:	xorg-proto-kbproto-devel >= 1.0.3
+Requires:	xorg-proto-presentproto-devel >= 1.0
 Requires:	xorg-proto-randrproto-devel >= 1.4.0
 Requires:	xorg-proto-renderproto-devel >= 0.11
 Requires:	xorg-proto-resourceproto-devel >= 1.2.0
 Requires:	xorg-proto-scrnsaverproto-devel >= 1.1
 Requires:	xorg-proto-videoproto-devel
-Requires:	xorg-proto-xextproto-devel >= 1:7.2.0
+Requires:	xorg-proto-xextproto-devel >= 1:7.3.0
 Requires:	xorg-proto-xf86driproto-devel >= 2.1.0
 Requires:	xorg-proto-xineramaproto-devel
 Requires:	xorg-proto-xproto-devel >= 7.0.22
@@ -353,6 +382,7 @@ Summary:	GLX extension library for X.org server
 Summary(pl.UTF-8):	Biblioteka rozszerzenia GLX dla serwera X.org
 Group:		X11/Servers
 Requires:	%{name} = %{version}-%{release}
+Requires:	Mesa-libGL >= 7.1.0
 # Mesa version glapi tables in glx/ dir come from
 Provides:	xorg-xserver-libglx(glapi) = 7.1.0
 Provides:	xorg-xserver-module(glx)
