@@ -10,8 +10,6 @@
 # config:	/etc/X11/xorg.conf
 # pidfile:	/var/run/Xvfb.pid
 #
-# $Id$
-
 # Source function library
 . /etc/rc.d/init.d/functions
 
@@ -47,9 +45,7 @@ start() {
 	fi
 
 	msg_starting "Xvfb"
-
-	# Beware the jabberwock!
-	daemon sh -c "\"exec sh -c 'echo \$\$ > /var/run/Xvfb.pid; exec /usr/bin/Xvfb $OPTIONS $DISPLAY_NUMBER' &\""
+	daemon --makepid --fork --pidfile /var/run/Xvfb.pid /usr/bin/Xvfb $OPTIONS $DISPLAY_NUMBER
 	RETVAL=$?
 	[ $RETVAL -eq 0 ] && touch /var/lock/subsys/Xvfb
 }
