@@ -58,7 +58,7 @@ stop() {
 
 	# Stop daemons.
 	msg_stopping "Xvfb"
-	killproc Xvfb
+	killproc --pidfile /var/run/Xvfb.pid Xvfb -TERM
 	rm -f /var/lock/subsys/Xvfb
 }
 
