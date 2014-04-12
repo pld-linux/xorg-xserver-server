@@ -1,4 +1,6 @@
-# TODO: consider XSELINUX
+# TODO
+# - consider XSELINUX
+# - Xvfb initscript runs Xvfb as root! add user there!
 #
 # Conditional build:
 %bcond_with	dbus		# D-BUS support for configuration (if no udev)
@@ -18,7 +20,7 @@
 %define	xorg_xserver_server_font_abi		0.6
 %define	xorg_xserver_server_videodrv_abi	15.0
 %define	xorg_xserver_server_xinput_abi		20.0
-#
+
 %define	pixman_ver	0.30.0
 
 Summary:	X.org server
@@ -286,6 +288,8 @@ Requires:	mktemp
 Requires:	pixman >= %{pixman_ver}
 Requires:	util-linux
 Requires:	which
+Requires:	xkeyboard-config
+Requires:	xorg-app-xkbcomp
 Requires:	xorg-app-xauth
 # requires fixed and cursor fonts
 Requires:	xorg-font-font-alias
