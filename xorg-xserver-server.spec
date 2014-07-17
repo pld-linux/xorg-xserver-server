@@ -175,6 +175,7 @@ Obsoletes:	XFree86-Xserver < 1:7.0.0
 Obsoletes:	XFree86-modules < 1:7.0.0
 Obsoletes:	XFree86-setup < 1:7.0.0
 Obsoletes:	Xserver
+Obsoletes:	glamor
 Obsoletes:	xorg-xserver-libdri
 Obsoletes:	xorg-xserver-server-xorgcfg
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -381,6 +382,7 @@ Requires:	xorg-proto-xineramaproto-devel
 Requires:	xorg-proto-xproto-devel >= 7.0.22
 Obsoletes:	X11-Xserver-devel < 1:7.0.0
 Obsoletes:	XFree86-Xserver-devel < 1:7.0.0
+Obsoletes:	glamor-devel
 
 %description devel
 Header files for X.org server.
