@@ -60,6 +60,7 @@ BuildRequires:	dbus-devel >= 1.0
 %endif
 %{?with_hal:BuildRequires:	hal-devel}
 BuildRequires:	libdrm-devel >= 2.4.39
+BuildRequires:	libepoxy-devel
 %{?with_xselinux:BuildRequires:	libselinux-devel >= 2.0.86}
 BuildRequires:	libtool
 BuildRequires:	libunwind-devel
@@ -71,6 +72,7 @@ BuildRequires:	pixman-devel >= %{pixman_ver}
 BuildRequires:	pkgconfig >= 1:0.19
 %{?with_systemtap:BuildRequires:	systemtap-sdt-devel}
 BuildRequires:	udev-devel >= 1:143
+BuildRequires:	wayland-devel
 BuildRequires:	xcb-util-devel
 BuildRequires:	xcb-util-image-devel
 BuildRequires:	xcb-util-keysyms-devel
@@ -289,8 +291,8 @@ Requires:	pixman >= %{pixman_ver}
 Requires:	util-linux
 Requires:	which
 Requires:	xkeyboard-config
-Requires:	xorg-app-xkbcomp
 Requires:	xorg-app-xauth
+Requires:	xorg-app-xkbcomp
 # requires fixed and cursor fonts
 Requires:	xorg-font-font-alias
 Requires:	xorg-font-font-cursor-misc
@@ -335,6 +337,22 @@ system service.
 %description -n xorg-xserver-Xvfb-init -l pl.UTF-8
 Ten pakiet zawiera skrypty startowe dla Xvfb oraz rejestruje Xvfb jako
 usługę systemową.
+
+%package -n xorg-xserver-Xwayland
+Summary:	Xwayland - X server integrated into a Wayland window system
+Summary(pl.UTF-8):	Xwayland - serwer X integrowalny w Wayland
+Group:		X11/Servers
+Requires:	pixman >= %{pixman_ver}
+Requires:	xorg-lib-libX11 >= 1.6
+Requires:	xorg-lib-libXext >= 1.0.99.4
+Requires:	xorg-lib-libXfont >= 1.4.2
+Requires:	xorg-lib-libXi >= 1.2.99.1
+
+%description -n xorg-xserver-Xwayland
+Xwayland - server integrated into a Wayland window system.
+
+%description -n xorg-xserver-Xwayland -l pl.UTF-8
+Xwayland - serwer X integrowalny w Wayland.
 
 %package devel
 Summary:	Header files for X.org server
@@ -478,6 +496,9 @@ fi
 	%{?with_xf86bigfont:--enable-xf86bigfont} \
 	--disable-xfake \
 	--enable-xfbdev \
+	--with-systemd-daemon \
+	--enable-xwayland \
+	--enable-glamor \
 	%{?with_xselinux:--enable-xselinux}
 
 %{__make}
@@ -632,6 +653,10 @@ fi
 %defattr(644,root,root,755)
 %attr(754,root,root) /etc/rc.d/init.d/Xvfb
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/Xvfb
+
+%files -n xorg-xserver-Xwayland
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_bindir}/Xwayland
 
 %files devel
 %defattr(644,root,root,755)
