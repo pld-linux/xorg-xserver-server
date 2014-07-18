@@ -1,18 +1,21 @@
 # TODO
-# - consider XSELINUX
+# - consider XSELINUX by default
 # - Xvfb initscript runs Xvfb as root! add user there!
+# - upstream --enable-suid-wrapper vs Xwrapper patch?
 #
 # Conditional build:
 %bcond_with	dbus		# D-BUS support for configuration (if no udev)
 %bcond_with	hal		# HAL support for configuration (if no udev)
 %bcond_without	udev		# UDEV support for configuration
-%bcond_without	dmx		# DMX support
 %bcond_without	dri2		# DRI2 extension
 %bcond_without	record		# RECORD extension
-%bcond_without	systemtap	# systemtap/dtrace probes
 %bcond_with	xcsecurity	# XC-SECURITY extension (deprecated)
 %bcond_with	xf86bigfont	# XF86BigFont extension
 %bcond_with	xselinux	# SELinux extension
+%bcond_without	dmx		# DMX DDX (Xdmx server)
+%bcond_without	wayland		# Wayland DDX (Xwayland server)
+%bcond_without	glamor		# glamor dix module
+%bcond_without	systemtap	# systemtap/dtrace probes
 #
 # ABI versions, see hw/xfree86/common/xf86Module.h
 %define	xorg_xserver_server_ansic_abi		0.4
@@ -47,6 +50,8 @@ Patch6:		110_nvidia_slowdow_fix.patch
 Patch7:		%{name}-include-defs.patch
 URL:		http://xorg.freedesktop.org/
 BuildRequires:	Mesa-libGL-devel >= 7.8.1
+%{?with_dri2:BuildRequires:	Mesa-libGL-devel >= 9.2.0}
+%{?with_glamor:BuildRequires:	Mesa-libgbm-devel >= 10.2.0}
 # for glx headers
 BuildRequires:	OpenGL-GLX-devel
 %{?with_xselinux:BuildRequires:	audit-libs-devel}
@@ -60,19 +65,21 @@ BuildRequires:	dbus-devel >= 1.0
 %endif
 %{?with_hal:BuildRequires:	hal-devel}
 BuildRequires:	libdrm-devel >= 2.4.39
+%if %{with glamor} || %{with wayland}
 BuildRequires:	libepoxy-devel
+%endif
 %{?with_xselinux:BuildRequires:	libselinux-devel >= 2.0.86}
-BuildRequires:	libtool
+BuildRequires:	libtool >= 2:2.2
 BuildRequires:	libunwind-devel
 BuildRequires:	libxcb-devel >= 1.6
-BuildRequires:	ncurses-devel
 BuildRequires:	pam-devel
 BuildRequires:	perl-base
 BuildRequires:	pixman-devel >= %{pixman_ver}
 BuildRequires:	pkgconfig >= 1:0.19
 %{?with_systemtap:BuildRequires:	systemtap-sdt-devel}
 BuildRequires:	udev-devel >= 1:143
-BuildRequires:	wayland-devel
+# wayland-client
+%{?with_wayland:BuildRequires:	wayland-devel >= 1.3.0}
 BuildRequires:	xcb-util-devel
 BuildRequires:	xcb-util-image-devel
 BuildRequires:	xcb-util-keysyms-devel
@@ -82,18 +89,18 @@ BuildRequires:	xorg-app-mkfontscale
 BuildRequires:	xorg-font-font-util >= 1.1
 BuildRequires:	xorg-lib-libX11-devel >= 1.6
 BuildRequires:	xorg-lib-libXau-devel
-BuildRequires:	xorg-lib-libXaw-devel
+%{?with_dmx:BuildRequires:	xorg-lib-libXaw-devel}
 BuildRequires:	xorg-lib-libXdamage-devel
 BuildRequires:	xorg-lib-libXdmcp-devel
 BuildRequires:	xorg-lib-libXext-devel >= 1.0.99.4
 BuildRequires:	xorg-lib-libXfixes-devel
 BuildRequires:	xorg-lib-libXfont-devel >= 1.4.2
 BuildRequires:	xorg-lib-libXi-devel >= 1.2.99.1
-BuildRequires:	xorg-lib-libXmu-devel
-BuildRequires:	xorg-lib-libXpm-devel
+%{?with_dmx:BuildRequires:	xorg-lib-libXmu-devel}
+%{?with_dmx:BuildRequires:	xorg-lib-libXpm-devel}
 BuildRequires:	xorg-lib-libXrender-devel
 BuildRequires:	xorg-lib-libXres-devel
-BuildRequires:	xorg-lib-libXt-devel >= 1.0.0
+%{?with_dmx:BuildRequires:	xorg-lib-libXt-devel >= 1.0.0}
 BuildRequires:	xorg-lib-libXtst-devel >= 1.0.99.2
 BuildRequires:	xorg-lib-libXv-devel
 BuildRequires:	xorg-lib-libXxf86dga-devel
@@ -104,7 +111,7 @@ BuildRequires:	xorg-lib-libfontenc-devel
 BuildRequires:	xorg-lib-libpciaccess-devel >= 0.12.901
 BuildRequires:	xorg-lib-libxkbfile-devel
 BuildRequires:	xorg-lib-libxshmfence-devel >= 1.1
-BuildRequires:	xorg-lib-xtrans-devel >= 1.3.2
+BuildRequires:	xorg-lib-xtrans-devel >= 1.3.3
 BuildRequires:	xorg-proto-bigreqsproto-devel >= 1.1.0
 BuildRequires:	xorg-proto-compositeproto-devel >= 0.4
 BuildRequires:	xorg-proto-damageproto-devel >= 1.1
@@ -113,7 +120,7 @@ BuildRequires:	xorg-proto-damageproto-devel >= 1.1
 BuildRequires:	xorg-proto-dri3proto-devel >= 1.0
 BuildRequires:	xorg-proto-fixesproto-devel >= 5.0
 BuildRequires:	xorg-proto-fontcacheproto-devel
-BuildRequires:	xorg-proto-fontsproto-devel
+BuildRequires:	xorg-proto-fontsproto-devel >= 2.1.3
 BuildRequires:	xorg-proto-glproto-devel >= 1.4.17
 BuildRequires:	xorg-proto-inputproto-devel >= 2.3
 BuildRequires:	xorg-proto-kbproto-devel >= 1.0.3
@@ -133,11 +140,12 @@ BuildRequires:	xorg-proto-xf86driproto-devel >= 2.1.0
 BuildRequires:	xorg-proto-xf86miscproto-devel
 BuildRequires:	xorg-proto-xf86vidmodeproto-devel >= 2.2.99.1
 BuildRequires:	xorg-proto-xineramaproto-devel
-BuildRequires:	xorg-proto-xproto-devel >= 7.0.22
+BuildRequires:	xorg-proto-xproto-devel >= 7.0.26
 BuildRequires:	xorg-sgml-doctools >= 1.8
 BuildRequires:	xorg-util-util-macros >= 1.14
 #BR: tslib (for KDRIVE only)
 Requires(triggerpostun):	sed >= 4.0
+%{?with_glamor:Requires:	Mesa-libgbm >= 10.2.0}
 Requires:	libdrm >= 2.4.39
 Requires:	pixman >= %{pixman_ver}
 Requires:	udev-libs >= 1:143
@@ -175,7 +183,7 @@ Obsoletes:	XFree86-Xserver < 1:7.0.0
 Obsoletes:	XFree86-modules < 1:7.0.0
 Obsoletes:	XFree86-setup < 1:7.0.0
 Obsoletes:	Xserver
-Obsoletes:	glamor
+%{?with_glamor:Obsoletes:	glamor}
 Obsoletes:	xorg-xserver-libdri
 Obsoletes:	xorg-xserver-server-xorgcfg
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -252,7 +260,7 @@ Requires:	pixman >= %{pixman_ver}
 Requires:	xorg-lib-libXfont >= 1.4.2
 
 %description -n xorg-xserver-Xephyr
-Xephyr is a a kdrive server that outputs to a window on a pre-existing
+Xephyr is a kdrive server that outputs to a window on a pre-existing
 'host' X display. Think Xnest but with support for modern extensions
 like composite, damage and randr.
 
@@ -366,7 +374,7 @@ Requires:	xorg-lib-libpciaccess-devel >= 0.12.901
 Requires:	xorg-lib-libxkbfile-devel
 %{?with_dri2:Requires:	xorg-proto-dri2proto-devel >= 2.8}
 Requires:	xorg-proto-dri3proto-devel >= 1.0
-Requires:	xorg-proto-fontsproto-devel
+Requires:	xorg-proto-fontsproto-devel >= 2.1.3
 Requires:	xorg-proto-glproto-devel >= 1.4.17
 Requires:	xorg-proto-inputproto-devel >= 2.3
 Requires:	xorg-proto-kbproto-devel >= 1.0.3
@@ -379,10 +387,10 @@ Requires:	xorg-proto-videoproto-devel
 Requires:	xorg-proto-xextproto-devel >= 1:7.3.0
 Requires:	xorg-proto-xf86driproto-devel >= 2.1.0
 Requires:	xorg-proto-xineramaproto-devel
-Requires:	xorg-proto-xproto-devel >= 7.0.22
+Requires:	xorg-proto-xproto-devel >= 7.0.26
 Obsoletes:	X11-Xserver-devel < 1:7.0.0
 Obsoletes:	XFree86-Xserver-devel < 1:7.0.0
-Obsoletes:	glamor-devel
+%{?with_glamor:Obsoletes:	glamor-devel}
 
 %description devel
 Header files for X.org server.
@@ -407,6 +415,7 @@ Summary(pl.UTF-8):	Biblioteka rozszerzenia GLX dla serwera X.org
 Group:		X11/Servers
 Requires:	%{name} = %{version}-%{release}
 Requires:	Mesa-libGL >= 7.1.0
+%{?with_dri2:Requires:	Mesa-libGL >= 9.2.0}
 # Mesa version glapi tables in glx/ dir come from
 Provides:	xorg-xserver-libglx(glapi) = 7.1.0
 Provides:	xorg-xserver-module(glx)
@@ -476,8 +485,6 @@ fi
 	--with-os-vendor="PLD/Team" \
 	--with-default-font-path="%{_fontsdir}/misc,%{_fontsdir}/TTF,%{_fontsdir}/OTF,%{_fontsdir}/Type1,%{_fontsdir}/100dpi,%{_fontsdir}/75dpi" \
 	--with-xkb-output=/var/lib/xkb \
-	%{!?with_systemtap:--without-dtrace} \
-	--without-fop \
 	--disable-linux-acpi \
 	--disable-linux-apm \
 	--enable-aiglx \
@@ -487,6 +494,7 @@ fi
 	--enable-dga \
 	%{?with_dmx:--enable-dmx} \
 	--enable-dri2%{!?with_dri2:=no} \
+	%{?with_glamor:--enable-glamor} \
 	--enable-glx-tls \
 	--enable-install-libxf86config \
 	--enable-kdrive \
@@ -498,10 +506,11 @@ fi
 	%{?with_xf86bigfont:--enable-xf86bigfont} \
 	--disable-xfake \
 	--enable-xfbdev \
-	--with-systemd-daemon \
-	--enable-xwayland \
-	--enable-glamor \
-	%{?with_xselinux:--enable-xselinux}
+	%{?with_xselinux:--enable-xselinux} \
+	%{?with_wayland:--enable-xwayland} \
+	%{!?with_systemtap:--without-dtrace} \
+	--without-fop \
+	--with-systemd-daemon
 
 %{__make}
 
@@ -579,13 +588,28 @@ fi
 %dir %{_libdir}/xorg
 %{_libdir}/xorg/protocol.txt
 %dir %{_libdir}/xorg/modules
+%attr(755,root,root) %{_libdir}/xorg/modules/libexa.so
+%attr(755,root,root) %{_libdir}/xorg/modules/libfb.so
+%attr(755,root,root) %{_libdir}/xorg/modules/libfbdevhw.so
+%{?with_glamor:%attr(755,root,root) %{_libdir}/xorg/modules/libglamoregl.so}
+%attr(755,root,root) %{_libdir}/xorg/modules/libint10.so
+%attr(755,root,root) %{_libdir}/xorg/modules/libshadow.so
+%attr(755,root,root) %{_libdir}/xorg/modules/libshadowfb.so
+%attr(755,root,root) %{_libdir}/xorg/modules/libvbe.so
+%attr(755,root,root) %{_libdir}/xorg/modules/libvgahw.so
+%attr(755,root,root) %{_libdir}/xorg/modules/libwfb.so
 %dir %{_libdir}/xorg/modules/dri
 %dir %{_libdir}/xorg/modules/drivers
 %dir %{_libdir}/xorg/modules/extensions
 %dir %{_libdir}/xorg/modules/input
 %dir %{_libdir}/xorg/modules/multimedia
-%attr(755,root,root) %{_libdir}/xorg/modules/multimedia/*.so
-%attr(755,root,root) %{_libdir}/xorg/modules/lib*.so
+%attr(755,root,root) %{_libdir}/xorg/modules/multimedia/bt829_drv.so
+%attr(755,root,root) %{_libdir}/xorg/modules/multimedia/fi1236_drv.so
+%attr(755,root,root) %{_libdir}/xorg/modules/multimedia/msp3430_drv.so
+%attr(755,root,root) %{_libdir}/xorg/modules/multimedia/tda8425_drv.so
+%attr(755,root,root) %{_libdir}/xorg/modules/multimedia/tda9850_drv.so
+%attr(755,root,root) %{_libdir}/xorg/modules/multimedia/tda9885_drv.so
+%attr(755,root,root) %{_libdir}/xorg/modules/multimedia/uda1380_drv.so
 %if "%{_libdir}" != "%{_exec_prefix}/lib"
 %dir %{_exec_prefix}/lib/xorg
 %dir %{_exec_prefix}/lib/xorg/modules
@@ -600,7 +624,8 @@ fi
 %dir /etc/X11/xorg.conf.d
 %dir %{_datadir}/X11/xorg.conf.d
 # overwrite these settings with local configs in /etc/X11/xorg.conf.d
-%verify(not md5 mtime size) %{_datadir}/X11/xorg.conf.d/*.conf
+%verify(not md5 mtime size) %{_datadir}/X11/xorg.conf.d/10-evdev.conf
+%verify(not md5 mtime size) %{_datadir}/X11/xorg.conf.d/10-quirks.conf
 %{_mandir}/man1/Xorg.1*
 %{_mandir}/man1/Xserver.1*
 %{_mandir}/man1/cvt.1*
@@ -656,9 +681,11 @@ fi
 %attr(754,root,root) /etc/rc.d/init.d/Xvfb
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/Xvfb
 
+%if %{with wayland}
 %files -n xorg-xserver-Xwayland
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/Xwayland
+%endif
 
 %files devel
 %defattr(644,root,root,755)
