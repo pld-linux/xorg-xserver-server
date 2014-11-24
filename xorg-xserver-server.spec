@@ -30,7 +30,7 @@ Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
 Version:	1.16.2
-Release:	1
+Release:	2
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
@@ -86,7 +86,6 @@ BuildRequires:	xcb-util-keysyms-devel
 BuildRequires:	xcb-util-wm-devel
 BuildRequires:	xmlto >= 0.0.20
 BuildRequires:	xorg-app-mkfontscale
-BuildRequires:	xorg-font-font-util >= 1.1
 BuildRequires:	xorg-lib-libX11-devel >= 1.6
 BuildRequires:	xorg-lib-libXau-devel
 %{?with_dmx:BuildRequires:	xorg-lib-libXaw-devel}
@@ -153,10 +152,6 @@ Requires:	xkeyboard-config
 # for rgb.txt
 Requires:	xorg-app-rgb >= 0.99.3
 Requires:	xorg-app-xkbcomp
-# xserver requires fixed and cursor fonts
-Requires:	xorg-font-font-alias
-Requires:	xorg-font-font-cursor-misc
-Requires:	xorg-font-font-misc-misc-base >= 1.0.0-0.3
 Requires:	xorg-lib-libXfont >= 1.4.2
 Requires:	xorg-lib-libpciaccess >= 0.12.901
 Requires:	xorg-lib-libxshmfence >= 1.1
@@ -302,10 +297,6 @@ Requires:	which
 Requires:	xkeyboard-config
 Requires:	xorg-app-xauth
 Requires:	xorg-app-xkbcomp
-# requires fixed and cursor fonts
-Requires:	xorg-font-font-alias
-Requires:	xorg-font-font-cursor-misc
-Requires:	xorg-font-font-misc-misc-base >= 1.0.0-0.3
 Requires:	xorg-lib-libXfont >= 1.4.2
 Obsoletes:	X11-Xvfb < 1:7.0.0
 Obsoletes:	XFree86-Xvfb < 1:7.0.0
