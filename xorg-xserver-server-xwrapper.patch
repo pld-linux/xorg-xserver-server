@@ -314,7 +314,7 @@
 +bin_PROGRAMS = Xwrapper
 +Xwrapper_SOURCES = wrapper.c
 +Xwrapper_CFLAGS = -DUSE_PAM -DXSERVER_PATH=\"/usr/bin/Xorg\" $(AM_CFLAGS)
-+Xwrapper_LDADD = -lpam_misc
++Xwrapper_LDADD = -lpam_misc -lpam
 +
  if SECURE_RPC
  libos_la_SOURCES += $(SECURERPC_SRCS)
