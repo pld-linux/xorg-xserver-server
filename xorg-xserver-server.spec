@@ -16,6 +16,7 @@
 %bcond_without	wayland		# Wayland DDX (Xwayland server)
 %bcond_without	glamor		# glamor dix module
 %bcond_without	systemtap	# systemtap/dtrace probes
+%bcond_without	libunwind	# use libunwind for backtracing
 #
 # ABI versions, see hw/xfree86/common/xf86Module.h
 %define	xorg_xserver_server_ansic_abi		0.4
@@ -25,6 +26,10 @@
 %define	xorg_xserver_server_xinput_abi		21.0
 
 %define	pixman_ver	0.30.0
+
+%ifarch x32
+%undefine	with_libunwind
+%endif
 
 Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
@@ -70,7 +75,7 @@ BuildRequires:	libepoxy-devel
 %endif
 %{?with_xselinux:BuildRequires:	libselinux-devel >= 2.0.86}
 BuildRequires:	libtool >= 2:2.2
-BuildRequires:	libunwind-devel
+%{?with_libunwind:BuildRequires:	libunwind-devel}
 BuildRequires:	libxcb-devel >= 1.6
 BuildRequires:	pam-devel
 BuildRequires:	perl-base
@@ -489,7 +494,7 @@ fi
 	--enable-glx-tls \
 	--enable-install-libxf86config \
 	--enable-kdrive \
-	--enable-libunwind \
+	%{?with_libunwind:--enable-libunwind} \
 	%{?with_record:--enable-record} \
 	--enable-secure-rpc \
 	%{?with_xcsecurity:--enable-xcsecurity} \
