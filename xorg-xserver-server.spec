@@ -48,6 +48,7 @@ Source12:	xvfb-run.sh
 
 Patch0:		%{name}-xwrapper.patch
 Patch1:		%{name}-pic-libxf86config.patch
+Patch2:		dtrace-link.patch
 
 Patch4:		%{name}-builtin-SHA1.patch
 Patch5:		%{name}-export-GetMaster.patch
@@ -428,6 +429,7 @@ Biblioteka rozszerzenia GLX dla serwera X.org.
 %setup -q -n xorg-server-%{version}
 %patch0 -p0
 %patch1 -p1
+%patch2 -p1
 
 %patch4 -p1
 %patch5 -p1
