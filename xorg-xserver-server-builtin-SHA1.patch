@@ -1,58 +1,144 @@
-From 3fbec7d4db59bbd24a9a768182000a1d004c5bc5 Mon Sep 17 00:00:00 2001
-From: Tiago Vignatti <tiago.vignatti@nokia.com>
-Date: Wed, 24 Mar 2010 17:27:43 +0200
-Subject: [PATCH] Revert "Revert "Render: Use built-in SHA1 library""
-
-This reverts commit a39377cbcbd3091095efbeab25bec18ae520147e.
-
-Conflicts:
-
-	configure.ac
-	include/dix-config.h.in
-	render/glyph.c
-
-
-Ok ok ok, it's the revert of a revert! Buhhh... 
-
-Once upon a time, back in 2007, Carl Worth was trying to boost render
-(4c6abe1c). He prefered to use a "strong hash" to compare glyphs (19b3b1fd)
-and used openssl library for this. Further, for the same purpose, people
-started to set other SHA1 implementations in autoconf. And a lot of
-alternatives appeared - six, to be precise. In the mean time, John Tapsell
-commit a builtin implementation of SHA1. In the same day, Keith Packard
-reverted, stating "X.org should not be providing a custom SHA1
-implementation." (a39377cb). Now, users ended up with Xorg setting the default
-as the openssl's one (libcrypto), which takes 88 kB of xserver's private RSS.
-Besides that, we have a ridiculous "configure dot fucking ac stanza to work
-out which lib to use is almost as long as sha1.c was", to quote daniels.
-
-My simple argument against Keith's decision is simple: we can save 316 kB of
-RSS in a standalone Xorg call. Therefore, I'm in favor to keep our own very
-simple and shiny SHA1 implementation.
-
----
-I'm not comfortable yet to send this patch around without see if there's any
-regressions on render or eventually get some ack from Carl.
-
-
- configure.ac            |   89 +------------------------
- include/dix-config.h.in |   15 ----
- os/Makefile.am          |    1 -
- os/xsha1.c              |  168 ---------------------------------------------
- render/Makefile.am      |    3 +
- render/glyph.c          |   25 ++-----
- render/sha1.c           |  173 +++++++++++++++++++++++++++++++++++++++++++++++
- render/sha1.h           |   63 +++++++++++++++++
- 8 files changed, 248 insertions(+), 289 deletions(-)
- delete mode 100644 os/xsha1.c
- create mode 100644 render/sha1.c
- create mode 100644 render/sha1.h
-
-diff --git a/include/dix-config.h.in b/include/dix-config.h.in
-index 058c8fd..d6e99a5 100644
---- a/include/dix-config.h.in
-+++ b/include/dix-config.h.in
-@@ -142,27 +142,6 @@
+diff -urN xorg-server-1.17.0.org/configure.ac xorg-server-1.17.0/configure.ac
+--- xorg-server-1.17.0.org/configure.ac	2015-02-02 07:40:17.000000000 +0100
++++ xorg-server-1.17.0/configure.ac	2015-02-04 19:34:23.458568095 +0100
+@@ -1544,7 +1544,7 @@
+ 
+ if test "x$SPECIAL_DTRACE_OBJECTS" = "xyes" ; then
+   DIX_LIB='$(top_builddir)/dix/dix.O'
+-  OS_LIB='$(top_builddir)/os/os.O $(SHA1_LIBS) $(DLOPEN_LIBS) $(LIBUNWIND_LIBS)'
++  OS_LIB='$(top_builddir)/os/os.O $(DLOPEN_LIBS) $(LIBUNWIND_LIBS)'
+ else
+   DIX_LIB='$(top_builddir)/dix/libdix.la'
+   OS_LIB='$(top_builddir)/os/libos.la'
+@@ -1566,124 +1566,6 @@
+ MIEXT_SYNC_LIB='$(top_builddir)/miext/sync/libsync.la'
+ CORE_INCS='-I$(top_srcdir)/include -I$(top_builddir)/include'
+ 
+-# SHA1 hashing
+-AC_ARG_WITH([sha1],
+-            [AS_HELP_STRING([--with-sha1=libc|libmd|libnettle|libgcrypt|libcrypto|libsha1|CommonCrypto|CryptoAPI],
+-                            [choose SHA1 implementation])])
+-AC_CHECK_FUNC([SHA1Init], [HAVE_SHA1_IN_LIBC=yes])
+-if test "x$with_sha1" = x && test "x$HAVE_SHA1_IN_LIBC" = xyes; then
+-	with_sha1=libc
+-fi
+-if test "x$with_sha1" = xlibc && test "x$HAVE_SHA1_IN_LIBC" != xyes; then
+-	AC_MSG_ERROR([libc requested but not found])
+-fi
+-if test "x$with_sha1" = xlibc; then
+-	AC_DEFINE([HAVE_SHA1_IN_LIBC], [1],
+-		[Use libc SHA1 functions])
+-	SHA1_LIBS=""
+-fi
+-AC_CHECK_FUNC([CC_SHA1_Init], [HAVE_SHA1_IN_COMMONCRYPTO=yes])
+-if test "x$with_sha1" = x && test "x$HAVE_SHA1_IN_COMMONCRYPTO" = xyes; then
+-	with_sha1=CommonCrypto
+-fi
+-if test "x$with_sha1" = xCommonCrypto && test "x$HAVE_SHA1_IN_COMMONCRYPTO" != xyes; then
+-	AC_MSG_ERROR([CommonCrypto requested but not found])
+-fi
+-if test "x$with_sha1" = xCommonCrypto; then
+-	AC_DEFINE([HAVE_SHA1_IN_COMMONCRYPTO], [1],
+-		[Use CommonCrypto SHA1 functions])
+-	SHA1_LIBS=""
+-fi
+-dnl stdcall functions cannot be tested with AC_CHECK_LIB
+-AC_CHECK_HEADER([wincrypt.h], [HAVE_SHA1_IN_CRYPTOAPI=yes], [], [#include <windows.h>])
+-if test "x$with_sha1" = x && test "x$HAVE_SHA1_IN_CRYPTOAPI" = xyes; then
+-	with_sha1=CryptoAPI
+-fi
+-if test "x$with_sha1" = xCryptoAPI && test "x$HAVE_SHA1_IN_CRYPTOAPI" != xyes; then
+-	AC_MSG_ERROR([CryptoAPI requested but not found])
+-fi
+-if test "x$with_sha1" = xCryptoAPI; then
+-	AC_DEFINE([HAVE_SHA1_IN_CRYPTOAPI], [1],
+-		[Use CryptoAPI SHA1 functions])
+-	SHA1_LIBS=""
+-fi
+-AC_CHECK_LIB([md], [SHA1Init], [HAVE_LIBMD=yes])
+-if test "x$with_sha1" = x && test "x$HAVE_LIBMD" = xyes; then
+-	with_sha1=libmd
+-fi
+-if test "x$with_sha1" = xlibmd && test "x$HAVE_LIBMD" != xyes; then
+-	AC_MSG_ERROR([libmd requested but not found])
+-fi
+-if test "x$with_sha1" = xlibmd; then
+-	AC_DEFINE([HAVE_SHA1_IN_LIBMD], [1],
+-	          [Use libmd SHA1 functions])
+-	SHA1_LIBS=-lmd
+-fi
+-PKG_CHECK_MODULES([LIBSHA1], [libsha1], [HAVE_LIBSHA1=yes], [HAVE_LIBSHA1=no])
+-if test "x$with_sha1" = x && test "x$HAVE_LIBSHA1" = xyes; then
+-   with_sha1=libsha1
+-fi
+-if test "x$with_sha1" = xlibsha1 && test "x$HAVE_LIBSHA1" != xyes; then
+-	AC_MSG_ERROR([libsha1 requested but not found])
+-fi
+-if test "x$with_sha1" = xlibsha1; then
+-	AC_DEFINE([HAVE_SHA1_IN_LIBSHA1], [1],
+-	          [Use libsha1 for SHA1])
+-	SHA1_LIBS=-lsha1
+-fi
+-AC_CHECK_LIB([nettle], [nettle_sha1_init], [HAVE_LIBNETTLE=yes])
+-if test "x$with_sha1" = x && test "x$HAVE_LIBNETTLE" = xyes; then
+-	with_sha1=libnettle
+-fi
+-if test "x$with_sha1" = xlibnettle && test "x$HAVE_LIBNETTLE" != xyes; then
+-	AC_MSG_ERROR([libnettle requested but not found])
+-fi
+-if test "x$with_sha1" = xlibnettle; then
+-	AC_DEFINE([HAVE_SHA1_IN_LIBNETTLE], [1],
+-	          [Use libnettle SHA1 functions])
+-	SHA1_LIBS=-lnettle
+-fi
+-AC_CHECK_LIB([gcrypt], [gcry_md_open], [HAVE_LIBGCRYPT=yes])
+-if test "x$with_sha1" = x && test "x$HAVE_LIBGCRYPT" = xyes; then
+-	with_sha1=libgcrypt
+-fi
+-if test "x$with_sha1" = xlibgcrypt && test "x$HAVE_LIBGCRYPT" != xyes; then
+-	AC_MSG_ERROR([libgcrypt requested but not found])
+-fi
+-if test "x$with_sha1" = xlibgcrypt; then
+-	AC_DEFINE([HAVE_SHA1_IN_LIBGCRYPT], [1],
+-	          [Use libgcrypt SHA1 functions])
+-	SHA1_LIBS=-lgcrypt
+-fi
+-# We don't need all of the OpenSSL libraries, just libcrypto
+-AC_CHECK_LIB([crypto], [SHA1_Init], [HAVE_LIBCRYPTO=yes])
+-PKG_CHECK_MODULES([OPENSSL], [openssl], [HAVE_OPENSSL_PKC=yes],
+-                  [HAVE_OPENSSL_PKC=no])
+-if test "x$HAVE_LIBCRYPTO" = xyes || test "x$HAVE_OPENSSL_PKC" = xyes; then
+-	if test "x$with_sha1" = x; then
+-		with_sha1=libcrypto
+-	fi
+-else
+-	if test "x$with_sha1" = xlibcrypto; then
+-		AC_MSG_ERROR([OpenSSL libcrypto requested but not found])
+-	fi
+-fi
+-if test "x$with_sha1" = xlibcrypto; then
+-	if test "x$HAVE_LIBCRYPTO" = xyes; then
+-		SHA1_LIBS=-lcrypto
+-	else
+-		SHA1_LIBS="$OPENSSL_LIBS"
+-		SHA1_CFLAGS="$OPENSSL_CFLAGS"
+-	fi
+-fi
+-AC_MSG_CHECKING([for SHA1 implementation])
+-if test "x$with_sha1" = x; then
+-	AC_MSG_ERROR([No suitable SHA1 implementation found])
+-fi
+-AC_MSG_RESULT([$with_sha1])
+-AC_SUBST(SHA1_LIBS)
+-AC_SUBST(SHA1_CFLAGS)
+-
+ PKG_CHECK_MODULES([XSERVERCFLAGS], [$REQUIRED_MODULES $REQUIRED_LIBS])
+ PKG_CHECK_MODULES([XSERVERLIBS], [$REQUIRED_LIBS])
+ 
+diff -urN xorg-server-1.17.0.org/include/dix-config.h.in xorg-server-1.17.0/include/dix-config.h.in
+--- xorg-server-1.17.0.org/include/dix-config.h.in	2014-10-09 14:15:31.000000000 +0200
++++ xorg-server-1.17.0/include/dix-config.h.in	2015-02-04 19:34:23.455234679 +0100
+@@ -152,27 +152,6 @@
  /* Define to 1 if you have the <rpcsvc/dbm.h> header file. */
  #undef HAVE_RPCSVC_DBM_H
  
@@ -80,21 +166,24 @@ index 058c8fd..d6e99a5 100644
  /* Define to 1 if you have the `shmctl64' function. */
  #undef HAVE_SHMCTL64
  
-diff --git a/os/Makefile.am b/os/Makefile.am
-index 66a4a0f..b8c1636 100644
---- a/os/Makefile.am
-+++ b/os/Makefile.am
-@@ -22,7 +22,6 @@ libos_la_SOURCES = 	\
- 	strcasecmp.c	\
- 	strcasestr.c	\
+diff -urN xorg-server-1.17.0.org/os/Makefile.am xorg-server-1.17.0/os/Makefile.am
+--- xorg-server-1.17.0.org/os/Makefile.am	2013-11-12 00:15:00.000000000 +0100
++++ xorg-server-1.17.0/os/Makefile.am	2015-02-04 19:34:23.455234679 +0100
+@@ -21,7 +21,6 @@
+ 	osinit.c	\
+ 	utils.c		\
  	xdmauth.c	\
 -	xsha1.c		\
  	xstrans.c	\
  	xprintf.c	\
  	$(XORG_SRCS)
---- a/os/xsha1.c	2012-03-30 04:57:28.000000000 +0200
-+++ /dev/null	2011-06-01 08:46:43.490033582 +0200
-@@ -1,267 +0,0 @@
+diff -urN xorg-server-1.17.0.org/os/xsha1.c xorg-server-1.17.0/os/xsha1.c
+--- xorg-server-1.17.0.org/os/xsha1.c	2015-01-18 00:42:52.000000000 +0100
++++ xorg-server-1.17.0/os/xsha1.c	2015-02-04 19:34:23.455234679 +0100
+@@ -23,270 +23,3 @@
+  * DEALINGS IN THE SOFTWARE.
+  */
+ 
 -#ifdef HAVE_DIX_CONFIG_H
 -#include <dix-config.h>
 -#endif
@@ -362,26 +451,9 @@ index 66a4a0f..b8c1636 100644
 -}
 -
 -#endif
-diff --git a/render/Makefile.am b/render/Makefile.am
-index 216c613..bb46702 100644
---- a/render/Makefile.am
-+++ b/render/Makefile.am
-@@ -13,8 +13,11 @@ librender_la_SOURCES =	\
- 	mitrap.c	\
- 	mitri.c		\
- 	picture.c	\
-+	sha1.c		\
- 	render.c
- 
- if XORG
- sdk_HEADERS = picture.h mipict.h glyphstr.h picturestr.h
- endif
-+
-+EXTRA_DIST = sha1.h
-diff --git a/render/glyph.c b/render/glyph.c
-index 0b864ad..e14530a 100644
---- a/render/glyph.c
-+++ b/render/glyph.c
+diff -urN xorg-server-1.17.0.org/render/glyph.c xorg-server-1.17.0/render/glyph.c
+--- xorg-server-1.17.0.org/render/glyph.c	2015-01-18 00:42:52.000000000 +0100
++++ xorg-server-1.17.0/render/glyph.c	2015-02-04 19:34:23.458568095 +0100
 @@ -26,8 +26,7 @@
  #include <dix-config.h>
  #endif
@@ -392,7 +464,7 @@ index 0b864ad..e14530a 100644
  #include "misc.h"
  #include "scrnintstr.h"
  #include "os.h"
-@@ -167,21 +167,13 @@ int
+@@ -165,21 +164,13 @@
  HashGlyph(xGlyphInfo * gi,
            CARD8 *bits, unsigned long size, unsigned char sha1[20])
  {
@@ -419,11 +491,24 @@ index 0b864ad..e14530a 100644
      return Success;
  }
  
-diff --git a/render/sha1.c b/render/sha1.c
-new file mode 100644
-index 0000000..820eb2a
---- /dev/null
-+++ b/render/sha1.c
+diff -urN xorg-server-1.17.0.org/render/Makefile.am xorg-server-1.17.0/render/Makefile.am
+--- xorg-server-1.17.0.org/render/Makefile.am	2013-06-18 18:03:42.000000000 +0200
++++ xorg-server-1.17.0/render/Makefile.am	2015-02-04 19:34:23.455234679 +0100
+@@ -13,8 +13,11 @@
+ 	mitrap.c	\
+ 	mitri.c		\
+ 	picture.c	\
++	sha1.c		\
+ 	render.c
+ 
+ if XORG
+ sdk_HEADERS = picture.h mipict.h glyphstr.h picturestr.h
+ endif
++
++EXTRA_DIST = sha1.h
+diff -urN xorg-server-1.17.0.org/render/sha1.c xorg-server-1.17.0/render/sha1.c
+--- xorg-server-1.17.0.org/render/sha1.c	1970-01-01 01:00:00.000000000 +0100
++++ xorg-server-1.17.0/render/sha1.c	2015-02-04 19:34:23.458568095 +0100
 @@ -0,0 +1,173 @@
 +/*
 + * SHA-1 in C
@@ -598,11 +683,9 @@ index 0000000..820eb2a
 +	}
 +}
 +
-diff --git a/render/sha1.h b/render/sha1.h
-new file mode 100644
-index 0000000..ace7d97
---- /dev/null
-+++ b/render/sha1.h
+diff -urN xorg-server-1.17.0.org/render/sha1.h xorg-server-1.17.0/render/sha1.h
+--- xorg-server-1.17.0.org/render/sha1.h	1970-01-01 01:00:00.000000000 +0100
++++ xorg-server-1.17.0/render/sha1.h	2015-02-04 19:34:23.458568095 +0100
 @@ -0,0 +1,63 @@
 +/*
 + * SHA-1 in C
@@ -667,143 +750,3 @@ index 0000000..ace7d97
 +
 +#endif /* _SHA1_H */
 +
--- 
-1.6.0.4
-
---- xorg-server-1.9.2.902/configure.ac.orig	2010-12-04 06:56:52.000000000 +0100
-+++ xorg-server-1.9.2.902/configure.ac	2010-12-07 19:16:06.420296250 +0100
-@@ -1338,7 +1338,7 @@
- 
- if test "x$SPECIAL_DTRACE_OBJECTS" = "xyes" ; then
-   DIX_LIB='$(top_builddir)/dix/dix.O'
--  OS_LIB='$(top_builddir)/os/os.O $(SHA1_LIBS) $(DLOPEN_LIBS) $(LIBUNWIND_LIBS)'
-+  OS_LIB='$(top_builddir)/os/os.O $(DLOPEN_LIBS) $(LIBUNWIND_LIBS)'
- else
-   DIX_LIB='$(top_builddir)/dix/libdix.la'
-   OS_LIB='$(top_builddir)/os/libos.la'
-@@ -1358,124 +1358,6 @@
- MIEXT_SYNC_LIB='$(top_builddir)/miext/sync/libsync.la'
- CORE_INCS='-I$(top_srcdir)/include -I$(top_builddir)/include'
- 
--# SHA1 hashing
--AC_ARG_WITH([sha1],
--            [AS_HELP_STRING([--with-sha1=libc|libmd|libnettle|libgcrypt|libcrypto|libsha1|CommonCrypto|CryptoAPI],
--                            [choose SHA1 implementation])])
--AC_CHECK_FUNC([SHA1Init], [HAVE_SHA1_IN_LIBC=yes])
--if test "x$with_sha1" = x && test "x$HAVE_SHA1_IN_LIBC" = xyes; then
--	with_sha1=libc
--fi
--if test "x$with_sha1" = xlibc && test "x$HAVE_SHA1_IN_LIBC" != xyes; then
--	AC_MSG_ERROR([libc requested but not found])
--fi
--if test "x$with_sha1" = xlibc; then
--	AC_DEFINE([HAVE_SHA1_IN_LIBC], [1],
--		[Use libc SHA1 functions])
--	SHA1_LIBS=""
--fi
--AC_CHECK_FUNC([CC_SHA1_Init], [HAVE_SHA1_IN_COMMONCRYPTO=yes])
--if test "x$with_sha1" = x && test "x$HAVE_SHA1_IN_COMMONCRYPTO" = xyes; then
--	with_sha1=CommonCrypto
--fi
--if test "x$with_sha1" = xCommonCrypto && test "x$HAVE_SHA1_IN_COMMONCRYPTO" != xyes; then
--	AC_MSG_ERROR([CommonCrypto requested but not found])
--fi
--if test "x$with_sha1" = xCommonCrypto; then
--	AC_DEFINE([HAVE_SHA1_IN_COMMONCRYPTO], [1],
--		[Use CommonCrypto SHA1 functions])
--	SHA1_LIBS=""
--fi
--dnl stdcall functions cannot be tested with AC_CHECK_LIB
--AC_CHECK_HEADER([wincrypt.h], [HAVE_SHA1_IN_CRYPTOAPI=yes], [], [#include <windows.h>])
--if test "x$with_sha1" = x && test "x$HAVE_SHA1_IN_CRYPTOAPI" = xyes; then
--	with_sha1=CryptoAPI
--fi
--if test "x$with_sha1" = xCryptoAPI && test "x$HAVE_SHA1_IN_CRYPTOAPI" != xyes; then
--	AC_MSG_ERROR([CryptoAPI requested but not found])
--fi
--if test "x$with_sha1" = xCryptoAPI; then
--	AC_DEFINE([HAVE_SHA1_IN_CRYPTOAPI], [1],
--		[Use CryptoAPI SHA1 functions])
--	SHA1_LIBS=""
--fi
--AC_CHECK_LIB([md], [SHA1Init], [HAVE_LIBMD=yes])
--if test "x$with_sha1" = x && test "x$HAVE_LIBMD" = xyes; then
--	with_sha1=libmd
--fi
--if test "x$with_sha1" = xlibmd && test "x$HAVE_LIBMD" != xyes; then
--	AC_MSG_ERROR([libmd requested but not found])
--fi
--if test "x$with_sha1" = xlibmd; then
--	AC_DEFINE([HAVE_SHA1_IN_LIBMD], [1],
--	          [Use libmd SHA1 functions])
--	SHA1_LIBS=-lmd
--fi
--PKG_CHECK_MODULES([LIBSHA1], [libsha1], [HAVE_LIBSHA1=yes], [HAVE_LIBSHA1=no])
--if test "x$with_sha1" = x && test "x$HAVE_LIBSHA1" = xyes; then
--   with_sha1=libsha1
--fi
--if test "x$with_sha1" = xlibsha1 && test "x$HAVE_LIBSHA1" != xyes; then
--	AC_MSG_ERROR([libsha1 requested but not found])
--fi
--if test "x$with_sha1" = xlibsha1; then
--	AC_DEFINE([HAVE_SHA1_IN_LIBSHA1], [1],
--	          [Use libsha1 for SHA1])
--	SHA1_LIBS=-lsha1
--fi
--AC_CHECK_LIB([nettle], [nettle_sha1_init], [HAVE_LIBNETTLE=yes])
--if test "x$with_sha1" = x && test "x$HAVE_LIBNETTLE" = xyes; then
--	with_sha1=libnettle
--fi
--if test "x$with_sha1" = xlibnettle && test "x$HAVE_LIBNETTLE" != xyes; then
--	AC_MSG_ERROR([libnettle requested but not found])
--fi
--if test "x$with_sha1" = xlibnettle; then
--	AC_DEFINE([HAVE_SHA1_IN_LIBNETTLE], [1],
--	          [Use libnettle SHA1 functions])
--	SHA1_LIBS=-lnettle
--fi
--AC_CHECK_LIB([gcrypt], [gcry_md_open], [HAVE_LIBGCRYPT=yes])
--if test "x$with_sha1" = x && test "x$HAVE_LIBGCRYPT" = xyes; then
--	with_sha1=libgcrypt
--fi
--if test "x$with_sha1" = xlibgcrypt && test "x$HAVE_LIBGCRYPT" != xyes; then
--	AC_MSG_ERROR([libgcrypt requested but not found])
--fi
--if test "x$with_sha1" = xlibgcrypt; then
--	AC_DEFINE([HAVE_SHA1_IN_LIBGCRYPT], [1],
--	          [Use libgcrypt SHA1 functions])
--	SHA1_LIBS=-lgcrypt
--fi
--# We don't need all of the OpenSSL libraries, just libcrypto
--AC_CHECK_LIB([crypto], [SHA1_Init], [HAVE_LIBCRYPTO=yes])
--PKG_CHECK_MODULES([OPENSSL], [openssl], [HAVE_OPENSSL_PKC=yes],
--                  [HAVE_OPENSSL_PKC=no])
--if test "x$HAVE_LIBCRYPTO" = xyes || test "x$HAVE_OPENSSL_PKC" = xyes; then
--	if test "x$with_sha1" = x; then
--		with_sha1=libcrypto
--	fi
--else
--	if test "x$with_sha1" = xlibcrypto; then
--		AC_MSG_ERROR([OpenSSL libcrypto requested but not found])
--	fi
--fi
--if test "x$with_sha1" = xlibcrypto; then
--	if test "x$HAVE_LIBCRYPTO" = xyes; then
--		SHA1_LIBS=-lcrypto
--	else
--		SHA1_LIBS="$OPENSSL_LIBS"
--		SHA1_CFLAGS="$OPENSSL_CFLAGS"
--	fi
--fi
--AC_MSG_CHECKING([for SHA1 implementation])
--if test "x$with_sha1" = x; then
--	AC_MSG_ERROR([No suitable SHA1 implementation found])
--fi
--AC_MSG_RESULT([$with_sha1])
--AC_SUBST(SHA1_LIBS)
--AC_SUBST(SHA1_CFLAGS)
--
- PKG_CHECK_MODULES([XSERVERCFLAGS], [$REQUIRED_MODULES $REQUIRED_LIBS])
- PKG_CHECK_MODULES([XSERVERLIBS], [$REQUIRED_LIBS])
- 
-

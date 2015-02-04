@@ -20,9 +20,9 @@
 #
 # ABI versions, see hw/xfree86/common/xf86Module.h
 %define	xorg_xserver_server_ansic_abi		0.4
-%define	xorg_xserver_server_extension_abi	8.0
+%define	xorg_xserver_server_extension_abi	9.0
 %define	xorg_xserver_server_font_abi		0.6
-%define	xorg_xserver_server_videodrv_abi	18.0
+%define	xorg_xserver_server_videodrv_abi	19.0
 %define	xorg_xserver_server_xinput_abi		21.0
 
 %define	pixman_ver	0.30.0
@@ -34,12 +34,12 @@
 Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
-Version:	1.16.3
+Version:	1.17.0
 Release:	1
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
-# Source0-md5:	afd93977235584a9caa7528a737c1b52
+# Source0-md5:	38ecaefa238b04ec4a38f7128e87e239
 Source1:	10-quirks.conf
 Source2:	xserver.pamd
 Source10:	%{name}-Xvfb.init
@@ -187,6 +187,7 @@ Obsoletes:	Xserver
 %{?with_glamor:Obsoletes:	glamor}
 Obsoletes:	xorg-xserver-libdri
 Obsoletes:	xorg-xserver-server-xorgcfg
+Obsoletes:	xorg-driver-video-modesetting
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 # avoid self-dependencies on included modules
@@ -598,16 +599,9 @@ fi
 %attr(755,root,root) %{_libdir}/xorg/modules/libwfb.so
 %dir %{_libdir}/xorg/modules/dri
 %dir %{_libdir}/xorg/modules/drivers
+%attr(755,root,root) %{_libdir}/xorg/modules/drivers/modesetting_drv.so
 %dir %{_libdir}/xorg/modules/extensions
 %dir %{_libdir}/xorg/modules/input
-%dir %{_libdir}/xorg/modules/multimedia
-%attr(755,root,root) %{_libdir}/xorg/modules/multimedia/bt829_drv.so
-%attr(755,root,root) %{_libdir}/xorg/modules/multimedia/fi1236_drv.so
-%attr(755,root,root) %{_libdir}/xorg/modules/multimedia/msp3430_drv.so
-%attr(755,root,root) %{_libdir}/xorg/modules/multimedia/tda8425_drv.so
-%attr(755,root,root) %{_libdir}/xorg/modules/multimedia/tda9850_drv.so
-%attr(755,root,root) %{_libdir}/xorg/modules/multimedia/tda9885_drv.so
-%attr(755,root,root) %{_libdir}/xorg/modules/multimedia/uda1380_drv.so
 %if "%{_libdir}" != "%{_exec_prefix}/lib"
 %dir %{_exec_prefix}/lib/xorg
 %dir %{_exec_prefix}/lib/xorg/modules
@@ -630,6 +624,7 @@ fi
 %{_mandir}/man1/gtf.1*
 %{_mandir}/man4/exa.4*
 %{_mandir}/man4/fbdevhw.4*
+%{_mandir}/man4/modesetting.4*
 %{_mandir}/man5/xorg.conf.5*
 %{_mandir}/man5/xorg.conf.d.5*
 
