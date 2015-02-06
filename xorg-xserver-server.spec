@@ -70,7 +70,7 @@ BuildRequires:	docbook-dtd43-xml
 BuildRequires:	dbus-devel >= 1.0
 %endif
 %{?with_hal:BuildRequires:	hal-devel}
-BuildRequires:	libdrm-devel >= 2.4.39
+BuildRequires:	libdrm-devel >= 2.4.46
 %if %{with glamor} || %{with wayland}
 BuildRequires:	libepoxy-devel
 %endif
@@ -116,7 +116,7 @@ BuildRequires:	xorg-lib-libfontenc-devel
 BuildRequires:	xorg-lib-libpciaccess-devel >= 0.12.901
 BuildRequires:	xorg-lib-libxkbfile-devel
 BuildRequires:	xorg-lib-libxshmfence-devel >= 1.1
-BuildRequires:	xorg-lib-xtrans-devel >= 1.3.3
+BuildRequires:	xorg-lib-xtrans-devel >= 1.3.5
 BuildRequires:	xorg-proto-bigreqsproto-devel >= 1.1.0
 BuildRequires:	xorg-proto-compositeproto-devel >= 0.4
 BuildRequires:	xorg-proto-damageproto-devel >= 1.1
@@ -151,7 +151,7 @@ BuildRequires:	xorg-util-util-macros >= 1.14
 #BR: tslib (for KDRIVE only)
 Requires(triggerpostun):	sed >= 4.0
 %{?with_glamor:Requires:	Mesa-libgbm >= 10.2.0}
-Requires:	libdrm >= 2.4.39
+Requires:	libdrm >= 2.4.46
 Requires:	pixman >= %{pixman_ver}
 Requires:	udev-libs >= 1:143
 Requires:	xkeyboard-config
@@ -366,7 +366,7 @@ Summary:	Header files for X.org server
 Summary(pl.UTF-8):	Pliki nagłówkowe dla serwera X.org
 Group:		X11/Development/Libraries
 Requires:	Mesa-libGL-devel >= 7.8.0
-Requires:	libdrm-devel >= 2.4.39
+Requires:	libdrm-devel >= 2.4.46
 Requires:	pixman-devel >= %{pixman_ver}
 Requires:	xorg-lib-libpciaccess-devel >= 0.12.901
 Requires:	xorg-lib-libxkbfile-devel
