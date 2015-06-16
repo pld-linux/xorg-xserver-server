@@ -34,12 +34,12 @@
 Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
-Version:	1.17.1
-Release:	3
+Version:	1.17.2
+Release:	1
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
-# Source0-md5:	5986510d59e394a50126a8e2833e79d3
+# Source0-md5:	397e405566651150490ff493e463f1ad
 Source1:	10-quirks.conf
 Source2:	xserver.pamd
 Source10:	%{name}-Xvfb.init
@@ -51,7 +51,7 @@ Patch1:		%{name}-pic-libxf86config.patch
 Patch2:		dtrace-link.patch
 
 Patch4:		%{name}-builtin-SHA1.patch
-Patch5:		%{name}-export-GetMaster.patch
+
 Patch6:		110_nvidia_slowdow_fix.patch
 Patch7:		%{name}-include-defs.patch
 URL:		http://xorg.freedesktop.org/
@@ -433,7 +433,7 @@ Biblioteka rozszerzenia GLX dla serwera X.org.
 %patch2 -p1
 
 %patch4 -p1
-%patch5 -p1
+
 %patch6 -p1
 
 #unfortunately breaks build
