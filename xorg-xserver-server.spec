@@ -22,8 +22,8 @@
 %define	xorg_xserver_server_ansic_abi		0.4
 %define	xorg_xserver_server_extension_abi	9.0
 %define	xorg_xserver_server_font_abi		0.6
-%define	xorg_xserver_server_videodrv_abi	19.0
-%define	xorg_xserver_server_xinput_abi		21.0
+%define	xorg_xserver_server_videodrv_abi	20.0
+%define	xorg_xserver_server_xinput_abi		22.1
 
 %define	pixman_ver	0.30.0
 
@@ -34,12 +34,12 @@
 Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
-Version:	1.17.4
+Version:	1.18.0
 Release:	1
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
-# Source0-md5:	1509a9daae713895e7f5bcba8bcc05b2
+# Source0-md5:	3c1c1057d3ad27380d8dd87ffcc182cd
 Source1:	10-quirks.conf
 Source2:	xserver.pamd
 Source10:	%{name}-Xvfb.init
@@ -47,7 +47,7 @@ Source11:	%{name}-Xvfb.sysconfig
 Source12:	xvfb-run.sh
 
 Patch0:		%{name}-xwrapper.patch
-Patch1:		%{name}-pic-libxf86config.patch
+
 Patch2:		dtrace-link.patch
 
 Patch4:		%{name}-builtin-SHA1.patch
@@ -429,7 +429,7 @@ Biblioteka rozszerzenia GLX dla serwera X.org.
 %prep
 %setup -q -n xorg-server-%{version}
 %patch0 -p0
-%patch1 -p1
+
 %patch2 -p1
 
 %patch4 -p1
@@ -494,8 +494,6 @@ fi
 	%{?with_dmx:--enable-dmx} \
 	--enable-dri2%{!?with_dri2:=no} \
 	%{?with_glamor:--enable-glamor} \
-	--enable-glx-tls \
-	--enable-install-libxf86config \
 	--enable-kdrive \
 	%{?with_libunwind:--enable-libunwind} \
 	%{?with_record:--enable-record} \
@@ -616,7 +614,6 @@ fi
 %dir /etc/X11/xorg.conf.d
 %dir %{_datadir}/X11/xorg.conf.d
 # overwrite these settings with local configs in /etc/X11/xorg.conf.d
-%verify(not md5 mtime size) %{_datadir}/X11/xorg.conf.d/10-evdev.conf
 %verify(not md5 mtime size) %{_datadir}/X11/xorg.conf.d/10-quirks.conf
 %{_mandir}/man1/Xorg.1*
 %{_mandir}/man1/Xserver.1*
@@ -684,8 +681,6 @@ fi
 %defattr(644,root,root,755)
 %doc doc/{Xinput,Xserver-spec}.html %{?with_systemtap:doc/dtrace/Xserver-DTrace.html}
 %{_includedir}/xorg
-%{_libdir}/libxf86config.a
-%{_libdir}/libxf86config.la
 %{_aclocaldir}/xorg-server.m4
 %{_pkgconfigdir}/xorg-server.pc
 
