@@ -368,6 +368,7 @@ Group:		X11/Development/Libraries
 Requires:	Mesa-libGL-devel >= 7.8.0
 Requires:	libdrm-devel >= 2.4.46
 Requires:	pixman-devel >= %{pixman_ver}
+Requires:	xorg-lib-libXfont-devel
 Requires:	xorg-lib-libpciaccess-devel >= 0.12.901
 Requires:	xorg-lib-libxkbfile-devel
 %{?with_dri2:Requires:	xorg-proto-dri2proto-devel >= 2.8}
