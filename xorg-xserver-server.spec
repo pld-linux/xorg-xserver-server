@@ -1,7 +1,6 @@
 # TODO
 # - consider XSELINUX by default
 # - Xvfb initscript runs Xvfb as root! add user there!
-# - upstream --enable-suid-wrapper vs Xwrapper patch?
 #
 # Conditional build:
 %bcond_with	dbus		# D-BUS support for configuration (if no udev)
@@ -45,8 +44,6 @@ Source2:	xserver.pamd
 Source10:	%{name}-Xvfb.init
 Source11:	%{name}-Xvfb.sysconfig
 Source12:	xvfb-run.sh
-
-Patch0:		%{name}-xwrapper.patch
 
 Patch2:		dtrace-link.patch
 
@@ -429,16 +426,13 @@ Biblioteka rozszerzenia GLX dla serwera X.org.
 
 %prep
 %setup -q -n xorg-server-%{version}
-%patch0 -p0
 
 %patch2 -p1
 
 %patch4 -p1
 
 %patch6 -p1
-
-#unfortunately breaks build
-#patch7 -p1
+%patch7 -p1
 
 # xserver uses pixman-1 API/ABI so put that explictly here
 sed -i -e 's#<pixman\.h#<pixman-1/pixman.h#g' ./fb/fb.h ./include/miscstruct.h ./render/picture.h
@@ -481,6 +475,7 @@ fi
 %{__autoheader}
 %{__automake}
 %configure \
+	--libexecdir=%{_libdir}/xorg \
 	--with-os-name="PLD/Linux" \
 	--with-os-vendor="PLD/Team" \
 	--with-default-font-path="%{_fontsdir}/misc,%{_fontsdir}/TTF,%{_fontsdir}/OTF,%{_fontsdir}/Type1,%{_fontsdir}/100dpi,%{_fontsdir}/75dpi" \
@@ -508,6 +503,7 @@ fi
 	%{?with_wayland:--enable-xwayland} \
 	%{!?with_systemtap:--without-dtrace} \
 	--without-fop \
+	--enable-suid-wrapper \
 	--with-systemd-daemon
 
 %{__make} -j1
@@ -539,6 +535,9 @@ install -d $RPM_BUILD_ROOT/etc/rc.d/init.d
 install -d $RPM_BUILD_ROOT/etc/sysconfig
 install -p %{SOURCE10} $RPM_BUILD_ROOT/etc/rc.d/init.d/Xvfb
 cp -p %{SOURCE11} $RPM_BUILD_ROOT/etc/sysconfig/Xvfb
+
+# compatibility with old xwrapper
+ln -s %{_libdir}/xorg/Xorg.wraap $RPM_BUILD_ROOT%{_bindir}/Xwrapper
 
 # prepare source package
 install -d $RPM_BUILD_ROOT%{_usrsrc}/%{name}-%{version}
@@ -585,6 +584,8 @@ fi
 %attr(755,root,root) %{_bindir}/gtf
 %dir %{_libdir}/xorg
 %{_libdir}/xorg/protocol.txt
+%attr(755,root,root) %{_libdir}/xorg/Xorg
+%attr(4755,root,root) %{_libdir}/xorg/Xorg.wrap
 %dir %{_libdir}/xorg/modules
 %attr(755,root,root) %{_libdir}/xorg/modules/libexa.so
 %attr(755,root,root) %{_libdir}/xorg/modules/libfb.so
@@ -617,12 +618,14 @@ fi
 # overwrite these settings with local configs in /etc/X11/xorg.conf.d
 %verify(not md5 mtime size) %{_datadir}/X11/xorg.conf.d/10-quirks.conf
 %{_mandir}/man1/Xorg.1*
+%{_mandir}/man1/Xorg.wrap.1*
 %{_mandir}/man1/Xserver.1*
 %{_mandir}/man1/cvt.1*
 %{_mandir}/man1/gtf.1*
 %{_mandir}/man4/exa.4*
 %{_mandir}/man4/fbdevhw.4*
 %{_mandir}/man4/modesetting.4*
+%{_mandir}/man5/Xwrapper.config.5*
 %{_mandir}/man5/xorg.conf.5*
 %{_mandir}/man5/xorg.conf.d.5*
 

@@ -1,10 +1,10 @@
---- xorg-server-1.12.0/include/os.h~	2012-01-17 00:51:54.000000000 +0100
-+++ xorg-server-1.12.0/include/os.h	2012-03-20 18:36:45.042937701 +0100
-@@ -49,6 +49,7 @@
- #ifndef OS_H
- #define OS_H
+--- xorg-server-1.18.0/hw/xfree86/xorg-wrapper.c~	2015-11-10 19:37:11.000000000 +0100
++++ xorg-server-1.18.0/hw/xfree86/xorg-wrapper.c	2015-11-10 19:37:18.640853466 +0100
+@@ -24,6 +24,7 @@
+  */
  
-+#include "xorg-server.h"
- #include "misc.h"
- #include <stdarg.h>
- #include <string.h>
+ #include "dix-config.h"
++#include "xorg-config.h"
+ 
+ #include <errno.h>
+ #include <fcntl.h>
