@@ -537,7 +537,7 @@ install -p %{SOURCE10} $RPM_BUILD_ROOT/etc/rc.d/init.d/Xvfb
 cp -p %{SOURCE11} $RPM_BUILD_ROOT/etc/sysconfig/Xvfb
 
 # compatibility with old xwrapper
-ln -s %{_libdir}/xorg/Xorg.wraap $RPM_BUILD_ROOT%{_bindir}/Xwrapper
+ln -s %{_libdir}/xorg/Xorg.wrap $RPM_BUILD_ROOT%{_bindir}/Xwrapper
 
 # prepare source package
 install -d $RPM_BUILD_ROOT%{_usrsrc}/%{name}-%{version}
