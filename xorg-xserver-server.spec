@@ -80,12 +80,14 @@ BuildRequires:	perl-base
 BuildRequires:	pixman-devel >= %{pixman_ver}
 BuildRequires:	pkgconfig >= 1:0.19
 %{?with_systemtap:BuildRequires:	systemtap-sdt-devel}
+BuildRequires:	systemd-devel
 BuildRequires:	udev-devel >= 1:143
 # wayland-client
 %{?with_wayland:BuildRequires:	wayland-devel >= 1.3.0}
 BuildRequires:	xcb-util-devel
 BuildRequires:	xcb-util-image-devel
 BuildRequires:	xcb-util-keysyms-devel
+BuildRequires:	xcb-util-renderutil-devel
 BuildRequires:	xcb-util-wm-devel
 BuildRequires:	xmlto >= 0.0.20
 BuildRequires:	xorg-app-mkfontscale
