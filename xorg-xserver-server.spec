@@ -91,6 +91,7 @@ BuildRequires:	xcb-util-renderutil-devel
 BuildRequires:	xcb-util-wm-devel
 BuildRequires:	xmlto >= 0.0.20
 BuildRequires:	xorg-app-mkfontscale
+BuildRequires:	xorg-font-font-util >= 1.1
 BuildRequires:	xorg-lib-libX11-devel >= 1.6
 BuildRequires:	xorg-lib-libXau-devel
 %{?with_dmx:BuildRequires:	xorg-lib-libXaw-devel}
@@ -130,7 +131,7 @@ BuildRequires:	xorg-proto-inputproto-devel >= 2.3
 BuildRequires:	xorg-proto-kbproto-devel >= 1.0.3
 BuildRequires:	xorg-proto-presentproto-devel >= 1.0
 BuildRequires:	xorg-proto-printproto-devel
-BuildRequires:	xorg-proto-randrproto-devel >= 1.4.0
+BuildRequires:	xorg-proto-randrproto-devel >= 1.5.0
 %{?with_record:BuildRequires:	xorg-proto-recordproto-devel >= 1.13.99.1}
 BuildRequires:	xorg-proto-renderproto-devel >= 0.11
 BuildRequires:	xorg-proto-resourceproto-devel >= 1.2.0
@@ -144,7 +145,7 @@ BuildRequires:	xorg-proto-xf86driproto-devel >= 2.1.0
 BuildRequires:	xorg-proto-xf86miscproto-devel
 BuildRequires:	xorg-proto-xf86vidmodeproto-devel >= 2.2.99.1
 BuildRequires:	xorg-proto-xineramaproto-devel
-BuildRequires:	xorg-proto-xproto-devel >= 7.0.26
+BuildRequires:	xorg-proto-xproto-devel >= 7.0.28
 BuildRequires:	xorg-sgml-doctools >= 1.8
 BuildRequires:	xorg-util-util-macros >= 1.14
 #BR: tslib (for KDRIVE only)
@@ -377,7 +378,7 @@ Requires:	xorg-proto-glproto-devel >= 1.4.17
 Requires:	xorg-proto-inputproto-devel >= 2.3
 Requires:	xorg-proto-kbproto-devel >= 1.0.3
 Requires:	xorg-proto-presentproto-devel >= 1.0
-Requires:	xorg-proto-randrproto-devel >= 1.4.0
+Requires:	xorg-proto-randrproto-devel >= 1.5.0
 Requires:	xorg-proto-renderproto-devel >= 0.11
 Requires:	xorg-proto-resourceproto-devel >= 1.2.0
 Requires:	xorg-proto-scrnsaverproto-devel >= 1.1
@@ -385,7 +386,7 @@ Requires:	xorg-proto-videoproto-devel
 Requires:	xorg-proto-xextproto-devel >= 1:7.3.0
 Requires:	xorg-proto-xf86driproto-devel >= 2.1.0
 Requires:	xorg-proto-xineramaproto-devel
-Requires:	xorg-proto-xproto-devel >= 7.0.26
+Requires:	xorg-proto-xproto-devel >= 7.0.28
 Obsoletes:	X11-Xserver-devel < 1:7.0.0
 Obsoletes:	XFree86-Xserver-devel < 1:7.0.0
 %{?with_glamor:Obsoletes:	glamor-devel}
