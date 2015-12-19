@@ -34,7 +34,7 @@ Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
 Version:	1.18.0
-Release:	1
+Release:	2
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
@@ -44,7 +44,7 @@ Source2:	xserver.pamd
 Source10:	%{name}-Xvfb.init
 Source11:	%{name}-Xvfb.sysconfig
 Source12:	xvfb-run.sh
-
+Patch1:		%{name}-xwrapper-pam.patch
 Patch2:		dtrace-link.patch
 
 Patch4:		%{name}-builtin-SHA1.patch
@@ -429,7 +429,7 @@ Biblioteka rozszerzenia GLX dla serwera X.org.
 
 %prep
 %setup -q -n xorg-server-%{version}
-
+%patch1 -p1
 %patch2 -p1
 
 %patch4 -p1
@@ -539,6 +539,15 @@ install -d $RPM_BUILD_ROOT/etc/sysconfig
 install -p %{SOURCE10} $RPM_BUILD_ROOT/etc/rc.d/init.d/Xvfb
 cp -p %{SOURCE11} $RPM_BUILD_ROOT/etc/sysconfig/Xvfb
 
+# Xorg.wrap config
+cat >$RPM_BUILD_ROOT/etc/X11/Xwrapper.config <<EOF
+# allowed values: rootonly console anybody pam
+allowed_users = pam
+
+# set to yes if hardware or console access requires root rights (and Xwrapper fails to detect it)
+#needs_root_rights = yes
+EOF
+
 # compatibility with old xwrapper
 ln -s %{_libdir}/xorg/Xorg.wrap $RPM_BUILD_ROOT%{_bindir}/Xwrapper
 
@@ -617,6 +626,7 @@ fi
 %config(missingok) /etc/security/console.apps/xserver
 %{?with_dbus:/etc/dbus-1/system.d/xorg-server.conf}
 %dir /etc/X11/xorg.conf.d
+%config(noreplace) %verify(not md5 mtime size) /etc/X11/Xwrapper.config
 %dir %{_datadir}/X11/xorg.conf.d
 # overwrite these settings with local configs in /etc/X11/xorg.conf.d
 %verify(not md5 mtime size) %{_datadir}/X11/xorg.conf.d/10-quirks.conf

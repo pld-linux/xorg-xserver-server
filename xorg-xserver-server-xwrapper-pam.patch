@@ -1,0 +1,117 @@
+--- xorg-server-1.18.0/hw/xfree86/xorg-wrapper.c.orig	2015-12-05 22:58:04.135435699 +0100
++++ xorg-server-1.18.0/hw/xfree86/xorg-wrapper.c	2015-12-19 11:04:14.816470975 +0100
+@@ -44,6 +44,13 @@
+ #include <drm.h>
+ #include <xf86drm.h> /* For DRM_DEV_NAME */
+ #endif
++#define WITH_PAM 1
++#ifdef WITH_PAM
++#include <security/pam_appl.h>
++#include <security/pam_misc.h>
++#include <pwd.h>
++#endif /* WITH_PAM */
++
+ 
+ #include "misc.h"
+ 
+@@ -51,7 +58,7 @@
+ 
+ static const char *progname;
+ 
+-enum { ROOT_ONLY, CONSOLE_ONLY, ANYBODY };
++enum { ROOT_ONLY, CONSOLE_ONLY, ANYBODY, USEPAM };
+ 
+ /* KISS non locale / LANG parsing isspace version */
+ static int is_space(char c)
+@@ -125,6 +132,10 @@
+                 *allowed = CONSOLE_ONLY;
+             else if (strcmp(value, "anybody") == 0)
+                 *allowed = ANYBODY;
++#ifdef WITH_PAM
++            else if (strcmp(value, "pam") == 0)
++                *allowed = USEPAM;
++#endif
+             else {
+                 fprintf(stderr,
+                     "%s: Invalid value '%s' for 'allowed_users' at %s line %d\n",
+@@ -186,6 +197,45 @@
+     return 0;
+ }
+ 
++#ifdef WITH_PAM
++static int do_pam(void)
++{
++    int retval;
++    struct passwd *pw;
++    pam_handle_t *pamh = NULL;
++    static struct pam_conv conv = {
++        misc_conv,
++        NULL
++    };
++
++    pw = getpwuid(getuid());
++    if (pw == NULL) {
++        fprintf(stderr, "%s: Unable to read passwd entry\n", progname);
++	return -1;
++    }
++    retval = pam_start("xserver", pw->pw_name, &conv, &pamh);
++    if (retval != PAM_SUCCESS) {
++	fprintf(stderr, "%s: PAM failed\n", progname);
++	return -1;
++    }
++    retval = pam_authenticate(pamh, 0);
++    if (retval != PAM_SUCCESS) {
++        fprintf(stderr, "%s: PAM auth failed\n", progname);
++        pam_end(pamh, retval);
++	return -1;
++    }
++    retval = pam_acct_mgmt(pamh, 0);
++    if (retval != PAM_SUCCESS) {
++        fprintf(stderr, "%s: PAM auth failed\n", progname);
++        pam_end(pamh, retval);
++	return -1;
++    }
++    /* this is not a session, so do not do session management */
++    pam_end(pamh, PAM_SUCCESS);
++    return 0;
++}
++#endif
++
+ int main(int argc, char *argv[])
+ {
+ #ifdef WITH_LIBDRM
+@@ -195,7 +245,11 @@
+     int i, r, fd;
+     int kms_cards = 0;
+     int total_cards = 0;
++#if WITH_PAM
++    int allowed = USEPAM;
++#else
+     int allowed = CONSOLE_ONLY;
++#endif
+     int needs_root_rights = -1;
+     char *const empty_envp[1] = { NULL, };
+ 
+@@ -203,6 +257,12 @@
+ 
+     parse_config(&allowed, &needs_root_rights);
+ 
++#if WITH_PAM
++    if (allowed == USEPAM) {
++        if(do_pam() < 0)
++            exit(1);
++    } else
++#endif
+     /* For non root users check if they are allowed to run the X server */
+     if (getuid() != 0) {
+         switch (allowed) {
+--- xorg-server-1.18.0/hw/xfree86/Makefile.am.orig	2015-10-28 19:15:36.000000000 +0100
++++ xorg-server-1.18.0/hw/xfree86/Makefile.am	2015-12-19 11:04:50.946469457 +0100
+@@ -85,6 +85,7 @@
+ wrapdir = $(SUID_WRAPPER_DIR)
+ wrap_PROGRAMS = Xorg.wrap
+ Xorg_wrap_SOURCES = xorg-wrapper.c
++Xorg_wrap_LDADD = -lpam_misc -lpam
+ endif
+ 
+ BUILT_SOURCES = xorg.conf.example
