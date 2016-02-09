@@ -33,12 +33,12 @@
 Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
-Version:	1.18.0
-Release:	2
+Version:	1.18.1
+Release:	1
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
-# Source0-md5:	3c1c1057d3ad27380d8dd87ffcc182cd
+# Source0-md5:	1b9e85420c3790dd487addd50313f4da
 Source1:	10-quirks.conf
 Source2:	xserver.pamd
 Source10:	%{name}-Xvfb.init
@@ -50,7 +50,6 @@ Patch2:		dtrace-link.patch
 Patch4:		%{name}-builtin-SHA1.patch
 
 Patch6:		110_nvidia_slowdow_fix.patch
-Patch7:		%{name}-include-defs.patch
 URL:		http://xorg.freedesktop.org/
 BuildRequires:	Mesa-libGL-devel >= 7.8.1
 %{?with_dri2:BuildRequires:	Mesa-libGL-devel >= 9.2.0}
@@ -435,7 +434,6 @@ Biblioteka rozszerzenia GLX dla serwera X.org.
 %patch4 -p1
 
 %patch6 -p1
-%patch7 -p1
 
 # xserver uses pixman-1 API/ABI so put that explictly here
 sed -i -e 's#<pixman\.h#<pixman-1/pixman.h#g' ./fb/fb.h ./include/miscstruct.h ./render/picture.h
