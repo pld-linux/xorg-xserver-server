@@ -35,7 +35,7 @@ Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
 Version:	1.18.1
-Release:	2
+Release:	3
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
@@ -372,7 +372,7 @@ Requires:	xorg-lib-libXfont-devel
 Requires:	xorg-lib-libpciaccess-devel >= 0.12.901
 Requires:	xorg-lib-libxkbfile-devel
 %{?with_dri2:Requires:	xorg-proto-dri2proto-devel >= 2.8}
-%{?with_dri3:Requires:	xorg-proto-dri3proto-devel >= 2.8}
+%{?with_dri3:Requires:	xorg-proto-dri3proto-devel >= 1.0}
 Requires:	xorg-proto-dri3proto-devel >= 1.0
 Requires:	xorg-proto-fontsproto-devel >= 2.1.3
 Requires:	xorg-proto-glproto-devel >= 1.4.17
