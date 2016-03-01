@@ -7,6 +7,7 @@
 %bcond_with	hal		# HAL support for configuration (if no udev)
 %bcond_without	udev		# UDEV support for configuration
 %bcond_without	dri2		# DRI2 extension
+%bcond_without	dri3		# DRI3 extension
 %bcond_without	record		# RECORD extension
 %bcond_with	xcsecurity	# XC-SECURITY extension (deprecated)
 %bcond_with	xf86bigfont	# XF86BigFont extension
@@ -34,7 +35,7 @@ Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
 Version:	1.18.1
-Release:	1
+Release:	2
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
@@ -371,6 +372,7 @@ Requires:	xorg-lib-libXfont-devel
 Requires:	xorg-lib-libpciaccess-devel >= 0.12.901
 Requires:	xorg-lib-libxkbfile-devel
 %{?with_dri2:Requires:	xorg-proto-dri2proto-devel >= 2.8}
+%{?with_dri3:Requires:	xorg-proto-dri3proto-devel >= 2.8}
 Requires:	xorg-proto-dri3proto-devel >= 1.0
 Requires:	xorg-proto-fontsproto-devel >= 2.1.3
 Requires:	xorg-proto-glproto-devel >= 1.4.17
@@ -490,6 +492,7 @@ fi
 	--enable-dga \
 	%{?with_dmx:--enable-dmx} \
 	--enable-dri2%{!?with_dri2:=no} \
+	--enable-dri3%{!?with_dri3:=no} \
 	%{?with_glamor:--enable-glamor} \
 	--enable-kdrive \
 	%{?with_libunwind:--enable-libunwind} \
