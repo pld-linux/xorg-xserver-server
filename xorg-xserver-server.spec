@@ -20,10 +20,10 @@
 #
 # ABI versions, see hw/xfree86/common/xf86Module.h
 %define	xorg_xserver_server_ansic_abi		0.4
-%define	xorg_xserver_server_extension_abi	9.0
+%define	xorg_xserver_server_extension_abi	10.0
 %define	xorg_xserver_server_font_abi		0.6
-%define	xorg_xserver_server_videodrv_abi	20.0
-%define	xorg_xserver_server_xinput_abi		22.1
+%define	xorg_xserver_server_videodrv_abi	23.0
+%define	xorg_xserver_server_xinput_abi		24.1
 
 %define	pixman_ver	0.30.0
 
@@ -34,12 +34,12 @@
 Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
-Version:	1.18.4
+Version:	1.19.0
 Release:	1
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
-# Source0-md5:	d4842dfe3bd9a9d062f2fa1df9104a46
+# Source0-md5:	6a4d01e4e5047ab8f556960424ba1fa9
 Source1:	10-quirks.conf
 Source2:	xserver.pamd
 Source10:	%{name}-Xvfb.init
@@ -80,7 +80,7 @@ BuildRequires:	perl-base
 BuildRequires:	pixman-devel >= %{pixman_ver}
 BuildRequires:	pkgconfig >= 1:0.19
 %{?with_systemtap:BuildRequires:	systemtap-sdt-devel}
-BuildRequires:	systemd-devel
+BuildRequires:	systemd-devel >= 209
 BuildRequires:	udev-devel >= 1:143
 # wayland-client
 %{?with_wayland:BuildRequires:	wayland-devel >= 1.3.0}
@@ -100,6 +100,7 @@ BuildRequires:	xorg-lib-libXdmcp-devel
 BuildRequires:	xorg-lib-libXext-devel >= 1.0.99.4
 BuildRequires:	xorg-lib-libXfixes-devel
 BuildRequires:	xorg-lib-libXfont-devel >= 1.4.2
+BuildRequires:	xorg-lib-libXfont2-devel
 BuildRequires:	xorg-lib-libXi-devel >= 1.2.99.1
 %{?with_dmx:BuildRequires:	xorg-lib-libXmu-devel}
 %{?with_dmx:BuildRequires:	xorg-lib-libXpm-devel}
