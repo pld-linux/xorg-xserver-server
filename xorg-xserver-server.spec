@@ -170,6 +170,8 @@ Suggests:	xkeyboard-config
 Suggests:	xorg-driver-input-evdev
 # Usual desktop setups need least one video driver to run, see xorg.log which one exactly
 Suggests:	xorg-driver-video
+Provides:	xorg-driver-video
+Provides:	xorg-driver-video-modesetting
 Provides:	xorg-xserver-libdri = %{version}-%{release}
 Provides:	xorg-xserver-module(dri)
 Provides:	xorg-xserver-server(ansic-abi) = %{xorg_xserver_server_ansic_abi}
