@@ -84,6 +84,7 @@ BuildRequires:	systemd-devel >= 209
 BuildRequires:	udev-devel >= 1:143
 # wayland-client
 %{?with_wayland:BuildRequires:	wayland-devel >= 1.3.0}
+%{?with_wayland:BuildRequires:	wayland-protocols >= 1.1}
 BuildRequires:	xcb-util-devel
 BuildRequires:	xcb-util-image-devel
 BuildRequires:	xcb-util-keysyms-devel
@@ -99,8 +100,7 @@ BuildRequires:	xorg-lib-libXdamage-devel
 BuildRequires:	xorg-lib-libXdmcp-devel
 BuildRequires:	xorg-lib-libXext-devel >= 1.0.99.4
 BuildRequires:	xorg-lib-libXfixes-devel
-BuildRequires:	xorg-lib-libXfont-devel >= 1.4.2
-BuildRequires:	xorg-lib-libXfont2-devel
+BuildRequires:	xorg-lib-libXfont2-devel >= 2.0.0
 BuildRequires:	xorg-lib-libXi-devel >= 1.2.99.1
 %{?with_dmx:BuildRequires:	xorg-lib-libXmu-devel}
 %{?with_dmx:BuildRequires:	xorg-lib-libXpm-devel}
@@ -146,7 +146,7 @@ BuildRequires:	xorg-proto-xf86driproto-devel >= 2.1.0
 BuildRequires:	xorg-proto-xf86miscproto-devel
 BuildRequires:	xorg-proto-xf86vidmodeproto-devel >= 2.2.99.1
 BuildRequires:	xorg-proto-xineramaproto-devel
-BuildRequires:	xorg-proto-xproto-devel >= 7.0.28
+BuildRequires:	xorg-proto-xproto-devel >= 7.0.31
 BuildRequires:	xorg-sgml-doctools >= 1.8
 BuildRequires:	xorg-util-util-macros >= 1.14
 #BR: tslib (for KDRIVE only)
@@ -159,7 +159,7 @@ Requires:	xkeyboard-config
 # for rgb.txt
 Requires:	xorg-app-rgb >= 0.99.3
 Requires:	xorg-app-xkbcomp
-Requires:	xorg-lib-libXfont >= 1.4.2
+Requires:	xorg-lib-libXfont2 >= 2.0.0
 Requires:	xorg-lib-libpciaccess >= 0.12.901
 Requires:	xorg-lib-libxshmfence >= 1.1
 Suggests:	dbus-x11 >= 1.0
@@ -167,9 +167,7 @@ Suggests:	dbus-x11 >= 1.0
 Suggests:	udev-acl >= 1:143
 %{?with_udev:Suggests:	udev-core >= 1:143}
 Suggests:	xkeyboard-config
-Suggests:	xorg-driver-input-evdev
-# Usual desktop setups need least one video driver to run, see xorg.log which one exactly
-Suggests:	xorg-driver-video
+Suggests:	xorg-driver-input-libinput
 Provides:	xorg-driver-video
 Provides:	xorg-driver-video-modesetting
 Provides:	xorg-xserver-libdri = %{version}-%{release}
@@ -193,9 +191,6 @@ Obsoletes:	xorg-xserver-server-xorgcfg
 Obsoletes:	xorg-driver-video-modesetting
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-# avoid self-dependencies on included modules
-%define		_noautoreq	libscanpci.so libxf1bpp.so
-
 %description
 Xorg server is a generally used X server which uses display hardware.
 It requires proper driver for your display hardware.
@@ -211,7 +206,7 @@ Group:		X11/Servers
 Requires:	pixman >= %{pixman_ver}
 Requires:	xorg-lib-libX11 >= 1.6
 Requires:	xorg-lib-libXext >= 1.0.99.4
-Requires:	xorg-lib-libXfont >= 1.4.2
+Requires:	xorg-lib-libXfont2 >= 2.0.0
 Requires:	xorg-lib-libXi >= 1.2.99.1
 Requires:	xorg-lib-libdmx >= 1.0.99.1
 
@@ -227,7 +222,7 @@ Summary(pl.UTF-8):	Xnest - zagnieżdżony serwer X
 Group:		X11/Servers
 Requires:	pixman >= %{pixman_ver}
 Requires:	xorg-lib-libXext >= 1.0.99.4
-Requires:	xorg-lib-libXfont >= 1.4.2
+Requires:	xorg-lib-libXfont2 >= 2.0.0
 Obsoletes:	X11-Xnest < 1:7.0.0
 Obsoletes:	XFree86-Xnest < 1:7.0.0
 Obsoletes:	Xserver-Xnest
@@ -262,7 +257,7 @@ Group:		X11/Servers
 Requires:	Mesa-libGL >= 7.1.0
 Requires:	libxcb >= 1.6
 Requires:	pixman >= %{pixman_ver}
-Requires:	xorg-lib-libXfont >= 1.4.2
+Requires:	xorg-lib-libXfont2 >= 2.0.0
 
 %description -n xorg-xserver-Xephyr
 Xephyr is a kdrive server that outputs to a window on a pre-existing
@@ -286,7 +281,7 @@ Summary:	Xfbdev - Linux framebuffer device X server
 Summary(pl.UTF-8):	Xfbdev - serwer X dla framebuffera
 Group:		X11/Servers
 Requires:	pixman >= %{pixman_ver}
-Requires:	xorg-lib-libXfont >= 1.4.2
+Requires:	xorg-lib-libXfont2 >= 2.0.0
 
 %description -n xorg-xserver-Xfbdev
 Xfbdev is a Linux framebuffer device X server based on the kdrive X
@@ -307,7 +302,7 @@ Requires:	which
 Requires:	xkeyboard-config
 Requires:	xorg-app-xauth
 Requires:	xorg-app-xkbcomp
-Requires:	xorg-lib-libXfont >= 1.4.2
+Requires:	xorg-lib-libXfont2 >= 2.0.0
 Obsoletes:	X11-Xvfb < 1:7.0.0
 Obsoletes:	XFree86-Xvfb < 1:7.0.0
 
@@ -355,7 +350,7 @@ Group:		X11/Servers
 Requires:	pixman >= %{pixman_ver}
 Requires:	xorg-lib-libX11 >= 1.6
 Requires:	xorg-lib-libXext >= 1.0.99.4
-Requires:	xorg-lib-libXfont >= 1.4.2
+Requires:	xorg-lib-libXfont2 >= 2.0.0
 Requires:	xorg-lib-libXi >= 1.2.99.1
 
 %description -n xorg-xserver-Xwayland
@@ -371,7 +366,7 @@ Group:		X11/Development/Libraries
 Requires:	Mesa-libGL-devel >= 7.8.0
 Requires:	libdrm-devel >= 2.4.46
 Requires:	pixman-devel >= %{pixman_ver}
-Requires:	xorg-lib-libXfont-devel
+Requires:	xorg-lib-libXfont2-devel >= 2.0.0
 Requires:	xorg-lib-libpciaccess-devel >= 0.12.901
 Requires:	xorg-lib-libxkbfile-devel
 %{?with_dri2:Requires:	xorg-proto-dri2proto-devel >= 2.8}
@@ -390,7 +385,7 @@ Requires:	xorg-proto-videoproto-devel
 Requires:	xorg-proto-xextproto-devel >= 1:7.3.0
 Requires:	xorg-proto-xf86driproto-devel >= 2.1.0
 Requires:	xorg-proto-xineramaproto-devel
-Requires:	xorg-proto-xproto-devel >= 7.0.28
+Requires:	xorg-proto-xproto-devel >= 7.0.31
 Obsoletes:	X11-Xserver-devel < 1:7.0.0
 Obsoletes:	XFree86-Xserver-devel < 1:7.0.0
 %{?with_glamor:Obsoletes:	glamor-devel}
