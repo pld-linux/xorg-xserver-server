@@ -168,7 +168,7 @@ Suggests:	udev-acl >= 1:143
 %{?with_udev:Suggests:	udev-core >= 1:143}
 Suggests:	xkeyboard-config
 Suggests:	xorg-driver-input-libinput
-Provides:	xorg-driver-video
+Suggests:	xorg-driver-video
 Provides:	xorg-driver-video-modesetting
 Provides:	xorg-xserver-libdri = %{version}-%{release}
 Provides:	xorg-xserver-module(dri)
