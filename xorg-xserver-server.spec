@@ -168,6 +168,7 @@ Suggests:	udev-acl >= 1:143
 %{?with_udev:Suggests:	udev-core >= 1:143}
 Suggests:	xkeyboard-config
 Suggests:	xorg-driver-input-libinput
+# Usual desktop setups need least one video driver to run, see xorg.log which one exactly
 Suggests:	xorg-driver-video
 Provides:	xorg-driver-video-modesetting
 Provides:	xorg-xserver-libdri = %{version}-%{release}
