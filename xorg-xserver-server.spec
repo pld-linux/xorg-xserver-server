@@ -21,7 +21,6 @@
 # ABI versions, see hw/xfree86/common/xf86Module.h
 %define	xorg_xserver_server_ansic_abi		0.4
 %define	xorg_xserver_server_extension_abi	10.0
-%define	xorg_xserver_server_font_abi		0.6
 %define	xorg_xserver_server_videodrv_abi	23.0
 %define	xorg_xserver_server_xinput_abi		24.1
 
@@ -34,12 +33,12 @@
 Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
-Version:	1.19.5
+Version:	1.19.6
 Release:	1
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
-# Source0-md5:	4ac6feeae6790436ce9de879ca9a3bf8
+# Source0-md5:	3e47777ff034a331aed2322b078694a8
 Source1:	10-quirks.conf
 Source2:	xserver.pamd
 Source10:	%{name}-Xvfb.init
@@ -174,7 +173,6 @@ Provides:	xorg-xserver-libdri = %{version}-%{release}
 Provides:	xorg-xserver-module(dri)
 Provides:	xorg-xserver-server(ansic-abi) = %{xorg_xserver_server_ansic_abi}
 Provides:	xorg-xserver-server(extension-abi) = %{xorg_xserver_server_extension_abi}
-Provides:	xorg-xserver-server(font-abi) = %{xorg_xserver_server_font_abi}
 Provides:	xorg-xserver-server(videodrv-abi) = %{xorg_xserver_server_videodrv_abi}
 Provides:	xorg-xserver-server(xinput-abi) = %{xorg_xserver_server_xinput_abi}
 Obsoletes:	X11-Xserver < 1:7.0.0
@@ -442,29 +440,24 @@ sed -i -e 's#<pixman\.h#<pixman-1/pixman.h#g' ./fb/fb.h ./include/miscstruct.h .
 
 %build
 API=$(awk '/#define ABI_ANSIC_VERSION/ { split($0,A,/[(,)]/); printf("%d.%d",A[2], A[3]); }' hw/xfree86/common/xf86Module.h)
-if [ $API != %{xorg_xserver_server_ansic_abi} ]; then
+if [ "$API" != "%{xorg_xserver_server_ansic_abi}" ]; then
 	echo "Set %%define xorg_xserver_server_ansic_abi to $API and rerun."
 	exit 1
 fi
 
 API=$(awk '/#define ABI_EXTENSION_VERSION/ { split($0,A,/[(,)]/); printf("%d.%d",A[2], A[3]); }' hw/xfree86/common/xf86Module.h)
-if [ $API != %{xorg_xserver_server_extension_abi} ]; then
+if [ "$API" != "%{xorg_xserver_server_extension_abi}" ]; then
 	echo "Set %%define xorg_xserver_server_extension_abi to $API and rerun."
 	exit 1
 fi
 
-API=$(awk '/#define ABI_FONT_VERSION/ { split($0,A,/[(,)]/); printf("%d.%d",A[2], A[3]); }' hw/xfree86/common/xf86Module.h)
-if [ $API != %{xorg_xserver_server_font_abi} ]; then
-	echo "Set %%define xorg_xserver_server_font_abi to $API and rerun."
-	exit 1
-fi
 API=$(awk '/#define ABI_VIDEODRV_VERSION/ { split($0,A,/[(,)]/); printf("%d.%d",A[2], A[3]); }' hw/xfree86/common/xf86Module.h)
-if [ $API != %{xorg_xserver_server_videodrv_abi} ]; then
+if [ "$API" != "%{xorg_xserver_server_videodrv_abi}" ]; then
 	echo "Set %%define xorg_xserver_server_videodrv_abi to $API and rerun."
 	exit 1
 fi
 API=$(awk '/#define ABI_XINPUT_VERSION/ { split($0,A,/[(,)]/); printf("%d.%d",A[2], A[3]); }' hw/xfree86/common/xf86Module.h)
-if [ $API != %{xorg_xserver_server_xinput_abi} ]; then
+if [ "$API" != "%{xorg_xserver_server_xinput_abi}" ]; then
 	echo "Set %%define xorg_xserver_server_xinput_abi to $API and rerun."
 	exit 1
 fi
@@ -482,7 +475,6 @@ fi
 	--with-xkb-output=/var/lib/xkb \
 	--disable-linux-acpi \
 	--disable-linux-apm \
-	--enable-aiglx \
 	%{?with_dbus:--enable-config-dbus} \
 	--enable-config-hal%{!?with_hal:=no} \
 	--enable-config-udev%{!?with_udev:=no} \
