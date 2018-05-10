@@ -21,7 +21,7 @@
 # ABI versions, see hw/xfree86/common/xf86Module.h
 %define	xorg_xserver_server_ansic_abi		0.4
 %define	xorg_xserver_server_extension_abi	10.0
-%define	xorg_xserver_server_videodrv_abi	23.0
+%define	xorg_xserver_server_videodrv_abi	24.0
 %define	xorg_xserver_server_xinput_abi		24.1
 
 %define	pixman_ver	0.30.0
@@ -33,12 +33,12 @@
 Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
-Version:	1.19.6
+Version:	1.20.0
 Release:	1
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
-# Source0-md5:	3e47777ff034a331aed2322b078694a8
+# Source0-md5:	c1ca1ea0a905ea788da03c77cc38b06e
 Source1:	10-quirks.conf
 Source2:	xserver.pamd
 Source10:	%{name}-Xvfb.init
@@ -65,7 +65,7 @@ BuildRequires:	docbook-dtd43-xml
 BuildRequires:	dbus-devel >= 1.0
 %endif
 %{?with_hal:BuildRequires:	hal-devel}
-BuildRequires:	libdrm-devel >= 2.4.46
+BuildRequires:	libdrm-devel >= 2.4.89
 %if %{with glamor} || %{with wayland}
 BuildRequires:	libepoxy-devel
 %endif
@@ -82,7 +82,7 @@ BuildRequires:	systemd-devel >= 209
 BuildRequires:	udev-devel >= 1:143
 # wayland-client
 %{?with_wayland:BuildRequires:	wayland-devel >= 1.3.0}
-%{?with_wayland:BuildRequires:	wayland-protocols >= 1.1}
+%{?with_wayland:BuildRequires:	wayland-protocols >= 1.10}
 BuildRequires:	xcb-util-devel
 BuildRequires:	xcb-util-image-devel
 BuildRequires:	xcb-util-keysyms-devel
@@ -121,7 +121,7 @@ BuildRequires:	xorg-proto-compositeproto-devel >= 0.4
 BuildRequires:	xorg-proto-damageproto-devel >= 1.1
 %{?with_dmx:BuildRequires:	xorg-proto-dmxproto-devel >= 2.2.99.1}
 %{?with_dri2:BuildRequires:	xorg-proto-dri2proto-devel >= 2.8}
-BuildRequires:	xorg-proto-dri3proto-devel >= 1.0
+BuildRequires:	xorg-proto-dri3proto-devel >= 1.2
 BuildRequires:	xorg-proto-fixesproto-devel >= 5.0
 BuildRequires:	xorg-proto-fontcacheproto-devel
 BuildRequires:	xorg-proto-fontsproto-devel >= 2.1.3
@@ -130,7 +130,7 @@ BuildRequires:	xorg-proto-inputproto-devel >= 2.3
 BuildRequires:	xorg-proto-kbproto-devel >= 1.0.3
 BuildRequires:	xorg-proto-presentproto-devel >= 1.0
 BuildRequires:	xorg-proto-printproto-devel
-BuildRequires:	xorg-proto-randrproto-devel >= 1.5.0
+BuildRequires:	xorg-proto-randrproto-devel >= 1.6.0
 %{?with_record:BuildRequires:	xorg-proto-recordproto-devel >= 1.13.99.1}
 BuildRequires:	xorg-proto-renderproto-devel >= 0.11
 BuildRequires:	xorg-proto-resourceproto-devel >= 1.2.0
@@ -150,7 +150,7 @@ BuildRequires:	xorg-util-util-macros >= 1.14
 #BR: tslib (for KDRIVE only)
 Requires(triggerpostun):	sed >= 4.0
 %{?with_glamor:Requires:	Mesa-libgbm >= 10.2.0}
-Requires:	libdrm >= 2.4.46
+Requires:	libdrm >= 2.4.89
 Requires:	pixman >= %{pixman_ver}
 Requires:	udev-libs >= 1:143
 Requires:	xkeyboard-config
@@ -274,20 +274,6 @@ Xephyr jest serwerem opartym na kdrive wyświetlającym w oknie na
 istniejącym ekranie X. Można o nim myśleć jako o Xnest ze wsparciem do
 wspólczesnych rozszerzeń jak composite, damage i randr.
 
-%package -n xorg-xserver-Xfbdev
-Summary:	Xfbdev - Linux framebuffer device X server
-Summary(pl.UTF-8):	Xfbdev - serwer X dla framebuffera
-Group:		X11/Servers
-Requires:	pixman >= %{pixman_ver}
-Requires:	xorg-lib-libXfont2 >= 2.0.0
-
-%description -n xorg-xserver-Xfbdev
-Xfbdev is a Linux framebuffer device X server based on the kdrive X
-server.
-
-%description -n xorg-xserver-Xfbdev -l pl.UTF-8
-Xfbdev jest serwerem X dla framebuffera opartym na kdrive.
-
 %package -n xorg-xserver-Xvfb
 Summary:	Xvfb - virtual framebuffer X server
 Summary(pl.UTF-8):	Xvfb - serwer X z wirtualnym framebufferem
@@ -362,7 +348,7 @@ Summary:	Header files for X.org server
 Summary(pl.UTF-8):	Pliki nagłówkowe dla serwera X.org
 Group:		X11/Development/Libraries
 Requires:	Mesa-libGL-devel >= 7.8.0
-Requires:	libdrm-devel >= 2.4.46
+Requires:	libdrm-devel >= 2.4.89
 Requires:	pixman-devel >= %{pixman_ver}
 Requires:	xorg-lib-libXfont2-devel >= 2.0.0
 Requires:	xorg-lib-libpciaccess-devel >= 0.12.901
@@ -375,7 +361,7 @@ Requires:	xorg-proto-glproto-devel >= 1.4.17
 Requires:	xorg-proto-inputproto-devel >= 2.3
 Requires:	xorg-proto-kbproto-devel >= 1.0.3
 Requires:	xorg-proto-presentproto-devel >= 1.0
-Requires:	xorg-proto-randrproto-devel >= 1.5.0
+Requires:	xorg-proto-randrproto-devel >= 1.6.0
 Requires:	xorg-proto-renderproto-devel >= 0.11
 Requires:	xorg-proto-resourceproto-devel >= 1.2.0
 Requires:	xorg-proto-scrnsaverproto-devel >= 1.1
@@ -490,8 +476,6 @@ fi
 	%{?with_xcsecurity:--enable-xcsecurity} \
 	--enable-xephyr \
 	%{?with_xf86bigfont:--enable-xf86bigfont} \
-	--disable-xfake \
-	--enable-xfbdev \
 	%{?with_xselinux:--enable-xselinux} \
 	%{?with_wayland:--enable-xwayland} \
 	%{!?with_systemtap:--without-dtrace} \
@@ -662,10 +646,6 @@ fi
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/Xephyr
 %{_mandir}/man1/Xephyr.1*
-
-%files -n xorg-xserver-Xfbdev
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_bindir}/Xfbdev
 
 %files -n xorg-xserver-Xvfb
 %defattr(644,root,root,755)
