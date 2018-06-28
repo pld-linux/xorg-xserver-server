@@ -1,4 +1,5 @@
 # TODO
+# - use epoxy >= 1.4.4 when available
 # - consider XSELINUX by default
 # - Xvfb initscript runs Xvfb as root! add user there!
 #
@@ -64,21 +65,23 @@ BuildRequires:	docbook-dtd43-xml
 %if %{with hal} || %{with dbus}
 BuildRequires:	dbus-devel >= 1.0
 %endif
+# TODO for --enable-xwayland-eglstream
+#BuildRequires:	egl-wayland-devel >= 1.0.2
 %{?with_hal:BuildRequires:	hal-devel}
 BuildRequires:	libdrm-devel >= 2.4.89
 %if %{with glamor} || %{with wayland}
-BuildRequires:	libepoxy-devel
+BuildRequires:	libepoxy-devel # >= 1.4.4
 %endif
 %{?with_xselinux:BuildRequires:	libselinux-devel >= 2.0.86}
 BuildRequires:	libtool >= 2:2.2
 %{?with_libunwind:BuildRequires:	libunwind-devel}
-BuildRequires:	libxcb-devel >= 1.6
+BuildRequires:	libxcb-devel >= 1.9.3
 BuildRequires:	pam-devel
 BuildRequires:	perl-base
 BuildRequires:	pixman-devel >= %{pixman_ver}
 BuildRequires:	pkgconfig >= 1:0.19
 %{?with_systemtap:BuildRequires:	systemtap-sdt-devel}
-BuildRequires:	systemd-devel >= 209
+BuildRequires:	systemd-devel >= 1:209
 BuildRequires:	udev-devel >= 1:143
 # wayland-client
 %{?with_wayland:BuildRequires:	wayland-devel >= 1.3.0}
@@ -128,7 +131,7 @@ BuildRequires:	xorg-proto-fontsproto-devel >= 2.1.3
 BuildRequires:	xorg-proto-glproto-devel >= 1.4.17
 BuildRequires:	xorg-proto-inputproto-devel >= 2.3
 BuildRequires:	xorg-proto-kbproto-devel >= 1.0.3
-BuildRequires:	xorg-proto-presentproto-devel >= 1.0
+BuildRequires:	xorg-proto-presentproto-devel >= 1.1
 BuildRequires:	xorg-proto-printproto-devel
 BuildRequires:	xorg-proto-randrproto-devel >= 1.6.0
 %{?with_record:BuildRequires:	xorg-proto-recordproto-devel >= 1.13.99.1}
@@ -151,6 +154,7 @@ BuildRequires:	xorg-util-util-macros >= 1.14
 Requires(triggerpostun):	sed >= 4.0
 %{?with_glamor:Requires:	Mesa-libgbm >= 10.2.0}
 Requires:	libdrm >= 2.4.89
+Requires:	libepoxy # >= 1.4.4
 Requires:	pixman >= %{pixman_ver}
 Requires:	udev-libs >= 1:143
 Requires:	xkeyboard-config
@@ -253,7 +257,8 @@ Summary:	Xephyr - nested X server
 Summary(pl.UTF-8):	Xephyr - zagnieżdżony serwer X
 Group:		X11/Servers
 Requires:	Mesa-libGL >= 7.1.0
-Requires:	libxcb >= 1.6
+Requires:	libepoxy # >= 1.4.4
+Requires:	libxcb >= 1.9.3
 Requires:	pixman >= %{pixman_ver}
 Requires:	xorg-lib-libXfont2 >= 2.0.0
 
@@ -331,6 +336,7 @@ usługę systemową.
 Summary:	Xwayland - X server integrated into a Wayland window system
 Summary(pl.UTF-8):	Xwayland - serwer X integrowalny w Wayland
 Group:		X11/Servers
+Requires:	libepoxy # >= 1.4.4
 Requires:	pixman >= %{pixman_ver}
 Requires:	xorg-lib-libX11 >= 1.6
 Requires:	xorg-lib-libXext >= 1.0.99.4
@@ -360,7 +366,7 @@ Requires:	xorg-proto-fontsproto-devel >= 2.1.3
 Requires:	xorg-proto-glproto-devel >= 1.4.17
 Requires:	xorg-proto-inputproto-devel >= 2.3
 Requires:	xorg-proto-kbproto-devel >= 1.0.3
-Requires:	xorg-proto-presentproto-devel >= 1.0
+Requires:	xorg-proto-presentproto-devel >= 1.1
 Requires:	xorg-proto-randrproto-devel >= 1.6.0
 Requires:	xorg-proto-renderproto-devel >= 0.11
 Requires:	xorg-proto-resourceproto-devel >= 1.2.0
