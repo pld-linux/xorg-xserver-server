@@ -15,6 +15,7 @@
 %bcond_with	xselinux	# SELinux extension
 %bcond_without	dmx		# DMX DDX (Xdmx server)
 %bcond_without	wayland		# Wayland DDX (Xwayland server)
+%bcond_with	eglstream	# XWayland eglstream support
 %bcond_without	glamor		# glamor dix module
 %bcond_without	systemtap	# systemtap/dtrace probes
 %bcond_without	libunwind	# use libunwind for backtracing
@@ -65,12 +66,12 @@ BuildRequires:	docbook-dtd43-xml
 %if %{with hal} || %{with dbus}
 BuildRequires:	dbus-devel >= 1.0
 %endif
-# TODO for --enable-xwayland-eglstream
-#BuildRequires:	egl-wayland-devel >= 1.0.2
+%{?with_eglstream:BuildRequires:	egl-wayland-devel >= 1.0.2}
 %{?with_hal:BuildRequires:	hal-devel}
 BuildRequires:	libdrm-devel >= 2.4.89
 %if %{with glamor} || %{with wayland}
 BuildRequires:	libepoxy-devel # >= 1.4.4
+%{?with_eglstream:BuildRequires:	libepoxy-devel >= 1.5.0}
 %endif
 %{?with_xselinux:BuildRequires:	libselinux-devel >= 2.0.86}
 BuildRequires:	libtool >= 2:2.2
@@ -336,7 +337,12 @@ usługę systemową.
 Summary:	Xwayland - X server integrated into a Wayland window system
 Summary(pl.UTF-8):	Xwayland - serwer X integrowalny w Wayland
 Group:		X11/Servers
+%{?with_eglstream:Requires:	egl-wayland >= 1.0.2}
+%if %{with eglstream}
+Requires:	libepoxy >= 1.5.0
+%else
 Requires:	libepoxy # >= 1.4.4
+%endif
 Requires:	pixman >= %{pixman_ver}
 Requires:	xorg-lib-libX11 >= 1.6
 Requires:	xorg-lib-libXext >= 1.0.99.4
@@ -484,6 +490,7 @@ fi
 	%{?with_xf86bigfont:--enable-xf86bigfont} \
 	%{?with_xselinux:--enable-xselinux} \
 	%{?with_wayland:--enable-xwayland} \
+	%{?with_eglstream:--enable-xwayland-eglstream} \
 	%{!?with_systemtap:--without-dtrace} \
 	--without-fop \
 	--enable-suid-wrapper \
