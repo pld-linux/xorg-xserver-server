@@ -1,5 +1,4 @@
 # TODO
-# - use epoxy >= 1.4.4 when available
 # - consider XSELINUX by default
 # - Xvfb initscript runs Xvfb as root! add user there!
 #
@@ -54,7 +53,7 @@ Patch6:		110_nvidia_slowdow_fix.patch
 URL:		http://xorg.freedesktop.org/
 BuildRequires:	Mesa-libGL-devel >= 7.8.1
 %{?with_dri2:BuildRequires:	Mesa-libGL-devel >= 9.2.0}
-%{?with_glamor:BuildRequires:	Mesa-libgbm-devel >= 10.2.0}
+%{?with_glamor:BuildRequires:	Mesa-libgbm-devel >= 17.1.0}
 # for glx headers
 BuildRequires:	OpenGL-GLX-devel
 %{?with_xselinux:BuildRequires:	audit-libs-devel}
@@ -70,7 +69,7 @@ BuildRequires:	dbus-devel >= 1.0
 %{?with_hal:BuildRequires:	hal-devel}
 BuildRequires:	libdrm-devel >= 2.4.89
 %if %{with glamor} || %{with wayland}
-BuildRequires:	libepoxy-devel # >= 1.4.4
+BuildRequires:	libepoxy-devel >= 1.4.4
 %{?with_eglstream:BuildRequires:	libepoxy-devel >= 1.5.0}
 %endif
 %{?with_xselinux:BuildRequires:	libselinux-devel >= 2.0.86}
@@ -153,9 +152,9 @@ BuildRequires:	xorg-sgml-doctools >= 1.8
 BuildRequires:	xorg-util-util-macros >= 1.14
 #BR: tslib (for KDRIVE only)
 Requires(triggerpostun):	sed >= 4.0
-%{?with_glamor:Requires:	Mesa-libgbm >= 10.2.0}
+%{?with_glamor:Requires:	Mesa-libgbm >= 17.1.0}
 Requires:	libdrm >= 2.4.89
-Requires:	libepoxy # >= 1.4.4
+Requires:	libepoxy >= 1.4.4
 Requires:	pixman >= %{pixman_ver}
 Requires:	udev-libs >= 1:143
 Requires:	xkeyboard-config
@@ -258,7 +257,7 @@ Summary:	Xephyr - nested X server
 Summary(pl.UTF-8):	Xephyr - zagnieżdżony serwer X
 Group:		X11/Servers
 Requires:	Mesa-libGL >= 7.1.0
-Requires:	libepoxy # >= 1.4.4
+Requires:	libepoxy >= 1.4.4
 Requires:	libxcb >= 1.9.3
 Requires:	pixman >= %{pixman_ver}
 Requires:	xorg-lib-libXfont2 >= 2.0.0
@@ -341,7 +340,7 @@ Group:		X11/Servers
 %if %{with eglstream}
 Requires:	libepoxy >= 1.5.0
 %else
-Requires:	libepoxy # >= 1.4.4
+Requires:	libepoxy >= 1.4.4
 %endif
 Requires:	pixman >= %{pixman_ver}
 Requires:	xorg-lib-libX11 >= 1.6
