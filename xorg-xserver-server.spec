@@ -22,7 +22,7 @@
 # ABI versions, see hw/xfree86/common/xf86Module.h
 %define	xorg_xserver_server_ansic_abi		0.4
 %define	xorg_xserver_server_extension_abi	10.0
-%define	xorg_xserver_server_videodrv_abi	24.0
+%define	xorg_xserver_server_videodrv_abi	24.1
 %define	xorg_xserver_server_xinput_abi		24.1
 
 %define	pixman_ver	0.30.0
@@ -34,12 +34,12 @@
 Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
-Version:	1.20.6
+Version:	1.20.7
 Release:	1
 License:	MIT
 Group:		X11/Servers
 Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
-# Source0-md5:	a98170084f2c8fed480d2ff601f8a14b
+# Source0-md5:	d2e96355ad47244c675bce38db2b48a9
 Source1:	10-quirks.conf
 Source2:	xserver.pamd
 Source10:	%{name}-Xvfb.init
@@ -434,6 +434,8 @@ sed -i -e 's#<pixman\.h#<pixman-1/pixman.h#g' ./fb/fb.h ./include/miscstruct.h .
 
 # support __filemansuffix__ with "x" suffix (per FHS 2.3)
 %{__sed} -i -e 's,\.so man__filemansuffix__/,.so man5/,' hw/xfree86/man/*.man
+
+%{__sed} -i -e '1s|#!/usr/bin/python$|#!%{__python}|' config/fdi2iclass.py
 
 %build
 API=$(awk '/#define ABI_ANSIC_VERSION/ { split($0,A,/[(,)]/); printf("%d.%d",A[2], A[3]); }' hw/xfree86/common/xf86Module.h)
