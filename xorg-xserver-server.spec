@@ -38,7 +38,7 @@ Version:	1.20.7
 Release:	1
 License:	MIT
 Group:		X11/Servers
-Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
+Source0:	https://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
 # Source0-md5:	d2e96355ad47244c675bce38db2b48a9
 Source1:	10-quirks.conf
 Source2:	xserver.pamd
@@ -50,7 +50,7 @@ Patch1:		%{name}-xwrapper-pam.patch
 Patch4:		%{name}-builtin-SHA1.patch
 
 Patch6:		110_nvidia_slowdow_fix.patch
-URL:		http://xorg.freedesktop.org/
+URL:		https://xorg.freedesktop.org/
 BuildRequires:	Mesa-libGL-devel >= 7.8.1
 %{?with_dri2:BuildRequires:	Mesa-libGL-devel >= 9.2.0}
 %{?with_glamor:BuildRequires:	Mesa-libgbm-devel >= 17.1.0}
