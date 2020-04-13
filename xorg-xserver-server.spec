@@ -492,7 +492,7 @@ fi
 	--enable-suid-wrapper \
 	--with-systemd-daemon
 
-%{__make} -j1
+%{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
