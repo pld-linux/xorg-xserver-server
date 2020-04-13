@@ -35,7 +35,7 @@ Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
 Version:	1.20.8
-Release:	1
+Release:	2
 License:	MIT
 Group:		X11/Servers
 Source0:	https://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
@@ -68,9 +68,8 @@ BuildRequires:	dbus-devel >= 1.0
 %{?with_eglstream:BuildRequires:	egl-wayland-devel >= 1.0.2}
 %{?with_hal:BuildRequires:	hal-devel}
 BuildRequires:	libdrm-devel >= 2.4.89
-%if %{with glamor} || %{with wayland}
-BuildRequires:	libepoxy-devel >= 1.4.4
-%{?with_eglstream:BuildRequires:	libepoxy-devel >= 1.5.0}
+%if %{with glamor}
+BuildRequires:	libepoxy-devel >= 1.5.4
 %endif
 %{?with_xselinux:BuildRequires:	libselinux-devel >= 2.0.86}
 BuildRequires:	libtool >= 2:2.2
@@ -154,7 +153,7 @@ BuildRequires:	xorg-util-util-macros >= 1.14
 Requires(triggerpostun):	sed >= 4.0
 %{?with_glamor:Requires:	Mesa-libgbm >= 17.1.0}
 Requires:	libdrm >= 2.4.89
-Requires:	libepoxy >= 1.4.4
+%{?with_glamor:Requires:	libepoxy >= 1.5.4}
 Requires:	pixman >= %{pixman_ver}
 Requires:	udev-libs >= 1:143
 Requires:	xkeyboard-config
@@ -257,7 +256,7 @@ Summary:	Xephyr - nested X server
 Summary(pl.UTF-8):	Xephyr - zagnieżdżony serwer X
 Group:		X11/Servers
 Requires:	Mesa-libGL >= 7.1.0
-Requires:	libepoxy >= 1.4.4
+%{?with_glamor:Requires:	libepoxy >= 1.5.4}
 Requires:	libxcb >= 1.9.3
 Requires:	pixman >= %{pixman_ver}
 Requires:	xorg-lib-libXfont2 >= 2.0.0
@@ -337,11 +336,7 @@ Summary:	Xwayland - X server integrated into a Wayland window system
 Summary(pl.UTF-8):	Xwayland - serwer X integrowalny w Wayland
 Group:		X11/Servers
 %{?with_eglstream:Requires:	egl-wayland >= 1.0.2}
-%if %{with eglstream}
-Requires:	libepoxy >= 1.5.0
-%else
-Requires:	libepoxy >= 1.4.4
-%endif
+%{?with_glamor:Requires:	libepoxy >= 1.5.4}
 Requires:	pixman >= %{pixman_ver}
 Requires:	xorg-lib-libX11 >= 1.6
 Requires:	xorg-lib-libXext >= 1.0.99.4
