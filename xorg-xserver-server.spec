@@ -35,7 +35,7 @@ Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
 Version:	1.20.9
-Release:	1
+Release:	2
 License:	MIT
 Group:		X11/Servers
 Source0:	https://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
@@ -72,6 +72,7 @@ BuildRequires:	libdrm-devel >= 2.4.89
 BuildRequires:	libepoxy-devel >= 1.5.4
 %endif
 %{?with_xselinux:BuildRequires:	libselinux-devel >= 2.0.86}
+BuildRequires:	libtirpc-devel
 BuildRequires:	libtool >= 2:2.2
 %{?with_libunwind:BuildRequires:	libunwind-devel}
 BuildRequires:	libxcb-devel >= 1.9.3
@@ -191,6 +192,9 @@ Obsoletes:	xorg-xserver-libdri
 Obsoletes:	xorg-xserver-server-xorgcfg
 Obsoletes:	xorg-driver-video-modesetting
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
+
+%define		tirpc_cflags	$(pkg-config --cflags libtirpc)
+%define		tirpc_libs	$(pkg-config --libs libtirpc)
 
 %description
 Xorg server is a generally used X server which uses display hardware.
@@ -462,6 +466,8 @@ fi
 %{__autoheader}
 %{__automake}
 %configure \
+	CPPFLAGS="%{rpmcppflags} %{tirpc_cflags}" \
+	LIBS="%{tirpc_libs}" \
 	--libexecdir=%{_libdir}/xorg \
 	--with-os-name="PLD/Linux" \
 	--with-os-vendor="PLD/Team" \
