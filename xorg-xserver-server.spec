@@ -34,12 +34,12 @@
 Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
-Version:	1.20.10
+Version:	1.20.11
 Release:	1
 License:	MIT
 Group:		X11/Servers
 Source0:	https://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
-# Source0-md5:	8cf8bd1f33e3736bc8dd279b20a32399
+# Source0-md5:	a22ccd74a5eee721cad6805e489c7144
 Source1:	10-quirks.conf
 Source2:	xserver.pamd
 Source10:	%{name}-Xvfb.init
@@ -151,12 +151,11 @@ BuildRequires:	xorg-proto-xineramaproto-devel
 BuildRequires:	xorg-proto-xproto-devel >= 7.0.31
 BuildRequires:	xorg-sgml-doctools >= 1.8
 BuildRequires:	xorg-util-util-macros >= 1.14
-#BR: tslib (for KDRIVE only)
-Requires(triggerpostun):	sed >= 4.0
 %{?with_glamor:Requires:	Mesa-libgbm >= 17.1.0}
 Requires:	libdrm >= 2.4.89
 %{?with_glamor:Requires:	libepoxy >= 1.5.4}
 Requires:	pixman >= %{pixman_ver}
+Requires:	sed >= 4.0
 Requires:	udev-libs >= 1:143
 Requires:	xkeyboard-config
 # for rgb.txt

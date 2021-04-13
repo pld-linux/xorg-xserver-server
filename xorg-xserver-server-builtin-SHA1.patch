@@ -139,8 +139,8 @@ diff -urN xorg-server-1.17.0.org/include/dix-config.h.in xorg-server-1.17.0/incl
 --- xorg-server-1.17.0.org/include/dix-config.h.in	2014-10-09 14:15:31.000000000 +0200
 +++ xorg-server-1.17.0/include/dix-config.h.in	2015-02-04 19:34:23.455234679 +0100
 @@ -152,27 +152,6 @@
- /* Define to 1 if you have the <rpcsvc/dbm.h> header file. */
- #undef HAVE_RPCSVC_DBM_H
+ /* Define to 1 if you have the `arc4random_buf' function. */
+ #undef HAVE_ARC4RANDOM_BUF
  
 -/* Define to use libc SHA1 functions */
 -#undef HAVE_SHA1_IN_LIBC
@@ -170,7 +170,7 @@ diff -urN xorg-server-1.17.0.org/os/Makefile.am xorg-server-1.17.0/os/Makefile.a
 --- xorg-server-1.17.0.org/os/Makefile.am	2013-11-12 00:15:00.000000000 +0100
 +++ xorg-server-1.17.0/os/Makefile.am	2015-02-04 19:34:23.455234679 +0100
 @@ -21,7 +21,6 @@
- 	osinit.c	\
+ 	ospoll.h	\
  	utils.c		\
  	xdmauth.c	\
 -	xsha1.c		\
