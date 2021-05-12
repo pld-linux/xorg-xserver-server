@@ -14,6 +14,9 @@
 %bcond_with	xselinux	# SELinux extension
 %bcond_without	dmx		# DMX DDX (Xdmx server)
 %bcond_without	wayland		# Wayland DDX (Xwayland server)
+%bcond_without	xnest		# Xnest DDX (Xnest server)
+%bcond_without	xvfb		# Xvfb DDX (Xvfb server)
+%bcond_without	xephyr		# kdrive Xephyr server
 %bcond_with	eglstream	# XWayland eglstream support
 %bcond_without	glamor		# glamor dix module
 %bcond_without	systemtap	# systemtap/dtrace probes
@@ -504,15 +507,17 @@ fi
 	%{?with_libunwind:--enable-libunwind} \
 	%{?with_record:--enable-record} \
 	--enable-secure-rpc \
+	--enable-suid-wrapper \
 	%{?with_xcsecurity:--enable-xcsecurity} \
-	--enable-xephyr \
+	--enable-xephyr%{!?with_xephyr:=no} \
 	%{?with_xf86bigfont:--enable-xf86bigfont} \
+	--enable-xnest%{!?with_xnest:=no} \
 	%{?with_xselinux:--enable-xselinux} \
+	%{!?with_xvfb:--disable-xvfb} \
 	%{?with_wayland:--enable-xwayland} \
 	%{?with_eglstream:--enable-xwayland-eglstream} \
 	%{!?with_systemtap:--without-dtrace} \
 	--without-fop \
-	--enable-suid-wrapper \
 	--with-systemd-daemon
 
 %{__make}
@@ -540,10 +545,12 @@ install -p %{SOURCE12} $RPM_BUILD_ROOT%{_bindir}/xvfb-run
 
 cp -p %{SOURCE1} $RPM_BUILD_ROOT%{_datadir}/X11/xorg.conf.d/10-quirks.conf
 
+%if %{with xvfb}
 install -d $RPM_BUILD_ROOT/etc/rc.d/init.d
 install -d $RPM_BUILD_ROOT/etc/sysconfig
 install -p %{SOURCE10} $RPM_BUILD_ROOT/etc/rc.d/init.d/Xvfb
 cp -p %{SOURCE11} $RPM_BUILD_ROOT/etc/sysconfig/Xvfb
+%endif
 
 # Xorg.wrap config
 cat >$RPM_BUILD_ROOT/etc/X11/Xwrapper.config <<EOF
@@ -683,16 +690,21 @@ fi
 %{_mandir}/man1/xdmxconfig.1*
 %endif
 
-%files -n xorg-xserver-Xnest
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_bindir}/Xnest
-%{_mandir}/man1/Xnest.1*
-
+%if %{with xephyr}
 %files -n xorg-xserver-Xephyr
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/Xephyr
 %{_mandir}/man1/Xephyr.1*
+%endif
 
+%if %{with xnest}
+%files -n xorg-xserver-Xnest
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_bindir}/Xnest
+%{_mandir}/man1/Xnest.1*
+%endif
+
+%if %{with xvfb}
 %files -n xorg-xserver-Xvfb
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/Xvfb
@@ -703,6 +715,7 @@ fi
 %defattr(644,root,root,755)
 %attr(754,root,root) /etc/rc.d/init.d/Xvfb
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/Xvfb
+%endif
 
 %if %{with wayland}
 %files -n xorg-xserver-Xwayland
