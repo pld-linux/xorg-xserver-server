@@ -35,7 +35,7 @@ Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
 Version:	1.20.11
-Release:	1
+Release:	2
 License:	MIT
 Group:		X11/Servers
 Source0:	https://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
@@ -164,6 +164,8 @@ Requires:	xorg-app-xkbcomp
 Requires:	xorg-lib-libXfont2 >= 2.0.0
 Requires:	xorg-lib-libpciaccess >= 0.12.901
 Requires:	xorg-lib-libxshmfence >= 1.1
+# for protocol.txt
+Requires:	xorg-xserver-common = %{version}-%{release}
 Suggests:	dbus-x11 >= 1.0
 %{?with_hal:Suggests:	hal}
 Suggests:	udev-acl >= 1:143
@@ -203,155 +205,6 @@ It requires proper driver for your display hardware.
 %description -l pl.UTF-8
 Serwer Xorg to podstawowy serwer X wyświetlający obraz na karcie
 graficznej. Do działania wymaga odpowiedniego sterownika.
-
-%package -n xorg-xserver-Xdmx
-Summary:	Xdmx - distributed multi-head X server
-Summary(pl.UTF-8):	Xdmx - rozproszony, wielomonitorowy serwer X
-Group:		X11/Servers
-Requires:	pixman >= %{pixman_ver}
-Requires:	xorg-lib-libX11 >= 1.6
-Requires:	xorg-lib-libXext >= 1.0.99.4
-Requires:	xorg-lib-libXfont2 >= 2.0.0
-Requires:	xorg-lib-libXi >= 1.2.99.1
-Requires:	xorg-lib-libdmx >= 1.0.99.1
-
-%description -n xorg-xserver-Xdmx
-Xdmx - distributed multi-head X server.
-
-%description -n xorg-xserver-Xdmx -l pl.UTF-8
-Xdmx - rozproszony, wielomonitorowy serwer X.
-
-%package -n xorg-xserver-Xnest
-Summary:	Xnest - nested X server
-Summary(pl.UTF-8):	Xnest - zagnieżdżony serwer X
-Group:		X11/Servers
-Requires:	pixman >= %{pixman_ver}
-Requires:	xorg-lib-libXext >= 1.0.99.4
-Requires:	xorg-lib-libXfont2 >= 2.0.0
-Obsoletes:	X11-Xnest < 1:7.0.0
-Obsoletes:	XFree86-Xnest < 1:7.0.0
-Obsoletes:	Xserver-Xnest
-
-%description -n xorg-xserver-Xnest
-Xnest is an X Window System server which runs in an X window. Xnest is
-a 'nested' window server, actually a client of the real X server,
-which manages windows and graphics requests for Xnest, while Xnest
-manages the windows and graphics requests for its own clients.
-
-%description -n xorg-xserver-Xnest -l pl.UTF-8
-Xnest jest serwerem X uruchamianym w okienku innego serwera X. Xnest
-zachowuje się jak klient X w stosunku do prawdziwego serwera X, a jak
-serwer X dla własnych klientów.
-
-%description -n xorg-xserver-Xnest -l ru.UTF-8
-Xnest - это сервер X Window System, который работает в окне X. На
-самом деле это клиент реального X-сервера, который управляет окнами и
-графическими запросами для Xnest в то время, как Xnest управляет
-окнами и графическими запросами для своих собственных клиентов.
-
-%description -n xorg-xserver-Xnest -l uk.UTF-8
-Xnest - це сервер X Window System, який працює у вікні X. Фактично це
-клієнт реального X-сервера, який керує вікнами та графічними запитами
-для Xnest в той час, як Xnest керує вікнами та графічними запитами для
-своїх власних клієнтів.
-
-%package -n xorg-xserver-Xephyr
-Summary:	Xephyr - nested X server
-Summary(pl.UTF-8):	Xephyr - zagnieżdżony serwer X
-Group:		X11/Servers
-Requires:	Mesa-libGL >= 7.1.0
-%{?with_glamor:Requires:	libepoxy >= 1.5.4}
-Requires:	libxcb >= 1.9.3
-Requires:	pixman >= %{pixman_ver}
-Requires:	xorg-lib-libXfont2 >= 2.0.0
-
-%description -n xorg-xserver-Xephyr
-Xephyr is a kdrive server that outputs to a window on a pre-existing
-'host' X display. Think Xnest but with support for modern extensions
-like composite, damage and randr.
-
-Unlike Xnest which is an X proxy, i.e. limited to the capabilities of
-the host X server, Xephyr is a real X server which uses the host X
-server window as "framebuffer" via fast SHM XImages.
-
-It also has support for 'visually' debugging what the server is
-painting.
-
-%description -n xorg-xserver-Xephyr -l pl.UTF-8
-Xephyr jest serwerem opartym na kdrive wyświetlającym w oknie na
-istniejącym ekranie X. Można o nim myśleć jako o Xnest ze wsparciem do
-wspólczesnych rozszerzeń jak composite, damage i randr.
-
-%package -n xorg-xserver-Xvfb
-Summary:	Xvfb - virtual framebuffer X server
-Summary(pl.UTF-8):	Xvfb - serwer X z wirtualnym framebufferem
-Group:		X11/Servers
-Requires:	Mesa-libGL >= 7.1.0
-Requires:	mktemp
-Requires:	pixman >= %{pixman_ver}
-Requires:	util-linux
-Requires:	which
-Requires:	xkeyboard-config
-Requires:	xorg-app-xauth
-Requires:	xorg-app-xkbcomp
-Requires:	xorg-lib-libXfont2 >= 2.0.0
-Obsoletes:	X11-Xvfb < 1:7.0.0
-Obsoletes:	XFree86-Xvfb < 1:7.0.0
-
-%description -n xorg-xserver-Xvfb
-Xvfb (X Virtual Frame Buffer) is an X Window System server that is
-capable of running on machines with no display hardware and no
-physical input devices. Xvfb emulates a dumb framebuffer using virtual
-memory. Xvfb doesn't open any devices, but behaves otherwise as an X
-display. Xvfb is normally used for testing servers. Using Xvfb, the
-mfb or cfb code for any depth can be exercised without using real
-hardware that supports the desired depths. Xvfb has also been used to
-test X clients against unusual depths and screen configurations, to do
-batch processing with Xvfb as a background rendering engine, to do
-load testing, to help with porting an X server to a new platform, and
-to provide an unobtrusive way of running applications which really
-don't need an X server but insist on having one.
-
-%description -n xorg-xserver-Xvfb -l pl.UTF-8
-Xvfb (X Virtual Frame Buffer) jest serwerem X, który można uruchamiać
-na maszynach bez urządzeń wyświetlających ani fizycznych urządzeń
-wejściowych. Xvfb emuluje prosty framebuffer w pamięci. Zwykle jest
-używany do testowania serwerów X, może też być używany do testowania
-klientów X w rzadko używanych konfiguracjach ekranu. Można też użyć
-Xvfb do uruchomienia aplikacji, które w rzeczywistości nie wymagają
-serwera X, ale odmawiają uruchomienia bez niego.
-
-%package -n xorg-xserver-Xvfb-init
-Summary:	Init scripts for Xvfb
-Summary(pl.UTF-8):	Skrypty startowe dla Xvfb
-Group:		X11/Servers
-Requires:	xorg-xserver-Xvfb
-
-%description -n xorg-xserver-Xvfb-init
-This package contains init scripts for Xvfb and registers Xvfb as
-system service.
-
-%description -n xorg-xserver-Xvfb-init -l pl.UTF-8
-Ten pakiet zawiera skrypty startowe dla Xvfb oraz rejestruje Xvfb jako
-usługę systemową.
-
-%package -n xorg-xserver-Xwayland
-Summary:	Xwayland - X server integrated into a Wayland window system
-Summary(pl.UTF-8):	Xwayland - serwer X integrowalny w Wayland
-Group:		X11/Servers
-%{?with_eglstream:Requires:	egl-wayland >= 1.0.2}
-%{?with_glamor:Requires:	libepoxy >= 1.5.4}
-Requires:	pixman >= %{pixman_ver}
-Requires:	xorg-lib-libX11 >= 1.6
-Requires:	xorg-lib-libXext >= 1.0.99.4
-Requires:	xorg-lib-libXfont2 >= 2.0.0
-Requires:	xorg-lib-libXi >= 1.2.99.1
-
-%description -n xorg-xserver-Xwayland
-Xwayland - server integrated into a Wayland window system.
-
-%description -n xorg-xserver-Xwayland -l pl.UTF-8
-Xwayland - serwer X integrowalny w Wayland.
 
 %package devel
 Summary:	Header files for X.org server
@@ -419,6 +272,169 @@ GLX extension library for X.org server.
 
 %description -n xorg-xserver-libglx -l pl.UTF-8
 Biblioteka rozszerzenia GLX dla serwera X.org.
+
+%package -n xorg-xserver-Xdmx
+Summary:	Xdmx - distributed multi-head X server
+Summary(pl.UTF-8):	Xdmx - rozproszony, wielomonitorowy serwer X
+Group:		X11/Servers
+Requires:	pixman >= %{pixman_ver}
+Requires:	xorg-lib-libX11 >= 1.6
+Requires:	xorg-lib-libXext >= 1.0.99.4
+Requires:	xorg-lib-libXfont2 >= 2.0.0
+Requires:	xorg-lib-libXi >= 1.2.99.1
+Requires:	xorg-lib-libdmx >= 1.0.99.1
+
+%description -n xorg-xserver-Xdmx
+Xdmx - distributed multi-head X server.
+
+%description -n xorg-xserver-Xdmx -l pl.UTF-8
+Xdmx - rozproszony, wielomonitorowy serwer X.
+
+%package -n xorg-xserver-Xephyr
+Summary:	Xephyr - nested X server
+Summary(pl.UTF-8):	Xephyr - zagnieżdżony serwer X
+Group:		X11/Servers
+Requires:	Mesa-libGL >= 7.1.0
+%{?with_glamor:Requires:	libepoxy >= 1.5.4}
+Requires:	libxcb >= 1.9.3
+Requires:	pixman >= %{pixman_ver}
+Requires:	xorg-lib-libXfont2 >= 2.0.0
+
+%description -n xorg-xserver-Xephyr
+Xephyr is a kdrive server that outputs to a window on a pre-existing
+'host' X display. Think Xnest but with support for modern extensions
+like composite, damage and randr.
+
+Unlike Xnest which is an X proxy, i.e. limited to the capabilities of
+the host X server, Xephyr is a real X server which uses the host X
+server window as "framebuffer" via fast SHM XImages.
+
+It also has support for 'visually' debugging what the server is
+painting.
+
+%description -n xorg-xserver-Xephyr -l pl.UTF-8
+Xephyr jest serwerem opartym na kdrive wyświetlającym w oknie na
+istniejącym ekranie X. Można o nim myśleć jako o Xnest ze wsparciem do
+wspólczesnych rozszerzeń jak composite, damage i randr.
+
+%package -n xorg-xserver-Xnest
+Summary:	Xnest - nested X server
+Summary(pl.UTF-8):	Xnest - zagnieżdżony serwer X
+Group:		X11/Servers
+Requires:	pixman >= %{pixman_ver}
+Requires:	xorg-lib-libXext >= 1.0.99.4
+Requires:	xorg-lib-libXfont2 >= 2.0.0
+Obsoletes:	X11-Xnest < 1:7.0.0
+Obsoletes:	XFree86-Xnest < 1:7.0.0
+Obsoletes:	Xserver-Xnest
+
+%description -n xorg-xserver-Xnest
+Xnest is an X Window System server which runs in an X window. Xnest is
+a 'nested' window server, actually a client of the real X server,
+which manages windows and graphics requests for Xnest, while Xnest
+manages the windows and graphics requests for its own clients.
+
+%description -n xorg-xserver-Xnest -l pl.UTF-8
+Xnest jest serwerem X uruchamianym w okienku innego serwera X. Xnest
+zachowuje się jak klient X w stosunku do prawdziwego serwera X, a jak
+serwer X dla własnych klientów.
+
+%description -n xorg-xserver-Xnest -l ru.UTF-8
+Xnest - это сервер X Window System, который работает в окне X. На
+самом деле это клиент реального X-сервера, который управляет окнами и
+графическими запросами для Xnest в то время, как Xnest управляет
+окнами и графическими запросами для своих собственных клиентов.
+
+%description -n xorg-xserver-Xnest -l uk.UTF-8
+Xnest - це сервер X Window System, який працює у вікні X. Фактично це
+клієнт реального X-сервера, який керує вікнами та графічними запитами
+для Xnest в той час, як Xnest керує вікнами та графічними запитами для
+своїх власних клієнтів.
+
+%package -n xorg-xserver-Xvfb
+Summary:	Xvfb - virtual framebuffer X server
+Summary(pl.UTF-8):	Xvfb - serwer X z wirtualnym framebufferem
+Group:		X11/Servers
+Requires:	Mesa-libGL >= 7.1.0
+Requires:	mktemp
+Requires:	pixman >= %{pixman_ver}
+Requires:	util-linux
+Requires:	which
+Requires:	xkeyboard-config
+Requires:	xorg-app-xauth
+Requires:	xorg-app-xkbcomp
+Requires:	xorg-lib-libXfont2 >= 2.0.0
+Obsoletes:	X11-Xvfb < 1:7.0.0
+Obsoletes:	XFree86-Xvfb < 1:7.0.0
+
+%description -n xorg-xserver-Xvfb
+Xvfb (X Virtual Frame Buffer) is an X Window System server that is
+capable of running on machines with no display hardware and no
+physical input devices. Xvfb emulates a dumb framebuffer using virtual
+memory. Xvfb doesn't open any devices, but behaves otherwise as an X
+display. Xvfb is normally used for testing servers. Using Xvfb, the
+mfb or cfb code for any depth can be exercised without using real
+hardware that supports the desired depths. Xvfb has also been used to
+test X clients against unusual depths and screen configurations, to do
+batch processing with Xvfb as a background rendering engine, to do
+load testing, to help with porting an X server to a new platform, and
+to provide an unobtrusive way of running applications which really
+don't need an X server but insist on having one.
+
+%description -n xorg-xserver-Xvfb -l pl.UTF-8
+Xvfb (X Virtual Frame Buffer) jest serwerem X, który można uruchamiać
+na maszynach bez urządzeń wyświetlających ani fizycznych urządzeń
+wejściowych. Xvfb emuluje prosty framebuffer w pamięci. Zwykle jest
+używany do testowania serwerów X, może też być używany do testowania
+klientów X w rzadko używanych konfiguracjach ekranu. Można też użyć
+Xvfb do uruchomienia aplikacji, które w rzeczywistości nie wymagają
+serwera X, ale odmawiają uruchomienia bez niego.
+
+%package -n xorg-xserver-Xvfb-init
+Summary:	Init scripts for Xvfb
+Summary(pl.UTF-8):	Skrypty startowe dla Xvfb
+Group:		X11/Servers
+Requires:	xorg-xserver-Xvfb
+
+%description -n xorg-xserver-Xvfb-init
+This package contains init scripts for Xvfb and registers Xvfb as
+system service.
+
+%description -n xorg-xserver-Xvfb-init -l pl.UTF-8
+Ten pakiet zawiera skrypty startowe dla Xvfb oraz rejestruje Xvfb jako
+usługę systemową.
+
+%package -n xorg-xserver-Xwayland
+Summary:	Xwayland - X server integrated into a Wayland window system
+Summary(pl.UTF-8):	Xwayland - serwer X integrowalny w Wayland
+Group:		X11/Servers
+%{?with_eglstream:Requires:	egl-wayland >= 1.0.2}
+%{?with_glamor:Requires:	libepoxy >= 1.5.4}
+Requires:	pixman >= %{pixman_ver}
+Requires:	xorg-lib-libX11 >= 1.6
+Requires:	xorg-lib-libXext >= 1.0.99.4
+Requires:	xorg-lib-libXfont2 >= 2.0.0
+Requires:	xorg-lib-libXi >= 1.2.99.1
+# for protocol.txt
+Requires:	xorg-xserver-common = %{version}-%{release}
+
+%description -n xorg-xserver-Xwayland
+Xwayland - server integrated into a Wayland window system.
+
+%description -n xorg-xserver-Xwayland -l pl.UTF-8
+Xwayland - serwer X integrowalny w Wayland.
+
+%package -n xorg-xserver-common
+Summary:	Common files for various X servers
+Summary(pl.UTF-8):	Pliki wspólne dla serwerów X
+Group:		X11/Servers
+Conflicts:	xorg-xserver-server < 1.20.11-2
+
+%description -n xorg-xserver-common
+Common files for various X servers.
+
+%description -n xorg-xserver-common -l pl.UTF-8
+Pliki wspólne dla serwerów X.
 
 %prep
 %setup -q -n xorg-server-%{version}
@@ -584,8 +600,6 @@ fi
 %attr(4755,root,root) %{_bindir}/Xwrapper
 %attr(755,root,root) %{_bindir}/cvt
 %attr(755,root,root) %{_bindir}/gtf
-%dir %{_libdir}/xorg
-%{_libdir}/xorg/protocol.txt
 %attr(755,root,root) %{_libdir}/xorg/Xorg
 %attr(4755,root,root) %{_libdir}/xorg/Xorg.wrap
 %dir %{_libdir}/xorg/modules
@@ -622,7 +636,6 @@ fi
 %verify(not md5 mtime size) %{_datadir}/X11/xorg.conf.d/10-quirks.conf
 %{_mandir}/man1/Xorg.1*
 %{_mandir}/man1/Xorg.wrap.1*
-%{_mandir}/man1/Xserver.1*
 %{_mandir}/man1/cvt.1*
 %{_mandir}/man1/gtf.1*
 %{_mandir}/man4/exa.4*
@@ -631,6 +644,23 @@ fi
 %{_mandir}/man5/Xwrapper.config.5*
 %{_mandir}/man5/xorg.conf.5*
 %{_mandir}/man5/xorg.conf.d.5*
+
+%files devel
+%defattr(644,root,root,755)
+%doc doc/{Xinput,Xserver-spec}.html %{?with_systemtap:doc/dtrace/Xserver-DTrace.html}
+%{_includedir}/xorg
+%{_aclocaldir}/xorg-server.m4
+%{_pkgconfigdir}/xorg-server.pc
+
+%files source
+%defattr(644,root,root,755)
+# keep file perms from install time, but have default defattr to keep adapter happy
+%defattr(-,root,root,755)
+%{_usrsrc}/%{name}-%{version}
+
+%files -n xorg-xserver-libglx
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/xorg/modules/extensions/libglx.so
 
 %if %{with dmx}
 %files -n xorg-xserver-Xdmx
@@ -680,19 +710,8 @@ fi
 %attr(755,root,root) %{_bindir}/Xwayland
 %endif
 
-%files devel
+%files -n xorg-xserver-common
 %defattr(644,root,root,755)
-%doc doc/{Xinput,Xserver-spec}.html %{?with_systemtap:doc/dtrace/Xserver-DTrace.html}
-%{_includedir}/xorg
-%{_aclocaldir}/xorg-server.m4
-%{_pkgconfigdir}/xorg-server.pc
-
-%files source
-%defattr(644,root,root,755)
-# keep file perms from install time, but have default defattr to keep adapter happy
-%defattr(-,root,root,755)
-%{_usrsrc}/%{name}-%{version}
-
-%files -n xorg-xserver-libglx
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/xorg/modules/extensions/libglx.so
+%dir %{_libdir}/xorg
+%{_libdir}/xorg/protocol.txt
+%{_mandir}/man1/Xserver.1*
