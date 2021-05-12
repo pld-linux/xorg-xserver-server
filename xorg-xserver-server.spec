@@ -188,11 +188,11 @@ Obsoletes:	X11-setup < 1:7.0.0
 Obsoletes:	XFree86-Xserver < 1:7.0.0
 Obsoletes:	XFree86-modules < 1:7.0.0
 Obsoletes:	XFree86-setup < 1:7.0.0
-Obsoletes:	Xserver
-%{?with_glamor:Obsoletes:	glamor}
-Obsoletes:	xorg-xserver-libdri
-Obsoletes:	xorg-xserver-server-xorgcfg
-Obsoletes:	xorg-driver-video-modesetting
+Obsoletes:	Xserver < 7.0
+%{?with_glamor:Obsoletes:	glamor < 0.6.1}
+Obsoletes:	xorg-xserver-libdri < 1.12.99
+Obsoletes:	xorg-xserver-server-xorgcfg < 1.5.99
+Obsoletes:	xorg-driver-video-modesetting < 0.9.1
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		tirpc_cflags	$(pkg-config --cflags libtirpc)
@@ -235,7 +235,7 @@ Requires:	xorg-proto-xineramaproto-devel
 Requires:	xorg-proto-xproto-devel >= 7.0.31
 Obsoletes:	X11-Xserver-devel < 1:7.0.0
 Obsoletes:	XFree86-Xserver-devel < 1:7.0.0
-%{?with_glamor:Obsoletes:	glamor-devel}
+%{?with_glamor:Obsoletes:	glamor-devel < 0.6.1}
 
 %description devel
 Header files for X.org server.
@@ -326,7 +326,7 @@ Requires:	xorg-lib-libXext >= 1.0.99.4
 Requires:	xorg-lib-libXfont2 >= 2.0.0
 Obsoletes:	X11-Xnest < 1:7.0.0
 Obsoletes:	XFree86-Xnest < 1:7.0.0
-Obsoletes:	Xserver-Xnest
+Obsoletes:	Xserver-Xnest < 7.0
 
 %description -n xorg-xserver-Xnest
 Xnest is an X Window System server which runs in an X window. Xnest is
@@ -394,7 +394,7 @@ serwera X, ale odmawiają uruchomienia bez niego.
 Summary:	Init scripts for Xvfb
 Summary(pl.UTF-8):	Skrypty startowe dla Xvfb
 Group:		X11/Servers
-Requires:	xorg-xserver-Xvfb
+Requires:	xorg-xserver-Xvfb = %{version}-%{release}
 
 %description -n xorg-xserver-Xvfb-init
 This package contains init scripts for Xvfb and registers Xvfb as
