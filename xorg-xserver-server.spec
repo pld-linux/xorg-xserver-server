@@ -38,7 +38,7 @@ Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
 Version:	1.20.11
-Release:	2
+Release:	3
 License:	MIT
 Group:		X11/Servers
 Source0:	https://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
@@ -55,11 +55,12 @@ Patch4:		%{name}-builtin-SHA1.patch
 Patch6:		110_nvidia_slowdow_fix.patch
 Patch7:		platform_probe_crash.patch
 URL:		https://xorg.freedesktop.org/
-BuildRequires:	Mesa-libGL-devel >= 7.8.1
-%{?with_dri2:BuildRequires:	Mesa-libGL-devel >= 9.2.0}
+BuildRequires:	Mesa-dri-devel >= 7.8.1
+%{?with_dri2:BuildRequires:	Mesa-dri-devel >= 9.2.0}
 %{?with_glamor:BuildRequires:	Mesa-libgbm-devel >= 17.1.0}
+BuildRequires:	OpenGL-devel >= 3.0
 # for glx headers
-BuildRequires:	OpenGL-GLX-devel
+BuildRequires:	OpenGL-GLX-devel >= 1.3
 %{?with_xselinux:BuildRequires:	audit-libs-devel}
 BuildRequires:	autoconf >= 2.60
 BuildRequires:	automake
@@ -84,6 +85,7 @@ BuildRequires:	pam-devel
 BuildRequires:	perl-base
 BuildRequires:	pixman-devel >= %{pixman_ver}
 BuildRequires:	pkgconfig >= 1:0.19
+BuildRequires:	pkgconfig(gl) >= 1.2
 %{?with_systemtap:BuildRequires:	systemtap-sdt-devel}
 BuildRequires:	systemd-devel >= 1:209
 BuildRequires:	udev-devel >= 1:143
@@ -213,7 +215,7 @@ graficznej. Do działania wymaga odpowiedniego sterownika.
 Summary:	Header files for X.org server
 Summary(pl.UTF-8):	Pliki nagłówkowe dla serwera X.org
 Group:		X11/Development/Libraries
-Requires:	Mesa-libGL-devel >= 7.8.0
+Requires:	Mesa-dri-devel >= 7.8.0
 Requires:	libdrm-devel >= 2.4.89
 Requires:	pixman-devel >= %{pixman_ver}
 Requires:	xorg-lib-libXfont2-devel >= 2.0.0
@@ -262,8 +264,7 @@ Summary:	GLX extension library for X.org server
 Summary(pl.UTF-8):	Biblioteka rozszerzenia GLX dla serwera X.org
 Group:		X11/Servers
 Requires:	%{name} = %{version}-%{release}
-Requires:	Mesa-libGL >= 7.1.0
-%{?with_dri2:Requires:	Mesa-libGL >= 9.2.0}
+Requires:	OpenGL >= 1.2
 # Mesa version glapi tables in glx/ dir come from
 Provides:	xorg-xserver-libglx(glapi) = 7.1.0
 Provides:	xorg-xserver-module(glx)
@@ -297,7 +298,7 @@ Xdmx - rozproszony, wielomonitorowy serwer X.
 Summary:	Xephyr - nested X server
 Summary(pl.UTF-8):	Xephyr - zagnieżdżony serwer X
 Group:		X11/Servers
-Requires:	Mesa-libGL >= 7.1.0
+Requires:	OpenGL >= 3.0
 %{?with_glamor:Requires:	libepoxy >= 1.5.4}
 Requires:	libxcb >= 1.9.3
 Requires:	pixman >= %{pixman_ver}
@@ -358,7 +359,7 @@ Xnest - це сервер X Window System, який працює у вікні X
 Summary:	Xvfb - virtual framebuffer X server
 Summary(pl.UTF-8):	Xvfb - serwer X z wirtualnym framebufferem
 Group:		X11/Servers
-Requires:	Mesa-libGL >= 7.1.0
+Requires:	OpenGL >= 1.2.1
 Requires:	mktemp
 Requires:	pixman >= %{pixman_ver}
 Requires:	util-linux
