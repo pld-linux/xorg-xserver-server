@@ -13,7 +13,7 @@
 %bcond_with	xf86bigfont	# XF86BigFont extension
 %bcond_with	xselinux	# SELinux extension
 %bcond_without	dmx		# DMX DDX (Xdmx server)
-%bcond_without	wayland		# Wayland DDX (Xwayland server)
+%bcond_with	wayland		# Wayland DDX (Xwayland server) [newer version in xorg-xserver-Xwayland.spec]
 %bcond_without	xnest		# Xnest DDX (Xnest server)
 %bcond_without	xvfb		# Xvfb DDX (Xvfb server)
 %bcond_without	xephyr		# kdrive Xephyr server
@@ -515,7 +515,7 @@ fi
 	--enable-xnest%{!?with_xnest:=no} \
 	%{?with_xselinux:--enable-xselinux} \
 	%{!?with_xvfb:--disable-xvfb} \
-	%{?with_wayland:--enable-xwayland} \
+	--enable-xwayland%{!?with_wayland:=no} \
 	%{?with_eglstream:--enable-xwayland-eglstream} \
 	%{!?with_systemtap:--without-dtrace} \
 	--without-fop \
