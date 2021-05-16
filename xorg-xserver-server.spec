@@ -38,7 +38,7 @@ Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
 Version:	1.20.11
-Release:	3
+Release:	4
 License:	MIT
 Group:		X11/Servers
 Source0:	https://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
@@ -171,6 +171,7 @@ Requires:	xorg-lib-libpciaccess >= 0.12.901
 Requires:	xorg-lib-libxshmfence >= 1.1
 # for protocol.txt
 Requires:	xorg-xserver-common = %{version}-%{release}
+Suggests:	%{name}-tools = %{version}-%{release}
 Suggests:	dbus-x11 >= 1.0
 %{?with_hal:Suggests:	hal}
 Suggests:	udev-acl >= 1:143
@@ -210,6 +211,21 @@ It requires proper driver for your display hardware.
 %description -l pl.UTF-8
 Serwer Xorg to podstawowy serwer X wyświetlający obraz na karcie
 graficznej. Do działania wymaga odpowiedniego sterownika.
+
+%package tools
+Summary:	Tools to calculate modelines for X.org server
+Summary(pl.UTF-8):	Narzędzia do liczenia opisów trybów graficznych (modeline) dla serwera X.org
+Group:		X11/Applications
+Conflicts:	xorg-xserver-server < 1.20.11-4
+
+%description tools
+Tools to calculate modelines for X.org server (using Coordinated Video
+Timing or Generalized Timing Formula).
+
+%description tools -l pl.UTF-8
+Narzędzia do liczenia opisów trybów graficznych (modeline) dla serwera
+X.org (przy użyciu algorytmów Coordinated Video Timing lub
+Generalizaed Timing Formula).
 
 %package devel
 Summary:	Header files for X.org server
@@ -606,8 +622,6 @@ fi
 %attr(755,root,root) %{_bindir}/X
 %attr(755,root,root) %{_bindir}/Xorg
 %attr(4755,root,root) %{_bindir}/Xwrapper
-%attr(755,root,root) %{_bindir}/cvt
-%attr(755,root,root) %{_bindir}/gtf
 %attr(755,root,root) %{_libdir}/xorg/Xorg
 %attr(4755,root,root) %{_libdir}/xorg/Xorg.wrap
 %dir %{_libdir}/xorg/modules
@@ -644,14 +658,19 @@ fi
 %verify(not md5 mtime size) %{_datadir}/X11/xorg.conf.d/10-quirks.conf
 %{_mandir}/man1/Xorg.1*
 %{_mandir}/man1/Xorg.wrap.1*
-%{_mandir}/man1/cvt.1*
-%{_mandir}/man1/gtf.1*
 %{_mandir}/man4/exa.4*
 %{_mandir}/man4/fbdevhw.4*
 %{_mandir}/man4/modesetting.4*
 %{_mandir}/man5/Xwrapper.config.5*
 %{_mandir}/man5/xorg.conf.5*
 %{_mandir}/man5/xorg.conf.d.5*
+
+%files tools
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_bindir}/cvt
+%attr(755,root,root) %{_bindir}/gtf
+%{_mandir}/man1/cvt.1*
+%{_mandir}/man1/gtf.1*
 
 %files devel
 %defattr(644,root,root,755)
