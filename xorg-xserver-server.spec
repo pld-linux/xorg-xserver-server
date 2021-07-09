@@ -37,12 +37,12 @@
 Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
-Version:	1.20.11
-Release:	4
+Version:	1.20.12
+Release:	1
 License:	MIT
 Group:		X11/Servers
-Source0:	https://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
-# Source0-md5:	a22ccd74a5eee721cad6805e489c7144
+Source0:	https://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.xz
+# Source0-md5:	0c299afaa6ac1c970a01f321725f4cd2
 Source1:	10-quirks.conf
 Source2:	xserver.pamd
 Source10:	%{name}-Xvfb.init
@@ -88,6 +88,7 @@ BuildRequires:	pkgconfig >= 1:0.19
 BuildRequires:	pkgconfig(gl) >= 1.2
 %{?with_systemtap:BuildRequires:	systemtap-sdt-devel}
 BuildRequires:	systemd-devel >= 1:209
+BuildRequires:	tar >= 1:1.22
 BuildRequires:	udev-devel >= 1:143
 # wayland-client
 %{?with_wayland:BuildRequires:	wayland-devel >= 1.3.0}
@@ -156,6 +157,7 @@ BuildRequires:	xorg-proto-xineramaproto-devel
 BuildRequires:	xorg-proto-xproto-devel >= 7.0.31
 BuildRequires:	xorg-sgml-doctools >= 1.8
 BuildRequires:	xorg-util-util-macros >= 1.14
+BuildRequires:	xz
 %{?with_glamor:Requires:	Mesa-libgbm >= 17.1.0}
 Requires:	libdrm >= 2.4.89
 %{?with_glamor:Requires:	libepoxy >= 1.5.4}
