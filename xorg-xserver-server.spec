@@ -38,7 +38,7 @@ Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
 Version:	1.20.12
-Release:	1
+Release:	2
 License:	MIT
 Group:		X11/Servers
 Source0:	https://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.xz
@@ -218,6 +218,8 @@ graficznej. Do działania wymaga odpowiedniego sterownika.
 Summary:	Tools to calculate modelines for X.org server
 Summary(pl.UTF-8):	Narzędzia do liczenia opisów trybów graficznych (modeline) dla serwera X.org
 Group:		X11/Applications
+# for cvt
+Requires:	xorg-lib-libxcvt-tools
 Conflicts:	xorg-xserver-server < 1.20.11-4
 
 %description tools
@@ -595,6 +597,9 @@ find -name '*.h' | xargs chmod a-x
 %{__rm} $RPM_BUILD_ROOT%{_docdir}/xorg-server/Xserver-DTrace.*
 %endif
 
+# moved to xorg-lib-libxcvt-tools
+%{__rm} $RPM_BUILD_ROOT{%{_bindir}/cvt,%{_mandir}/man1/cvt.1}
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -669,9 +674,7 @@ fi
 
 %files tools
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_bindir}/cvt
 %attr(755,root,root) %{_bindir}/gtf
-%{_mandir}/man1/cvt.1*
 %{_mandir}/man1/gtf.1*
 
 %files devel
