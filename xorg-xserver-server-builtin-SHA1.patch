@@ -180,7 +180,7 @@ diff -urN xorg-server-1.17.0.org/os/Makefile.am xorg-server-1.17.0/os/Makefile.a
 diff -urN xorg-server-1.17.0.org/os/xsha1.c xorg-server-1.17.0/os/xsha1.c
 --- xorg-server-1.17.0.org/os/xsha1.c	2015-01-18 00:42:52.000000000 +0100
 +++ xorg-server-1.17.0/os/xsha1.c	2015-02-04 19:34:23.455234679 +0100
-@@ -23,270 +23,3 @@
+@@ -23,279 +23,3 @@
   * DEALINGS IN THE SOFTWARE.
   */
  
@@ -194,7 +194,16 @@ diff -urN xorg-server-1.17.0.org/os/xsha1.c xorg-server-1.17.0/os/xsha1.c
 -#if defined(HAVE_SHA1_IN_LIBMD)  /* Use libmd for SHA1 */ \
 -	|| defined(HAVE_SHA1_IN_LIBC)   /* Use libc for SHA1 */
 -
+-#if defined(__DragonFly__) || defined(__FreeBSD__)
+-#include <sha.h>
+-#define	SHA1End		SHA1_End
+-#define	SHA1File	SHA1_File
+-#define	SHA1Final	SHA1_Final
+-#define	SHA1Init	SHA1_Init
+-#define	SHA1Update	SHA1_Update
+-#else
 -#include <sha1.h>
+-#endif
 -
 -void *
 -x_sha1_init(void)

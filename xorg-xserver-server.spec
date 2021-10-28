@@ -12,12 +12,9 @@
 %bcond_with	xcsecurity	# XC-SECURITY extension (deprecated)
 %bcond_with	xf86bigfont	# XF86BigFont extension
 %bcond_with	xselinux	# SELinux extension
-%bcond_without	dmx		# DMX DDX (Xdmx server)
-%bcond_with	wayland		# Wayland DDX (Xwayland server) [newer version in xorg-xserver-Xwayland.spec]
 %bcond_without	xnest		# Xnest DDX (Xnest server)
 %bcond_without	xvfb		# Xvfb DDX (Xvfb server)
 %bcond_without	xephyr		# kdrive Xephyr server
-%bcond_with	eglstream	# XWayland eglstream support
 %bcond_without	glamor		# glamor dix module
 %bcond_without	systemtap	# systemtap/dtrace probes
 %bcond_without	libunwind	# use libunwind for backtracing
@@ -25,8 +22,8 @@
 # ABI versions, see hw/xfree86/common/xf86Module.h
 %define	xorg_xserver_server_ansic_abi		0.4
 %define	xorg_xserver_server_extension_abi	10.0
-%define	xorg_xserver_server_videodrv_abi	24.1
-%define	xorg_xserver_server_xinput_abi		24.1
+%define	xorg_xserver_server_videodrv_abi	25.2
+%define	xorg_xserver_server_xinput_abi		24.4
 
 %define	pixman_ver	0.30.0
 
@@ -37,12 +34,12 @@
 Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
-Version:	1.20.13
+Version:	21.1.0
 Release:	1
 License:	MIT
 Group:		X11/Servers
 Source0:	https://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.xz
-# Source0-md5:	9acb2a51507e6056b09e3d3f19565419
+# Source0-md5:	1b8306f8f320fbb4c008865f0e36eaab
 Source1:	10-quirks.conf
 Source2:	xserver.pamd
 Source10:	%{name}-Xvfb.init
@@ -53,7 +50,6 @@ Patch1:		%{name}-xwrapper-pam.patch
 Patch4:		%{name}-builtin-SHA1.patch
 
 Patch6:		110_nvidia_slowdow_fix.patch
-Patch7:		platform_probe_crash.patch
 URL:		https://xorg.freedesktop.org/
 BuildRequires:	Mesa-dri-devel >= 7.8.1
 %{?with_dri2:BuildRequires:	Mesa-dri-devel >= 9.2.0}
@@ -70,7 +66,6 @@ BuildRequires:	docbook-dtd43-xml
 %if %{with hal} || %{with dbus}
 BuildRequires:	dbus-devel >= 1.0
 %endif
-%{?with_eglstream:BuildRequires:	egl-wayland-devel >= 1.0.2}
 %{?with_hal:BuildRequires:	hal-devel}
 BuildRequires:	libdrm-devel >= 2.4.89
 %if %{with glamor}
@@ -90,9 +85,6 @@ BuildRequires:	pkgconfig(gl) >= 1.2
 BuildRequires:	systemd-devel >= 1:209
 BuildRequires:	tar >= 1:1.22
 BuildRequires:	udev-devel >= 1:143
-# wayland-client
-%{?with_wayland:BuildRequires:	wayland-devel >= 1.3.0}
-%{?with_wayland:BuildRequires:	wayland-protocols >= 1.10}
 BuildRequires:	xcb-util-devel
 BuildRequires:	xcb-util-image-devel
 BuildRequires:	xcb-util-keysyms-devel
@@ -100,45 +92,41 @@ BuildRequires:	xcb-util-renderutil-devel
 BuildRequires:	xcb-util-wm-devel
 BuildRequires:	xmlto >= 0.0.20
 BuildRequires:	xorg-app-mkfontscale
+BuildRequires:	xorg-app-xkbcomp
 BuildRequires:	xorg-font-font-util >= 1.1
 BuildRequires:	xorg-lib-libX11-devel >= 1.6
 BuildRequires:	xorg-lib-libXau-devel
-%{?with_dmx:BuildRequires:	xorg-lib-libXaw-devel}
 BuildRequires:	xorg-lib-libXdamage-devel
 BuildRequires:	xorg-lib-libXdmcp-devel
 BuildRequires:	xorg-lib-libXext-devel >= 1.0.99.4
 BuildRequires:	xorg-lib-libXfixes-devel
 BuildRequires:	xorg-lib-libXfont2-devel >= 2.0.0
 BuildRequires:	xorg-lib-libXi-devel >= 1.2.99.1
-%{?with_dmx:BuildRequires:	xorg-lib-libXmu-devel}
-%{?with_dmx:BuildRequires:	xorg-lib-libXpm-devel}
 BuildRequires:	xorg-lib-libXrender-devel
 BuildRequires:	xorg-lib-libXres-devel
-%{?with_dmx:BuildRequires:	xorg-lib-libXt-devel >= 1.0.0}
 BuildRequires:	xorg-lib-libXtst-devel >= 1.0.99.2
 BuildRequires:	xorg-lib-libXv-devel
 BuildRequires:	xorg-lib-libXxf86dga-devel
 BuildRequires:	xorg-lib-libXxf86misc-devel
 BuildRequires:	xorg-lib-libXxf86vm-devel
-%{?with_dmx:BuildRequires:	xorg-lib-libdmx-devel >= 1.0.99.1}
 BuildRequires:	xorg-lib-libfontenc-devel
 BuildRequires:	xorg-lib-libpciaccess-devel >= 0.12.901
+BuildRequires:	xorg-lib-libxcvt-devel
 BuildRequires:	xorg-lib-libxkbfile-devel
 BuildRequires:	xorg-lib-libxshmfence-devel >= 1.1
 BuildRequires:	xorg-lib-xtrans-devel >= 1.3.5
 BuildRequires:	xorg-proto-bigreqsproto-devel >= 1.1.0
 BuildRequires:	xorg-proto-compositeproto-devel >= 0.4
 BuildRequires:	xorg-proto-damageproto-devel >= 1.1
-%{?with_dmx:BuildRequires:	xorg-proto-dmxproto-devel >= 2.2.99.1}
 %{?with_dri2:BuildRequires:	xorg-proto-dri2proto-devel >= 2.8}
 BuildRequires:	xorg-proto-dri3proto-devel >= 1.2
-BuildRequires:	xorg-proto-fixesproto-devel >= 5.0
+BuildRequires:	xorg-proto-fixesproto-devel >= 6.0
 BuildRequires:	xorg-proto-fontcacheproto-devel
 BuildRequires:	xorg-proto-fontsproto-devel >= 2.1.3
 BuildRequires:	xorg-proto-glproto-devel >= 1.4.17
-BuildRequires:	xorg-proto-inputproto-devel >= 2.3
+BuildRequires:	xorg-proto-inputproto-devel >= 2.3.99.1
 BuildRequires:	xorg-proto-kbproto-devel >= 1.0.3
-BuildRequires:	xorg-proto-presentproto-devel >= 1.1
+BuildRequires:	xorg-proto-presentproto-devel >= 1.2
 BuildRequires:	xorg-proto-printproto-devel
 BuildRequires:	xorg-proto-randrproto-devel >= 1.6.0
 %{?with_record:BuildRequires:	xorg-proto-recordproto-devel >= 1.13.99.1}
@@ -246,9 +234,9 @@ Requires:	xorg-lib-libxkbfile-devel
 Requires:	xorg-proto-dri3proto-devel >= 1.0
 Requires:	xorg-proto-fontsproto-devel >= 2.1.3
 Requires:	xorg-proto-glproto-devel >= 1.4.17
-Requires:	xorg-proto-inputproto-devel >= 2.3
+Requires:	xorg-proto-inputproto-devel >= 2.3.99.1
 Requires:	xorg-proto-kbproto-devel >= 1.0.3
-Requires:	xorg-proto-presentproto-devel >= 1.1
+Requires:	xorg-proto-presentproto-devel >= 1.2
 Requires:	xorg-proto-randrproto-devel >= 1.6.0
 Requires:	xorg-proto-renderproto-devel >= 0.11
 Requires:	xorg-proto-resourceproto-devel >= 1.2.0
@@ -296,23 +284,6 @@ GLX extension library for X.org server.
 
 %description -n xorg-xserver-libglx -l pl.UTF-8
 Biblioteka rozszerzenia GLX dla serwera X.org.
-
-%package -n xorg-xserver-Xdmx
-Summary:	Xdmx - distributed multi-head X server
-Summary(pl.UTF-8):	Xdmx - rozproszony, wielomonitorowy serwer X
-Group:		X11/Servers
-Requires:	pixman >= %{pixman_ver}
-Requires:	xorg-lib-libX11 >= 1.6
-Requires:	xorg-lib-libXext >= 1.0.99.4
-Requires:	xorg-lib-libXfont2 >= 2.0.0
-Requires:	xorg-lib-libXi >= 1.2.99.1
-Requires:	xorg-lib-libdmx >= 1.0.99.1
-
-%description -n xorg-xserver-Xdmx
-Xdmx - distributed multi-head X server.
-
-%description -n xorg-xserver-Xdmx -l pl.UTF-8
-Xdmx - rozproszony, wielomonitorowy serwer X.
 
 %package -n xorg-xserver-Xephyr
 Summary:	Xephyr - nested X server
@@ -428,26 +399,6 @@ system service.
 Ten pakiet zawiera skrypty startowe dla Xvfb oraz rejestruje Xvfb jako
 usługę systemową.
 
-%package -n xorg-xserver-Xwayland
-Summary:	Xwayland - X server integrated into a Wayland window system
-Summary(pl.UTF-8):	Xwayland - serwer X integrowalny w Wayland
-Group:		X11/Servers
-%{?with_eglstream:Requires:	egl-wayland >= 1.0.2}
-%{?with_glamor:Requires:	libepoxy >= 1.5.4}
-Requires:	pixman >= %{pixman_ver}
-Requires:	xorg-lib-libX11 >= 1.6
-Requires:	xorg-lib-libXext >= 1.0.99.4
-Requires:	xorg-lib-libXfont2 >= 2.0.0
-Requires:	xorg-lib-libXi >= 1.2.99.1
-# for protocol.txt
-Requires:	xorg-xserver-common = %{version}-%{release}
-
-%description -n xorg-xserver-Xwayland
-Xwayland - server integrated into a Wayland window system.
-
-%description -n xorg-xserver-Xwayland -l pl.UTF-8
-Xwayland - serwer X integrowalny w Wayland.
-
 %package -n xorg-xserver-common
 Summary:	Common files for various X servers
 Summary(pl.UTF-8):	Pliki wspólne dla serwerów X
@@ -467,7 +418,6 @@ Pliki wspólne dla serwerów X.
 %patch4 -p1
 
 %patch6 -p1
-%patch7 -p1
 
 # xserver uses pixman-1 API/ABI so put that explictly here
 sed -i -e 's#<pixman\.h#<pixman-1/pixman.h#g' ./fb/fb.h ./include/miscstruct.h ./render/picture.h
@@ -510,8 +460,6 @@ fi
 	CPPFLAGS="%{rpmcppflags} %{tirpc_cflags}" \
 	LIBS="%{tirpc_libs}" \
 	--libexecdir=%{_libdir}/xorg \
-	--with-os-name="PLD/Linux" \
-	--with-os-vendor="PLD/Team" \
 	--with-default-font-path="%{_fontsdir}/misc,%{_fontsdir}/TTF,%{_fontsdir}/OTF,%{_fontsdir}/Type1,%{_fontsdir}/100dpi,%{_fontsdir}/75dpi" \
 	--with-xkb-output=/var/lib/xkb \
 	--disable-linux-acpi \
@@ -520,7 +468,6 @@ fi
 	--enable-config-hal%{!?with_hal:=no} \
 	--enable-config-udev%{!?with_udev:=no} \
 	--enable-dga \
-	%{?with_dmx:--enable-dmx} \
 	--enable-dri2%{!?with_dri2:=no} \
 	--enable-dri3%{!?with_dri3:=no} \
 	%{?with_glamor:--enable-glamor} \
@@ -535,8 +482,6 @@ fi
 	--enable-xnest%{!?with_xnest:=no} \
 	%{?with_xselinux:--enable-xselinux} \
 	%{!?with_xvfb:--disable-xvfb} \
-	--enable-xwayland%{!?with_wayland:=no} \
-	%{?with_eglstream:--enable-xwayland-eglstream} \
 	%{!?with_systemtap:--without-dtrace} \
 	--without-fop \
 	--with-systemd-daemon
@@ -597,9 +542,6 @@ find -name '*.h' | xargs chmod a-x
 %{__rm} $RPM_BUILD_ROOT%{_docdir}/xorg-server/Xserver-DTrace.*
 %endif
 
-# moved to xorg-lib-libxcvt-tools
-%{__rm} $RPM_BUILD_ROOT{%{_bindir}/cvt,%{_mandir}/man1/cvt.1}
-
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -633,13 +575,11 @@ fi
 %attr(4755,root,root) %{_libdir}/xorg/Xorg.wrap
 %dir %{_libdir}/xorg/modules
 %attr(755,root,root) %{_libdir}/xorg/modules/libexa.so
-%attr(755,root,root) %{_libdir}/xorg/modules/libfb.so
 %attr(755,root,root) %{_libdir}/xorg/modules/libfbdevhw.so
 %{?with_glamor:%attr(755,root,root) %{_libdir}/xorg/modules/libglamoregl.so}
 %attr(755,root,root) %{_libdir}/xorg/modules/libint10.so
 %attr(755,root,root) %{_libdir}/xorg/modules/libshadow.so
 %attr(755,root,root) %{_libdir}/xorg/modules/libshadowfb.so
-%attr(755,root,root) %{_libdir}/xorg/modules/libvbe.so
 %attr(755,root,root) %{_libdir}/xorg/modules/libvgahw.so
 %attr(755,root,root) %{_libdir}/xorg/modules/libwfb.so
 %dir %{_libdir}/xorg/modules/dri
@@ -647,6 +587,7 @@ fi
 %attr(755,root,root) %{_libdir}/xorg/modules/drivers/modesetting_drv.so
 %dir %{_libdir}/xorg/modules/extensions
 %dir %{_libdir}/xorg/modules/input
+%attr(755,root,root) %{_libdir}/xorg/modules/input/inputtest_drv.so
 %if "%{_libdir}" != "%{_exec_prefix}/lib"
 %dir %{_exec_prefix}/lib/xorg
 %dir %{_exec_prefix}/lib/xorg/modules
@@ -667,6 +608,7 @@ fi
 %{_mandir}/man1/Xorg.wrap.1*
 %{_mandir}/man4/exa.4*
 %{_mandir}/man4/fbdevhw.4*
+%{_mandir}/man4/inputtestdrv.4*
 %{_mandir}/man4/modesetting.4*
 %{_mandir}/man5/Xwrapper.config.5*
 %{_mandir}/man5/xorg.conf.5*
@@ -694,27 +636,6 @@ fi
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/xorg/modules/extensions/libglx.so
 
-%if %{with dmx}
-%files -n xorg-xserver-Xdmx
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_bindir}/Xdmx
-%attr(755,root,root) %{_bindir}/dmxaddinput
-%attr(755,root,root) %{_bindir}/dmxaddscreen
-%attr(755,root,root) %{_bindir}/dmxinfo
-%attr(755,root,root) %{_bindir}/dmxreconfig
-%attr(755,root,root) %{_bindir}/dmxresize
-%attr(755,root,root) %{_bindir}/dmxrminput
-%attr(755,root,root) %{_bindir}/dmxrmscreen
-%attr(755,root,root) %{_bindir}/dmxtodmx
-%attr(755,root,root) %{_bindir}/dmxwininfo
-%attr(755,root,root) %{_bindir}/vdltodmx
-%attr(755,root,root) %{_bindir}/xdmxconfig
-%{_mandir}/man1/Xdmx.1*
-%{_mandir}/man1/dmxtodmx.1*
-%{_mandir}/man1/vdltodmx.1*
-%{_mandir}/man1/xdmxconfig.1*
-%endif
-
 %if %{with xephyr}
 %files -n xorg-xserver-Xephyr
 %defattr(644,root,root,755)
@@ -740,12 +661,6 @@ fi
 %defattr(644,root,root,755)
 %attr(754,root,root) /etc/rc.d/init.d/Xvfb
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/Xvfb
-%endif
-
-%if %{with wayland}
-%files -n xorg-xserver-Xwayland
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_bindir}/Xwayland
 %endif
 
 %files -n xorg-xserver-common
