@@ -18,6 +18,7 @@
 %bcond_without	glamor		# glamor dix module
 %bcond_without	systemtap	# systemtap/dtrace probes
 %bcond_without	libunwind	# use libunwind for backtracing
+%bcond_without	systemd		# systemd
 #
 # ABI versions, see hw/xfree86/common/xf86Module.h
 %define	xorg_xserver_server_ansic_abi		0.4
@@ -82,7 +83,7 @@ BuildRequires:	pixman-devel >= %{pixman_ver}
 BuildRequires:	pkgconfig >= 1:0.19
 BuildRequires:	pkgconfig(gl) >= 1.2
 %{?with_systemtap:BuildRequires:	systemtap-sdt-devel}
-BuildRequires:	systemd-devel >= 1:209
+%{?with_systemd:BuildRequires:	systemd-devel >= 1:209}
 BuildRequires:	tar >= 1:1.22
 BuildRequires:	udev-devel >= 1:143
 BuildRequires:	xcb-util-devel
@@ -484,7 +485,7 @@ fi
 	%{!?with_xvfb:--disable-xvfb} \
 	%{!?with_systemtap:--without-dtrace} \
 	--without-fop \
-	--with-systemd-daemon
+	%{__with_without systemd systemd-daemon}
 
 %{__make}
 
