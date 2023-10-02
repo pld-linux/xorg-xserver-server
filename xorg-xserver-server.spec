@@ -36,7 +36,7 @@ Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
 Version:	21.1.8
-Release:	1
+Release:	2
 License:	MIT
 Group:		X11/Servers
 Source0:	https://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.xz
@@ -46,10 +46,9 @@ Source2:	xserver.pamd
 Source10:	%{name}-Xvfb.init
 Source11:	%{name}-Xvfb.sysconfig
 Source12:	xvfb-run.sh
+Patch0:		python3.patch
 Patch1:		%{name}-xwrapper-pam.patch
-
 Patch4:		%{name}-builtin-SHA1.patch
-
 Patch6:		110_nvidia_slowdow_fix.patch
 URL:		https://xorg.freedesktop.org/
 BuildRequires:	Mesa-dri-devel >= 7.8.1
@@ -108,7 +107,6 @@ BuildRequires:	xorg-lib-libXres-devel
 BuildRequires:	xorg-lib-libXtst-devel >= 1.0.99.2
 BuildRequires:	xorg-lib-libXv-devel
 BuildRequires:	xorg-lib-libXxf86dga-devel
-BuildRequires:	xorg-lib-libXxf86misc-devel
 BuildRequires:	xorg-lib-libXxf86vm-devel
 BuildRequires:	xorg-lib-libfontenc-devel
 BuildRequires:	xorg-lib-libpciaccess-devel >= 0.12.901
@@ -414,10 +412,9 @@ Pliki wspólne dla serwerów X.
 
 %prep
 %setup -q -n xorg-server-%{version}
+%patch0 -p1
 %patch1 -p1
-
 %patch4 -p1
-
 %patch6 -p1
 
 # xserver uses pixman-1 API/ABI so put that explictly here
@@ -426,7 +423,7 @@ sed -i -e 's#<pixman\.h#<pixman-1/pixman.h#g' ./fb/fb.h ./include/miscstruct.h .
 # support __filemansuffix__ with "x" suffix (per FHS 2.3)
 %{__sed} -i -e 's,\.so man__filemansuffix__/,.so man5/,' hw/xfree86/man/*.man
 
-%{__sed} -i -e '1s|#!/usr/bin/python$|#!%{__python}|' config/fdi2iclass.py
+%{__sed} -i -e '1s|#!/usr/bin/python$|#!%{__python3}|' config/fdi2iclass.py
 
 %build
 API=$(awk '/#define ABI_ANSIC_VERSION/ { split($0,A,/[(,)]/); printf("%d.%d",A[2], A[3]); }' hw/xfree86/common/xf86Module.h)

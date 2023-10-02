@@ -1,0 +1,69 @@
+--- xorg-server-21.1.8/config/fdi2iclass.py.orig	2023-10-03 00:42:37.000000000 +0200
++++ xorg-server-21.1.8/config/fdi2iclass.py	2023-10-03 00:47:09.544768698 +0200
+@@ -65,7 +65,7 @@
+     booltype = False
+ 
+     # see what type of key we have
+-    if node.attributes.has_key('key'):
++    if 'key' in node.attributes:
+         key = node.attributes['key'].nodeValue
+         if key in match_table:
+             match = match_table[key]
+@@ -76,18 +76,18 @@
+     if not match and not booltype:
+         return (match, value)
+ 
+-    if node.attributes.has_key('string'):
++    if 'string' in node.attributes:
+         value = node.attributes['string'].nodeValue
+-    elif node.attributes.has_key('contains'):
++    elif 'contains' in node.attributes:
+         value = node.attributes['contains'].nodeValue
+         if match == 'MatchDevicePath':
+             value = device_glob(value)
+         elif booltype and value in cap_match_table:
+             match = cap_match_table[value]
+             value = 'yes'
+-    elif node.attributes.has_key('string_outof'):
++    elif 'string_outof' in node.attributes:
+         value = node.attributes['string_outof'].nodeValue.replace(';','|')
+-    elif node.attributes.has_key('contains_outof'):
++    elif 'contains_outof' in node.attributes:
+         all_values = node.attributes['contains_outof'].nodeValue.split(';')
+         for v in all_values:
+             if match == 'MatchDevicePath':
+@@ -166,18 +166,18 @@
+ def print_section(matches, driver, ignore, options):
+     '''Print a valid InputClass section to stdout'''
+     global num_sections
+-    print 'Section "InputClass"'
+-    print '\tIdentifier "Converted Class %d"' % num_sections
++    print('Section "InputClass"')
++    print('\tIdentifier "Converted Class %d"' % num_sections)
+     num_sections += 1
+     for m, v in matches:
+-        print '\t%s "%s"' % (m, v)
++        print('\t%s "%s"' % (m, v))
+     if driver:
+-        print '\tDriver "%s"' % driver
++        print('\tDriver "%s"' % driver)
+     if ignore:
+-        print '\tOption "Ignore" "yes"'
++        print('\tOption "Ignore" "yes"')
+     for o, v in options:
+-        print '\tOption "%s" "%s"' % (o, v)
+-    print 'EndSection'
++        print('\tOption "%s" "%s"' % (o, v))
++    print('EndSection')
+ 
+ def parse_fdi(fdi):
+     '''Parse x11 matches from fdi'''
+@@ -194,7 +194,7 @@
+ 
+         matches = parse_all_matches(match_node)
+         if num > 0:
+-            print
++            print()
+         print_section(matches, driver, ignore, options)
+         num += 1
+ 
