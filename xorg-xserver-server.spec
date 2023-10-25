@@ -67,6 +67,7 @@ BuildRequires:	docbook-dtd43-xml
 BuildRequires:	dbus-devel >= 1.0
 %endif
 %{?with_hal:BuildRequires:	hal-devel}
+BuildRequires:	libbsd-devel
 BuildRequires:	libdrm-devel >= 2.4.89
 %if %{with glamor}
 BuildRequires:	libepoxy-devel >= 1.5.4
