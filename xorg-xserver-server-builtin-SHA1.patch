@@ -484,7 +484,7 @@ diff -urN xorg-server-1.17.0.org/render/glyph.c xorg-server-1.17.0/render/glyph.
 -    if (!ctx)
 -        return BadAlloc;
 +    SHA1Init (&ctx);
-+    SHA1Update (&ctx, gi, sizeof (xGlyphInfo));
++    SHA1Update (&ctx, (uint8_t *)gi, sizeof (xGlyphInfo));
 +    SHA1Update (&ctx, bits, size);
 +    SHA1Final (sha1, &ctx);
  
