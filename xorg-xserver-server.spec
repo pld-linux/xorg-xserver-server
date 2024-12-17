@@ -35,12 +35,12 @@
 Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
-Version:	21.1.14
+Version:	21.1.15
 Release:	1
 License:	MIT
 Group:		X11/Servers
 Source0:	https://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.xz
-# Source0-md5:	79c7a0058e247fe7b94b8159d4a6f4f5
+# Source0-md5:	f6195ead06a84d0ceeddb5f120c2a90d
 Source1:	10-quirks.conf
 Source2:	xserver.pamd
 Source10:	%{name}-Xvfb.init
@@ -413,10 +413,10 @@ Pliki wspólne dla serwerów X.
 
 %prep
 %setup -q -n xorg-server-%{version}
-%patch0 -p1
-%patch1 -p1
-%patch4 -p1
-%patch6 -p1
+%patch -P0 -p1
+%patch -P1 -p1
+%patch -P4 -p1
+%patch -P6 -p1
 
 # xserver uses pixman-1 API/ABI so put that explictly here
 sed -i -e 's#<pixman\.h#<pixman-1/pixman.h#g' ./fb/fb.h ./include/miscstruct.h ./render/picture.h
