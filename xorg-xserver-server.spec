@@ -35,12 +35,12 @@
 Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
-Version:	21.1.15
+Version:	21.1.16
 Release:	1
 License:	MIT
 Group:		X11/Servers
 Source0:	https://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.xz
-# Source0-md5:	f6195ead06a84d0ceeddb5f120c2a90d
+# Source0-md5:	f1a5ec0939c0efd7fde1418989b579db
 Source1:	10-quirks.conf
 Source2:	xserver.pamd
 Source10:	%{name}-Xvfb.init
