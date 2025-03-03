@@ -194,6 +194,10 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		tirpc_cflags	$(pkg-config --cflags libtirpc)
 %define		tirpc_libs	$(pkg-config --libs libtirpc)
 
+# dtrace script expects CPP to be cpp, not "gcc -E", so force it regardless of rpm version
+# (autotools-based rpm<4.19 used to have "gcc -E", cmake builds for 4.19+ switched to cpp)
+%define		__cpp	cpp
+
 %description
 Xorg server is a generally used X server which uses display hardware.
 It requires proper driver for your display hardware.
