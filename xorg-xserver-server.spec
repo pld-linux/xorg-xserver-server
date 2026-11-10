@@ -35,12 +35,12 @@
 Summary:	X.org server
 Summary(pl.UTF-8):	Serwer X.org
 Name:		xorg-xserver-server
-Version:	21.1.25
-Release:	3
+Version:	21.1.26
+Release:	1
 License:	MIT
 Group:		X11/Servers
 Source0:	https://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.xz
-# Source0-md5:	19725dac02a581fadaec17cbc132d431
+# Source0-md5:	bbae291f5e85ca0e4ab07a539b8e8af6
 Source1:	10-quirks.conf
 Source2:	xserver.pamd
 Source10:	%{name}-Xvfb.init
@@ -50,8 +50,6 @@ Patch0:		python3.patch
 Patch1:		%{name}-xwrapper-pam.patch
 Patch4:		%{name}-builtin-SHA1.patch
 Patch6:		110_nvidia_slowdow_fix.patch
-# upstream a10192e7: 21.1.25 added a DamageRec field, breaking drivers that include damagestr.h
-Patch7:		damage-abi.patch
 URL:		https://xorg.freedesktop.org/
 BuildRequires:	Mesa-dri-devel >= 7.8.1
 %{?with_dri2:BuildRequires:	Mesa-dri-devel >= 9.2.0}
@@ -423,7 +421,6 @@ Pliki wspólne dla serwerów X.
 %patch -P1 -p1
 %patch -P4 -p1
 %patch -P6 -p1
-%patch -P7 -p1
 
 # xserver uses pixman-1 API/ABI so put that explictly here
 sed -i -e 's#<pixman\.h#<pixman-1/pixman.h#g' ./fb/fb.h ./include/miscstruct.h ./render/picture.h
